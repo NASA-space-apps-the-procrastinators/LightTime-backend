@@ -4,7 +4,7 @@ import time
 from flask import Blueprint, abort, current_app, jsonify, request
 
 from base_station import habitat, lookahead, recorder, reports, rules, scenario, usual
-from common import link, modes
+from common import link, modes, sources
 from common.models import (VITALS, Alert, Crew, LinkMessage, MissionState, Reading, db, iso,
                            utcnow)
 
@@ -323,3 +323,8 @@ def send_summaries():
         link.send("to_earth", "summary", recorder.daily_summary(crew),
                   state["delay_s"], state["link_up"], priority=3)
     return jsonify(sent=Crew.query.count(), pruned=recorder.prune())
+
+
+@bp.get("/sources")
+def data_sources():
+    return jsonify(sources.listing())

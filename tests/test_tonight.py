@@ -75,3 +75,10 @@ def test_resolving_keeps_the_crews_own_words_and_tells_earth(client):
     assert done["cleared_note"] == note
     resolved = [m for m in client.get("/api/base/outbox").get_json() if m["payload"].get("event") == "resolved"]
     assert resolved[0]["payload"]["note"] == note
+
+
+def test_the_sources_route_lists_the_nasa_data_we_use(client):
+    listed = client.get("/api/base/sources").get_json()
+    assert sum(s["agency"].startswith("NASA") for s in listed) >= 4
+    assert all(set(s) == {"id", "agency", "name", "kind", "url", "used_for", "as_of"} for s in listed)
+    assert listed[0]["id"] == "horizons" and "JPL Horizons" in listed[0]["as_of"]

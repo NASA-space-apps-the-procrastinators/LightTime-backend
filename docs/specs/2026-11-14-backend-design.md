@@ -123,6 +123,7 @@ All JSON. The screens poll once a second.
 | `POST /api/base/scenario/start` `{name, replay}` and `/scenario/stop` | base | starts or stops the scripted story ("stage", "full" or "real"; `replay: true` plays real wrist data) |
 | `GET /api/base/habitat` | base | cabin temperature, humidity, CO2 and radiation dose, with source and date (NASA EDA, RR-1) |
 | `POST /api/base/summary/send` | base | sends the daily summaries to Earth (link kind `summary`) |
+| `GET /api/base/sources` | base | every outside source the app uses: id, agency, name, kind (live, file, hand), url, used_for, as_of |
 | `POST /api/base/reset` | base | clears readings, alerts and messages for a fresh run |
 | `GET /api/earth/inbox` | earth | link_up, mode, and everything that has arrived |
 | `POST /api/earth/reply` `{message_id, text, from}` | earth | sends advice back, with the same delay |
