@@ -28,6 +28,7 @@ class Reading(db.Model):
     at = db.Column(db.DateTime, nullable=False, default=utcnow, index=True)
     source = db.Column(db.String(12), nullable=False, default="suit")
     signal_ok = db.Column(db.Boolean, nullable=False, default=True)
+    context = db.Column(db.String(12))
     heart_rate = db.Column(db.Float)
     spo2 = db.Column(db.Float)
     skin_temp = db.Column(db.Float)
@@ -39,7 +40,7 @@ class Reading(db.Model):
 
     def to_dict(self):
         out = {"id": self.id, "crew_id": self.crew_id, "at": iso(self.at),
-               "source": self.source, "signal_ok": self.signal_ok}
+               "source": self.source, "signal_ok": self.signal_ok, "context": self.context}
         out.update({v: getattr(self, v) for v in VITALS})
         return out
 
