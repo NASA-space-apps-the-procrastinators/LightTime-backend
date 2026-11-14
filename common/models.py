@@ -57,6 +57,9 @@ class Alert(db.Model):
     steps_done = db.Column(db.JSON, nullable=False, default=list)
     cleared_at = db.Column(db.DateTime)
     cleared_by = db.Column(db.String(40))
+    acknowledged_at = db.Column(db.DateTime)
+    acknowledged_by = db.Column(db.String(40))
+    report_id = db.Column(db.Integer)
 
 
 class MissionState(db.Model):
