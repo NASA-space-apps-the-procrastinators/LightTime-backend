@@ -111,7 +111,7 @@ Tried on six healthy volunteers breathing low-oxygen gas:
 
 Six of six warned before the red line, a median of 97 seconds ahead. On the control sleeper it warned twice in 7.8 hours, both real dips of 2 to 3 points that recovered. On 579 fast falls in a sleep apnoea patient it came first in 32%, about 42 seconds ahead. For the rest the fixed rule is what catches the fall.
 
-What these numbers do not show. The first version of this test, the one that worked on the scripted story, caught 2 of 6. The current settings were chosen on these same six recordings, so this is a fit and not a validation. Six people in one lab on finger oximeters is a small sample, and a fall this slow is the easy case. Harespod is the unseen test for Sunday. `python scripts/check_spo2_rules.py` reprints every number above.
+What these numbers do not show. The first version of this test, the one that worked on the scripted story, caught 2 of 6. The settings were then checked held-out (`python scripts/crossval_lookahead.py`, 14 Nov): chosen from 18 settings on five volunteers, tested on the sixth, six times. Held-out result: warned before the SOS for 6 of 6, median 97 s ahead (159, 106, 98, 96, 68 and 14 s). Every fold chose the settings the ship already uses. Limits of that check: the false-alarm cap (at most 3 trend warnings) uses the same control recording in every fold, so it is not held out, and volunteer 100006 is warned only 14 s ahead. Six people in one lab on finger oximeters is a small sample, and a fall this slow is the easy case. Harespod is the unseen test for Sunday. `python scripts/check_spo2_rules.py` reprints every number above.
 
 ### Asked ahead
 
