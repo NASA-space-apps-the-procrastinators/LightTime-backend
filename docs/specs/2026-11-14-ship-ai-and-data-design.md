@@ -155,7 +155,9 @@ Multi-day baselines, a learned model, a second backend, alerts from skin tempera
 
 ## 10. Open
 
-Kyler's Postgres host `kyler.visserfamily.cs` does not resolve from your laptop, and `.cs` is not a live domain ending. He needs to confirm the name. The password goes in `.env` only, which git ignores.
+Kyler's Postgres host is `kyler.visserfamily.ca` (the `.cs` name was a typo). Checked on 14 November: Postgres 17.9, database `lighttime`, user `svc-lighttime`. The app created all five tables on first start, `reading.context` included, so no column change was needed, and the stage story reached its SOS there. The password goes in `.env` only, which git ignores.
+
+One round trip from TJ's laptop to that host takes about 160 ms, and one reading makes 7 queries, so a reading takes about half a second. Played from the laptop against that database, a story runs about two and a half times slower than on SQLite: the stage SOS came at about 20 s instead of about 12 s. For the pitch, either run the server on a machine close to the database, or run it on the laptop with SQLite.
 
 ## References
 
