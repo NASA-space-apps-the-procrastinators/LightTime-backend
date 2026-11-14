@@ -1,7 +1,7 @@
 """The ship's side: readings in, alerts and reports out."""
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, current_app, jsonify, request
 
-from base_station import reports, rules
+from base_station import reports, rules, scenario
 from common import link, modes
 from common.models import (VITALS, Alert, Crew, LinkMessage, MissionState, Reading, db, iso,
                            utcnow)
@@ -221,8 +221,24 @@ def inbox():
 
 @bp.post("/reset")
 def reset():
+    scenario.stop()
     for model in (LinkMessage, Alert, Reading):
         model.query.delete()
     db.session.get(MissionState, 1).stop = "station"
     db.session.commit()
+    return jsonify(ok=True)
+
+
+@bp.post("/scenario/start")
+def scenario_start():
+    name = (request.get_json(silent=True) or {}).get("name", "stage")
+    if name not in scenario.SCENARIOS:
+        return jsonify(error="unknown scenario"), 400
+    scenario.start(current_app._get_current_object(), name)
+    return jsonify(ok=True, name=name)
+
+
+@bp.post("/scenario/stop")
+def scenario_stop():
+    scenario.stop()
     return jsonify(ok=True)
