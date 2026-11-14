@@ -43,7 +43,21 @@ What the ship AI and data work changed (from `docs/specs/2026-11-14-ship-ai-and-
 | Report to Earth | New `asked_ahead` (list of `q` and `a`), `lookahead`, `usual`. The strip is 60 readings. New link kind `summary`, new update event `escalated` |
 | Behaviour | Heart rate alone raises nothing. Reset keeps the dial. A second SOS press returns the same alert with 200. Bad input returns 400 |
 
+What tonight's integration plan added (`docs/plans/2026-11-14-tonight-integration.md`). All additive, no renames:
+
+| Where | Change |
+|---|---|
+| State | Each stop adds `path_km`, `round_trip_s` and `plays_as_s` (real seconds one leg takes in the demo) |
+| Alert | New `why` (how the ship reached it, in plain lines) and `cleared_note`. The timeline adds `earliest_reply_at` |
+| Resolve | `POST /api/base/alerts/<id>/clear` takes `{"by", "note"}`. The note goes to Earth with the resolved update |
+| New | `GET /api/base/sources`: every outside source, with what it is used for and how fresh it is |
+| New | `GET /api/earth/outbox`: what Earth has sent, with status and `eta_s` |
+| New | `GET /api/earth/network`: NASA DSN Now round-trip light time to Mars spacecraft beside the Horizons figure |
+| Frontend | `docs/frontend/` holds a typed client and a polling hook. `tests/test_contract.py` checks the field names it expects |
+
 ## Data
+
+`python scripts/verify_data.py` checks the light-time numbers against Horizons and DSN Now, the NEWS2 bands, the clean tables and the raw-file checksums (`--offline` skips the network, `--write` records new checksums). The checks a person must do are in `docs/data-verification.md`. `python scripts/crossval_lookahead.py` chooses the time-left settings on five volunteers and tests them on the sixth, six times (about three minutes).
 
 `python scripts/build_clean_data.py` rebuilds `data/clean/` from the raw downloads, and `python scripts/check_spo2_rules.py` reprints the blood-oxygen evidence. Sources and licences are in `docs/data-sources.md`.
 
