@@ -1,0 +1,18 @@
+{
+  "note": "Demo checklist wording, not medical advice. Rebecca replaces each list with sourced text. Keep the treatment as the second step of the spo2 list: the scripted story waits for it.",
+  "spo2": [
+    "Go to the crew member and check that they respond",
+    "Fit the oxygen mask from the medical kit",
+    "Recheck blood oxygen after two minutes"
+  ],
+  "heart_rate": [
+    "Go to the crew member and check that they respond",
+    "Have them stop work and rest",
+    "Recheck heart rate after two minutes"
+  ],
+  "default": [
+    "Go to the crew member and check that they respond",
+    "Call the crew medical officer",
+    "Recheck the reading after two minutes"
+  ]
+}

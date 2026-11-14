@@ -1,0 +1,19 @@
+{
+  "source": "Bands follow the NEWS2 chart (Royal College of Physicians, 2017). NEWS2 is a hospital score and is not validated for spaceflight. These are demo tiers.",
+  "sustain_n": 5,
+  "quiet_s": 60,
+  "vitals": {
+    "spo2": {
+      "label": "Blood oxygen", "unit": "%", "nasa_risk": "Risk of Hypoxia",
+      "bands": [[91, 3], [93, 2], [95, 1], [null, 0]]
+    },
+    "heart_rate": {
+      "label": "Heart rate", "unit": " bpm", "nasa_risk": "Risk of Cardiovascular Adaptations",
+      "bands": [[40, 3], [50, 1], [90, 0], [110, 1], [130, 2], [null, 3]]
+    },
+    "bp_sys": {
+      "label": "Systolic blood pressure", "unit": " mmHg", "nasa_risk": "Risk of Cardiovascular Adaptations",
+      "bands": [[90, 3], [100, 2], [110, 1], [219, 0], [null, 3]]
+    }
+  }
+}
