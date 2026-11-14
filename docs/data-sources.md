@@ -24,6 +24,23 @@ There is no open stream of astronaut vital signs at NASA or the CSA (see the las
 
 The feed's Mars orbiters showed `rtlt="1330"`, which is 22.2 minutes there and back. Half of that is 665 s, and Horizons gives 661 s one way a day later. Two NASA systems agree.
 
+## Blood oxygen (added 14 November, afternoon)
+
+No NASA or CSA open dataset with blood oxygen could be found, so these three come from research groups. Details on each file are in the README next to it.
+
+| Source | Link | Licence | What it holds | Use |
+| --- | --- | --- | --- | --- |
+| UW induced-hypoxemia study | https://github.com/ubicomplab/oximetry-phone-cam-data (folder `data/gt`) | MIT | Six healthy adults breathing lowered-oxygen gas for 14 to 19 minutes, finger oximeter once a second. Cite: Hoffman JS et al. (2022). Smartphone camera oximetry in an induced hypoxemia study. npj Digital Medicine 5(1): 146. doi:10.1038/s41746-022-00665-y | `data/spo2_uw/`. Volunteer 100001 is the `real` story. All six test the time-left rule |
+| Apnea-ECG, control record c01r (PhysioNet) | https://physionet.org/content/apnea-ecg/1.0.0/ | ODC-By 1.0 | Eight hours of blood oxygen from a person who is fine. Cite: Penzel T, Moody GB, Mark RG, Goldberger AL, Peter JH (2000). The Apnea-ECG Database. Computers in Cardiology 27: 255-258. doi:10.13026/C23W2R | `data/spo2_apnea_ecg/c01r_SpO2_1Hz.csv`, the false-alarm test |
+| Apnea-ECG, patient record a01r (PhysioNet) | https://physionet.org/content/apnea-ecg/1.0.0/ | ODC-By 1.0 | A sleep apnoea patient's night, with 579 fast oxygen falls. Same citation | `data/spo2_apnea_ecg/a01r_SpO2_1Hz.csv`, shows where the trend warning stops helping |
+
+## CSA sources from Damola's list
+
+| Source | Link | What it holds | Use |
+| --- | --- | --- | --- |
+| CSA Performance Readiness Evaluation Tool (PRET) | https://data.asc-csa.gc.ca/dataset/c22fa749-b005-4956-bf68-2ac2b9e68d31 | Neurocognitive test results (PRET tasks, PVT reaction time, DANA, WinSCAT and others) as SPSS and Excel files. Open Government Licence - Canada | Only if we build the reaction test |
+| Canadian Healthcare in Deep Space (CSA, 2019) | https://asc-csa.gc.ca/eng/publications/canadian-healthcare-in-deep-space.asp (catalogue: https://data.asc-csa.gc.ca/dataset/a6f8cbbc-0f49-42da-9185-64bac61030b1) | Report of the CSA expert group on Canadian healthcare roles in deep-space flight. A report, with no measurements | Citation for the pitch: why autonomous medical care matters when Earth is minutes away |
+
 ## Optional, if there is time
 
 | Source | Link | What it holds | Use |

@@ -95,7 +95,7 @@ Later: FHIR export, logins, a real DTN stack.
 | Table | Holds |
 | --- | --- |
 | `crew` | id, name, role |
-| `reading` | crew_id, at, source (suit, typed, scenario), signal_ok, heart_rate, spo2, skin_temp, bp_sys, bp_dia, glucose, sleep_hours, mood (1 to 5) |
+| `reading` | crew_id, at, source (suit, typed, scenario, replay), context, signal_ok, heart_rate, spo2, skin_temp, bp_sys, bp_dia, glucose, sleep_hours, mood (1 to 5) |
 | `alert` | crew_id, at, level, vital, value, reason, auto, nasa_risk, steps_done, acknowledged_at, acknowledged_by, report_id, cleared_at, cleared_by |
 | `mission_state` | one row: the dial stop |
 | `link_message` | direction (to_earth, to_ship), kind (report, update, message, reply), priority, payload, created_at, sent_at, delay_s, deliver_at, in_reply_to |
@@ -120,12 +120,16 @@ All JSON. The screens poll once a second.
 | `POST /api/base/messages` `{text, alert_id, from}` | base | free text from the crew to the flight surgeon |
 | `GET /api/base/outbox` | base | everything the ship has sent, with status (queued, in_flight, delivered), eta_s and the three times |
 | `GET /api/base/inbox` | base, suit | replies from Earth that have arrived |
-| `POST /api/base/scenario/start` `{name}` and `/scenario/stop` | base | starts or stops the scripted story ("stage" or "full") |
+| `POST /api/base/scenario/start` `{name, replay}` and `/scenario/stop` | base | starts or stops the scripted story ("stage", "full" or "real"; `replay: true` plays real wrist data) |
+| `GET /api/base/habitat` | base | cabin temperature, humidity, CO2 and radiation dose, with source and date (NASA EDA, RR-1) |
+| `POST /api/base/summary/send` | base | sends the daily summaries to Earth (link kind `summary`) |
 | `POST /api/base/reset` | base | clears readings, alerts and messages for a fresh run |
 | `GET /api/earth/inbox` | earth | link_up, mode, and everything that has arrived |
 | `POST /api/earth/reply` `{message_id, text, from}` | earth | sends advice back, with the same delay |
 
-An alert carries: `id`, `crew_id`, `crew`, `at`, `level`, `vital`, `value`, `unit`, `reason`, `source`, `auto`, `nasa_risk`, `steps`, `steps_done`, `acknowledged_by`, `cleared_at`, `cleared_by`, `speak` (only for an emergency) and `timeline`.
+An alert carries: `id`, `crew_id`, `crew`, `at`, `level`, `vital`, `value`, `unit`, `reason`, `source`, `auto`, `nasa_risk`, `steps`, `steps_done`, `acknowledged_by`, `cleared_at`, `cleared_by`, `speak` (for an emergency or a falling trend; say it once per alert id and level), `lookahead` and `timeline`.
+
+`lookahead` is null unless a falling trend was found. It holds `now`, `per_min`, `eta_s`, `red_line`, `at`, `red_line_at`, `reply_s` and `earth_in_time`, frozen when the report left, so count down to `red_line_at`. The crew board adds `usual.heart_rate` (`low`, `high`, `n`, or null for the first ten minutes). Details: `docs/specs/2026-11-14-ship-ai-and-data-design.md` section 7.
 
 The `timeline` holds `raised_at`, `acknowledged_at`, `sent_at`, `earth_eta_s`, `earth_at`, `reply_at` and `resolved_at`. A time is null until that step has happened. `earth_eta_s` counts down in mission time to the moment Earth hears.
 

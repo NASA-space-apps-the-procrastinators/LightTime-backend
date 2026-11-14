@@ -29,6 +29,24 @@ For Postgres, copy `.env.example` to `.env` and set `DATABASE_URL`.
 
 The API table, the field names and the design decisions are in `docs/specs/2026-11-14-backend-design.md`.
 
+What the ship AI and data work changed (from `docs/specs/2026-11-14-ship-ai-and-data-design.md`, section 7):
+
+| Where | Change |
+|---|---|
+| Alert | New `lookahead`: `now`, `per_min`, `eta_s`, `red_line`, `at`, `red_line_at`, `reply_s`, `earth_in_time`. Null unless a falling trend was found. Frozen when the report left, so count down to `red_line_at` |
+| Alert | `speak` is now also set for a falling trend. Say it once per alert id and level |
+| Crew board | New `usual.heart_rate`: `low`, `high`, `n`, or null for the first ten minutes |
+| Reading | New `context`. `source` can be `replay` |
+| New | `GET /api/base/habitat`: cabin and radiation with source and date |
+| New | `POST /api/base/summary/send`: daily summaries to Earth |
+| Story | `POST /api/base/scenario/start` takes `{"name": "stage" or "full" or "real", "replay": true}`. `real` plays a recorded oxygen fall and takes about three and a half minutes to reach SOS. Keep `stage` for the pitch |
+| Report to Earth | New `asked_ahead` (list of `q` and `a`), `lookahead`, `usual`. The strip is 60 readings. New link kind `summary`, new update event `escalated` |
+| Behaviour | Heart rate alone raises nothing. Reset keeps the dial. A second SOS press returns the same alert with 200. Bad input returns 400 |
+
+## Data
+
+`python scripts/build_clean_data.py` rebuilds `data/clean/` from the raw downloads, and `python scripts/check_spo2_rules.py` reprints the blood-oxygen evidence. Sources and licences are in `docs/data-sources.md`.
+
 ## Data and honesty notes
 
 - Mars light time comes from NASA JPL Horizons. If the call fails, dated values read on 13 November are used and labelled.
