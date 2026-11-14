@@ -1,0 +1,13 @@
+metric,unit,watch_rule,alert_rule,watch_param,alert_param,needs_symptom,consecutive_days,source,source_status
+hr_rest,bpm,outside baseline band,resting HR > baseline + 20 bpm for 3 consecutive days,,20.00,false,3,OCHMO Exercise Overview brief (TB-031); Cardiovascular evidence report,from contract (/thresholds example)
+bp_sys,mmHg,outside baseline band,"out of band 3 days running, or out of band with any symptom",,,false,3,pending: Light Time/data/thresholds.json (frontend repo),rule from contract scoring table; source pending
+bp_dia,mmHg,outside baseline band,"out of band 3 days running, or out of band with any symptom",,,false,3,pending: Light Time/data/thresholds.json (frontend repo),rule from contract scoring table; source pending
+spo2,%,below baseline band,under 94 %,,94.00,false,,pending: Light Time/data/thresholds.json (frontend repo),rule from contract scoring table; source pending
+temp_c,C,above baseline band,over 38.0 C,,38.00,false,,pending: Light Time/data/thresholds.json (frontend repo),rule from contract scoring table; source pending
+resp,/min,over 20/min,over 20/min with a symptom,20.00,20.00,true,,pending: Light Time/data/thresholds.json (frontend repo),rule from contract scoring table; source pending
+sleep_h,h,below baseline band or under 6.5 h,"with a symptom, or 3 days running",6.50,,true,3,pending: Light Time/data/thresholds.json (frontend repo),rule from contract scoring table; source pending
+mood,1-5,2 or lower,2 or lower with a symptom,2.00,2.00,true,,pending: Light Time/data/thresholds.json (frontend repo),rule from contract scoring table; source pending
+pvt_ms,ms,over baseline + 15 %,over baseline + 15 % with a symptom,0.15,0.15,true,,pending: Light Time/data/thresholds.json (frontend repo),rule from contract scoring table; source pending
+dose_mSv_day,mSv/day,never,over 2 mSv,,2.00,false,,pending: Light Time/data/thresholds.json (frontend repo),rule from contract scoring table; source pending
+co2_mmHg,mmHg,from 2.8 mmHg,over 4.5 mmHg,2.80,4.50,false,,OCHMO Carbon Dioxide brief,from contract (/station)
+signal_quality,0-1,"RECHECK under 0.6, never an ALERT on its own",never,0.60,,false,,backend-api-contract.md conventions,from contract

@@ -1,0 +1,37 @@
+crew_id,metric,low,high,point,unit,set_on,source
+C1,hr_rest,52.00,64.00,,bpm,2026-05-27,backend-api-contract.md
+C1,bp_sys,108.00,122.00,,mmHg,2026-05-27,backend-api-contract.md
+C1,bp_dia,66.00,78.00,,mmHg,2026-05-27,backend-api-contract.md
+C1,spo2,96.00,99.00,,%,2026-05-27,backend-api-contract.md
+C1,temp_c,36.30,36.90,,C,2026-05-27,backend-api-contract.md
+C1,resp,12.00,16.00,,/min,2026-05-27,backend-api-contract.md
+C1,sleep_h,6.80,7.60,,h,2026-05-27,backend-api-contract.md
+C1,pvt_ms,,,265.00,ms,2026-05-27,backend-api-contract.md
+C1,vo2max_ml_min_kg,,,44.00,mL/min/kg,2026-05-27,backend-api-contract.md
+C2,hr_rest,58.00,70.00,,bpm,2026-05-27,draft (crew-seed.json not in this repo)
+C2,bp_sys,112.00,128.00,,mmHg,2026-05-27,draft (crew-seed.json not in this repo)
+C2,bp_dia,70.00,82.00,,mmHg,2026-05-27,draft (crew-seed.json not in this repo)
+C2,spo2,96.00,99.00,,%,2026-05-27,draft (crew-seed.json not in this repo)
+C2,temp_c,36.40,37.00,,C,2026-05-27,draft (crew-seed.json not in this repo)
+C2,resp,13.00,17.00,,/min,2026-05-27,draft (crew-seed.json not in this repo)
+C2,sleep_h,6.50,7.30,,h,2026-05-27,draft (crew-seed.json not in this repo)
+C2,pvt_ms,,,280.00,ms,2026-05-27,draft (crew-seed.json not in this repo)
+C2,vo2max_ml_min_kg,,,40.00,mL/min/kg,2026-05-27,draft (crew-seed.json not in this repo)
+C3,hr_rest,60.00,72.00,,bpm,2026-05-27,draft (crew-seed.json not in this repo)
+C3,bp_sys,104.00,118.00,,mmHg,2026-05-27,draft (crew-seed.json not in this repo)
+C3,bp_dia,64.00,76.00,,mmHg,2026-05-27,draft (crew-seed.json not in this repo)
+C3,spo2,96.00,99.00,,%,2026-05-27,draft (crew-seed.json not in this repo)
+C3,temp_c,36.20,36.80,,C,2026-05-27,draft (crew-seed.json not in this repo)
+C3,resp,12.00,16.00,,/min,2026-05-27,draft (crew-seed.json not in this repo)
+C3,sleep_h,7.00,7.80,,h,2026-05-27,draft (crew-seed.json not in this repo)
+C3,pvt_ms,,,250.00,ms,2026-05-27,draft (crew-seed.json not in this repo)
+C3,vo2max_ml_min_kg,,,42.00,mL/min/kg,2026-05-27,draft (crew-seed.json not in this repo)
+C4,hr_rest,46.00,56.00,,bpm,2026-05-27,draft (crew-seed.json not in this repo)
+C4,bp_sys,110.00,124.00,,mmHg,2026-05-27,draft (crew-seed.json not in this repo)
+C4,bp_dia,68.00,80.00,,mmHg,2026-05-27,draft (crew-seed.json not in this repo)
+C4,spo2,96.00,99.00,,%,2026-05-27,draft (crew-seed.json not in this repo)
+C4,temp_c,36.40,37.00,,C,2026-05-27,draft (crew-seed.json not in this repo)
+C4,resp,10.00,14.00,,/min,2026-05-27,draft (crew-seed.json not in this repo)
+C4,sleep_h,6.60,7.40,,h,2026-05-27,draft (crew-seed.json not in this repo)
+C4,pvt_ms,,,270.00,ms,2026-05-27,draft (crew-seed.json not in this repo)
+C4,vo2max_ml_min_kg,,,52.00,mL/min/kg,2026-05-27,draft (crew-seed.json not in this repo)

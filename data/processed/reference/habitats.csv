@@ -1,0 +1,3 @@
+habitat_id,name,cabin_data_source
+H1,"Hab A (galley, exercise)",eda_rr1_replay
+H2,"Hab B (labs, sleep stations)",sim

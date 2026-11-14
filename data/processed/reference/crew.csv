@@ -1,0 +1,5 @@
+crew_id,backend_id,name,role,suit_id,home_habitat_id,is_cmo,source
+C1,1,Okafor,Commander,LT-01,H1,false,backend-api-contract.md
+C2,2,Lindqvist,Flight Engineer,LT-02,H1,true,draft
+C3,3,Sato,Flight Engineer,LT-03,H2,false,draft
+C4,4,Mensah,Mission Specialist,LT-04,H2,false,draft
