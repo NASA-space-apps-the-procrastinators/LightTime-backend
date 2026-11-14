@@ -1,12 +1,12 @@
 # LIGHT-TIME data sources spec
 
-Date: 14 November 2026. Owner: TJ. Status: waiting for TJ's sign-off. No plan is written yet.
+Date: 14 November 2026. Owner: The backend owner. Status: waiting for the backend owner's sign-off. No plan is written yet.
 
 Companion files: `docs/data-sources.md` (every source, with links) and `docs/specs/2026-11-14-backend-design.md` (the backend this plugs into).
 
 ## Problem
 
-We have found a dozen NASA and CSA sources. Right now only one of them, Mars light time, is wired into the backend. The cabin, radiation and space weather tiles on Damola's screens are mock numbers. We need one simple, repeatable way to bring a source into the backend, keep it working when the venue network drops, and show on screen where every number came from.
+We have found a dozen NASA and CSA sources. Right now only one of them, Mars light time, is wired into the backend. The cabin, radiation and space weather tiles on the frontend owner's screens are mock numbers. We need one simple, repeatable way to bring a source into the backend, keep it working when the venue network drops, and show on screen where every number came from.
 
 ## What Global Awards require
 
@@ -103,13 +103,13 @@ None of this starts before the Saturday plan's Task 9 is done and the 16:15 run 
 | --- | --- |
 | A feed changes shape or goes quiet during the weekend | The saved answer keeps the tile alive, and the tile shows its age |
 | The DSN feed is stale (the copy read on 14 November was stamped 13 November) | Show the feed's own time; never call it "live" unless it is under an hour old |
-| A screen shows cabin CO2 in mmHg, as Damola's mock does, while NASA's file is in ppm | Show ppm as given. Convert only with a cited factor |
+| A screen shows cabin CO2 in mmHg, as the frontend owner's mock does, while NASA's file is in ppm | Show ppm as given. Convert only with a cited factor |
 | This work eats Saturday | It is gated behind Task 9 and the 16:15 run |
 
 ## Open questions
 
 | Question | Who | Blocks |
 | --- | --- | --- |
-| Do the crew tiles replay PPG-DaLiA in the calm phase, or keep the scripted numbers? | TJ | Phase B |
-| Does the Earth console want the DSN line? | David, Damola | Phase A, the last step |
-| Do Damola's cabin tiles keep their OK and WATCH badges? We have no sourced rule for them yet | Damola, Rebecca | Phase B |
+| Do the crew tiles replay PPG-DaLiA in the calm phase, or keep the scripted numbers? | The backend owner | Phase B |
+| Does the Earth console want the DSN line? | Okafor, the frontend owner | Phase A, the last step |
+| Do the frontend owner's cabin tiles keep their OK and WATCH badges? We have no sourced rule for them yet | The frontend owner, the documentation owner | Phase B |

@@ -1,6 +1,6 @@
 # LIGHT-TIME backend spec
 
-Date: 14 November 2026. Owner: TJ. Status: approved by TJ at 11:02, updated at 11:45 after Damola's screens and the CSA workshop.
+Date: 14 November 2026. Owner: The backend owner. Status: approved by the backend owner at 11:02, updated at 11:45 after the frontend owner's screens and the CSA workshop.
 
 Build plan: `docs/plans/2026-11-14-backend-saturday.md`. The plan's code was built in a scratch folder before this was sent. All 45 tests pass on SQLite and on Postgres 16, and the Mars story was played end to end over HTTP on Postgres.
 
@@ -13,7 +13,7 @@ On a trip to Mars a message to Earth takes 3 to 22 minutes each way, and sometim
 1. A reading posted by the suit shows on the crew board within one second (block 1).
 2. Five bad readings in a row raise one SOS that says why. A loose sensor raises "check your sensor" and never an SOS (block 2).
 3. At the Mars stop, Earth cannot see a report until the real light time has passed (11 minutes, played in 11 seconds), and a reply takes the same time back (block 3).
-4. Damola's alert screen (acknowledge, send to flight surgeon, round trip, thread with ground) runs on real data, not mock data.
+4. The frontend owner's alert screen (acknowledge, send to flight surgeon, round trip, thread with ground) runs on real data, not mock data.
 5. Reset and start replay the same story every time, with no server restart.
 6. Every number on a screen has a named source, and simulated readings are labelled.
 
@@ -24,12 +24,12 @@ On a trip to Mars a message to Earth takes 3 to 22 minutes each way, and sometim
 | Logins and roles | Two-day demo on our own network |
 | A language model on stage | Rules and templates cannot stall or make things up in front of judges |
 | A real delay-tolerant network | We model the delay and the queue, not the protocol |
-| Diagnosis or treatment advice | The checklist text is demo wording until Rebecca sources it |
+| Diagnosis or treatment advice | The checklist text is demo wording until the documentation owner sources it |
 | Baselines, habitat tiles, space weather, check-in schedule, FHIR export | Sunday work, one short plan each, only if the 16:15 run works |
 
 ## Who uses it
 
-The astronaut in the suit (David) needs his readings checked every second, so the ship calls for help when he cannot. The crew medical officer at the base station (Damola) needs an alert that says why it fired and what to do, so he can act without waiting for Earth. The flight surgeon on Earth (a judge, with Rebecca as backup) needs to see only what has reached Earth and how old it is. The person driving the demo (Kyler) needs one reset call and one start call. The people building screens (Damola, David) need plain JSON they can poll once a second.
+The astronaut in the suit (Okafor) needs his readings checked every second, so the ship calls for help when he cannot. The crew medical officer at the base station (the frontend owner) needs an alert that says why it fired and what to do, so he can act without waiting for Earth. The flight surgeon on Earth (a judge, with the documentation owner as backup) needs to see only what has reached Earth and how old it is. The person driving the demo (the reviewer) needs one reset call and one start call. The people building screens (the frontend owner, Okafor) need plain JSON they can poll once a second.
 
 ## Words we use
 
@@ -81,7 +81,7 @@ Must have on Saturday. Each one has tests in the plan.
 
 Sunday, in this order, if Saturday's run works:
 
-1. A week of history and personal baselines. This feeds the trend chart, the baseline numbers and the "over baseline for 3 days" alert on Damola's screens.
+1. A week of history and personal baselines. This feeds the trend chart, the baseline numbers and the "over baseline for 3 days" alert on the frontend owner's screens.
 2. Habitat tiles on real data: ISS cabin readings from NASA's Environmental Data App and space weather from NASA DONKI. The links and the download steps are in `docs/data-sources.md`.
 3. One line on the Earth console from NASA's Deep Space Network Now feed: the round-trip light time NASA's own antennas are waiting on for Mars.
 4. CSA's open heart-rate filter (github.com/asc-csa/heart-rate-filtering, MIT licence) as a noise rule in front of the sustained check.
@@ -138,7 +138,7 @@ The `timeline` holds `raised_at`, `acknowledged_at`, `sent_at`, `earth_eta_s`, `
 
 The three times on a sent message are `sent_at`, `arrives_after_s` (the one-way delay) and `earliest_reply_after_s` (twice the delay). Every update, message and reply carries `payload.alert_id`, so the thread for one alert is the outbox and inbox filtered by that id.
 
-## Damola's screens against the API
+## the frontend owner's screens against the API
 
 | On the lo-fi screens | Comes from | Saturday |
 | --- | --- | --- |
@@ -165,7 +165,7 @@ The three times on a sent message are `sent_at`, `arrives_after_s` (the one-way 
 | `warning` | ALERT | Warning |
 | `emergency` | SOS | Emergency |
 
-Three more notes for the screens. The crew the API returns is David, Damola and Youssef, the people on stage; the names on the lo-fi are placeholders. Source lines printed on a card should come from the API's `source` field or from Rebecca's checked list: NASA lists V1 3004 as "In-Mission Medical Care", not "vital-sign trending". The lo-fi's example alert is a slow trend; Saturday's live alert is the collapse, so the alert screen needs a red SOS look and the spoken line.
+Three more notes for the screens. The crew the API returns is Okafor, the frontend owner and the hardware owner, the people on stage; the names on the lo-fi are placeholders. Source lines printed on a card should come from the API's `source` field or from the documentation owner's checked list: NASA lists V1 3004 as "In-Mission Medical Care", not "vital-sign trending". The lo-fi's example alert is a slow trend; Saturday's live alert is the collapse, so the alert screen needs a red SOS look and the spoken line.
 
 ## Data sources
 
@@ -187,22 +187,22 @@ If we use any file from the CSA open data portal, the project page must name the
 
 | Risk | What we do |
 | --- | --- |
-| The venue Wi-Fi stops laptops reaching each other | Test from Damola's laptop in block 1 (plan Task 4, step 5). Fall back to a phone hotspot, then to one laptop |
+| The venue Wi-Fi stops laptops reaching each other | Test from the frontend owner's laptop in block 1 (plan Task 4, step 5). Fall back to a phone hotspot, then to one laptop |
 | Horizons cannot be reached from the venue | The dated values load by themselves and the screen says so |
 | The screens and the API drift apart | The table above is the contract. A field or route changes only together with this file |
 | The hardware sends faster or slower than once a second | "5 readings in a row" still holds; the wording "for 5 s" in the reason needs a tweak |
-| A printed source is wrong | Rebecca checks every source line on a screen before the 16:15 run |
+| A printed source is wrong | The documentation owner checks every source line on a screen before the 16:15 run |
 
 ## Open questions
 
 | Question | Who | Blocks |
 | --- | --- | --- |
-| Which Sunday picks in `docs/data-sources.md` do we wire, and has the cabin data been downloaded into `data/eda/`? | TJ | Sunday backlog |
-| Which Postgres do we point at: TJ's laptop or a hosted one? | TJ, Kyler | Task 9 |
-| Do the `reading` field names and the level map suit the frontend? | Damola | Block 2 |
-| What does the hardware send, how often, and can it flag a bad signal? | Youssef | Block 2 |
-| Sourced checklist wording for `base_station/procedures.json` | Rebecca | Sunday pitch |
-| Is any Bio-Monitor sample data open? Ask the CSA mentor on Discord | Rebecca | Sunday backlog |
+| Which Sunday picks in `docs/data-sources.md` do we wire, and has the cabin data been downloaded into `data/eda/`? | The backend owner | Sunday backlog |
+| Which Postgres do we point at: The backend owner's laptop or a hosted one? | The backend owner, the reviewer | Task 9 |
+| Do the `reading` field names and the level map suit the frontend? | The frontend owner | Block 2 |
+| What does the hardware send, how often, and can it flag a bad signal? | The hardware owner | Block 2 |
+| Sourced checklist wording for `base_station/procedures.json` | The documentation owner | Sunday pitch |
+| Is any Bio-Monitor sample data open? Ask the CSA mentor on Discord | The documentation owner | Sunday backlog |
 
 ## Timeline
 

@@ -8,11 +8,11 @@
 
 **Tech Stack:** Python 3.13, Flask, Flask-SQLAlchemy, pytest, requests. Frontend side: TypeScript, React 19, Next.js 16 (client components only).
 
-**Status of this plan:** written without running anything, at TJ's request. The code blocks are untested. Run every test step. Where a step says "stop and tell TJ", do that.
+**Status of this plan:** written without running anything, at the backend owner's request. The code blocks are untested. Run every test step. Where a step says "stop and tell the backend owner", do that.
 
 ---
 
-## Part A: where things stand (read this first, TJ)
+## Part A: where things stand (read this first, the backend owner)
 
 ### A1. Frontend and backend are not in tune yet, because the frontend has no screens
 
@@ -25,7 +25,7 @@ Checked at 15:00 on Saturday in your local clones.
 | Calls to the API | n/a | None. No fetch, no API URL, no types |
 | Levels | nominal, advisory, caution, warning, emergency | Tokens for OK, WATCH, ALERT only. No SOS colour |
 
-Nothing conflicts, because nothing is wired. The risk tonight is all on the frontend side. What the backend can do about it is hand over a typed client, a polling hook and a fixed contract with a test behind it (Task 6), so Damola builds screens and never guesses a field name.
+Nothing conflicts, because nothing is wired. The risk tonight is all on the frontend side. What the backend can do about it is hand over a typed client, a polling hook and a fixed contract with a test behind it (Task 6), so the frontend owner builds screens and never guesses a field name.
 
 Smallest set of screens that makes a working system tonight: (1) crew board with the dial and the story buttons, (2) the alert screen with checklist, timeline, countdown and voice, (3) the Earth console with inbox and reply. Everything else can wait.
 
@@ -98,7 +98,7 @@ Task 4 puts this list behind one route so a screen and a slide can show it.
 
 - **D1. Light-time module.** Keep the three small files and expose the working (recommended). Merging them into one module changes nothing a judge can see and risks 91 passing tests.
 - **D2. Machine learning.** None trained. Run the leave-one-out check (recommended).
-- **D3. Frontend gap.** Hand Damola the typed client (in this plan). A bare fallback console served by Flask is not in this plan. See the question at the end of the chat message.
+- **D3. Frontend gap.** Hand the frontend owner the typed client (in this plan). A bare fallback console served by Flask is not in this plan. See the question at the end of the chat message.
 
 ---
 
@@ -123,7 +123,7 @@ Task 4 puts this list behind one route so a screen and a slide can show it.
 
 ### Task 0: Starting point
 
-- [ ] **Step 1:** Run `git status --short` and `python -m pytest -q`. Expected: clean tree apart from this plan, `91 passed`. If not, stop and tell TJ.
+- [ ] **Step 1:** Run `git status --short` and `python -m pytest -q`. Expected: clean tree apart from this plan, `91 passed`. If not, stop and tell the backend owner.
 - [ ] **Step 2:** In `CLAUDE.md`, under "Read first", add the line `- Tonight's plan: docs/plans/2026-11-14-tonight-integration.md` and change "45 tests" to "91 tests".
 
 ---
@@ -302,7 +302,7 @@ def test_a_manual_sos_says_no_rule_was_involved(client):
 def test_resolving_keeps_the_crews_own_words_and_tells_earth(client):
     alert = sos(client)
     note = "Mask on. Back to 97 in two minutes."
-    done = client.post(f"/api/base/alerts/{alert['id']}/clear", json={"by": "Damola", "note": note}).get_json()
+    done = client.post(f"/api/base/alerts/{alert['id']}/clear", json={"by": "Lindqvist", "note": note}).get_json()
     assert done["cleared_note"] == note
     resolved = [m for m in client.get("/api/base/outbox").get_json() if m["payload"].get("event") == "resolved"]
     assert resolved[0]["payload"]["note"] == note
@@ -362,7 +362,7 @@ and replace the body of `clear_alert` with:
     return jsonify(alert_dict(alert))
 ```
 
-- [ ] **Step 6: The databases need the new column.** Local SQLite: `rm -f instance/lighttime.db`. Kyler's Postgres, once:
+- [ ] **Step 6: The databases need the new column.** Local SQLite: `rm -f instance/lighttime.db`. The reviewer's Postgres, once:
 
 `python -c "from app import create_app; from common.models import db; a = create_app(); a.app_context().push(); db.session.execute(db.text('ALTER TABLE alert ADD COLUMN IF NOT EXISTS cleared_note VARCHAR(280)')); db.session.commit()"`
 
@@ -441,7 +441,7 @@ def data_sources():
 - [ ] **Step 1: Save one real copy of the feed and look at it.**
 
 Run: `curl -s https://eyes.nasa.gov/dsn/data/dsn.xml -o data/reference/dsn_sample.xml` then open the file.
-Expected: `<dish name="...">` elements, each holding `<target name="..." ... rtlt="...">` elements. If the tags or the `rtlt` attribute are named differently, stop and tell TJ, because the parser below assumes them.
+Expected: `<dish name="...">` elements, each holding `<target name="..." ... rtlt="...">` elements. If the tags or the `rtlt` attribute are named differently, stop and tell the backend owner, because the parser below assumes them.
 
 - [ ] **Step 2:** Add to `tests/test_tonight.py`:
 
@@ -580,7 +580,7 @@ def network():
 ```
 
 - [ ] **Step 6:** Run `python -m pytest -q`. Expected: `106 passed`.
-- [ ] **Step 7:** Start the server, then `curl -s localhost:5000/api/earth/network`. Expected: `"source": "NASA DSN Now, live"`. If `passes` is not empty, `differ_s` should be under 10. If it is larger, do not hide it: tell TJ. An empty list only means no antenna is on Mars this minute.
+- [ ] **Step 7:** Start the server, then `curl -s localhost:5000/api/earth/network`. Expected: `"source": "NASA DSN Now, live"`. If `passes` is not empty, `differ_s` should be under 10. If it is larger, do not hide it: tell the backend owner. An empty list only means no antenna is on Mars this minute.
 - [ ] **Step 8:** Add the route to the spec's API table. Commit: `feat: DSN Now cross-check of the Mars delay`.
 
 ---
@@ -623,7 +623,7 @@ def test_every_screen_gets_the_fields_the_typed_client_expects(client):
     assert set(client.post("/api/base/dial", json={"stop": "moon"}).get_json()) == {"state", "flushed"}
 ```
 
-- [ ] **Step 2:** Run `python -m pytest -q`. Expected: `107 passed`. If a set differs, the code is the truth: correct the set here and the matching type below, and tell TJ which field.
+- [ ] **Step 2:** Run `python -m pytest -q`. Expected: `107 passed`. If a set differs, the code is the truth: correct the set here and the matching type below, and tell the backend owner which field.
 
 - [ ] **Step 3:** Create `docs/frontend/lighttime-api.ts`:
 
@@ -818,7 +818,7 @@ Rules that save you a bug each:
 - Readings for one crew member include typed check-ins. Filter on `source` for a chart.
 ```
 
-- [ ] **Step 6:** Commit: `docs: typed client and contract for the frontend`. Tell Damola the three files are in `docs/frontend/`.
+- [ ] **Step 6:** Commit: `docs: typed client and contract for the frontend`. Tell the frontend owner the three files are in `docs/frontend/`.
 
 ---
 
@@ -948,11 +948,11 @@ if __name__ == "__main__":
 ```
 
 - [ ] **Step 2:** Run `python scripts/verify_data.py --write`, then `python scripts/verify_data.py`.
-Expected: every line `PASS` (one `SKIP` is fine) and `ALL CHECKS PASSED`. A `FAIL` is a finding, not a typo to patch: use systematic-debugging to learn whether the data or the check is wrong, and tell TJ either way. Likely first suspects, since this script has never run: a column name in a clean table, or a top-level README that does not name a folder.
+Expected: every line `PASS` (one `SKIP` is fine) and `ALL CHECKS PASSED`. A `FAIL` is a finding, not a typo to patch: use systematic-debugging to learn whether the data or the check is wrong, and tell the backend owner either way. Likely first suspects, since this script has never run: a column name in a clean table, or a top-level README that does not name a folder.
 
 - [ ] **Step 3:** Commit: `data: verification script and checksums`.
 
-- [ ] **Step 4: The checks a script cannot do.** Copy this table into `docs/data-verification.md` and have a person (Rebecca) tick each line on Sunday morning. About 20 minutes.
+- [ ] **Step 4: The checks a script cannot do.** Copy this table into `docs/data-verification.md` and have a person (the documentation owner) tick each line on Sunday morning. About 20 minutes.
 
 | # | Open this | Confirm |
 |---|---|---|
@@ -1034,15 +1034,15 @@ if __name__ == "__main__":
 
 ### Task 9: Wrap up
 
-- [ ] **Step 1:** `AI_USE.md`: add today's line (TJ, Claude, this plan: contract, light-time working, DSN check, verification).
+- [ ] **Step 1:** `AI_USE.md`: add today's line (the backend owner, Claude, this plan: contract, light-time working, DSN check, verification).
 - [ ] **Step 2:** `README.md`: add the three new routes and the two scripts.
-- [ ] **Step 3:** `python -m pytest -q` (expected `107 passed`), then `git push`, then open the pull request to `main` for Kyler.
+- [ ] **Step 3:** `python -m pytest -q` (expected `107 passed`), then `git push`, then open the pull request to `main` for the reviewer.
 - [ ] **Step 4: Tonight's run-through, with the frontend.** Each line must work on a second laptop pointed at this one.
 
 | # | Do | See |
 |---|---|---|
 | 1 | Dial Mars | Delay 11 min, path 198 million km, "Crew medical officer", source JPL Horizons |
-| 2 | Start `stage` with replay | Three crew tiles moving on real wrist data, SOS for David in about 9 s, the line spoken once |
+| 2 | Start `stage` with replay | Three crew tiles moving on real wrist data, SOS for Okafor in about 9 s, the line spoken once |
 | 3 | Open the alert | `why` lines, checklist, timeline with a countdown to the earliest reply |
 | 4 | Earth console | Nothing for 11 real seconds, then the report with its asked-ahead answers |
 | 5 | Earth replies | Earth outbox counts down, the ship's inbox gets it 11 s later |
@@ -1055,4 +1055,4 @@ if __name__ == "__main__":
 
 ## Not in this plan
 
-A login on the API, a per-person sharing switch, doctor thinking time in the ETA, a learned model, DONKI space weather, and any frontend screen. A fallback console served by Flask is a question for TJ, not a task here.
+A login on the API, a per-person sharing switch, doctor thinking time in the ETA, a learned model, DONKI space weather, and any frontend screen. A fallback console served by Flask is a question for the backend owner, not a task here.
