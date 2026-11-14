@@ -21,6 +21,26 @@ The server listens on port 5000 and does not reload on its own: stop it with Ctr
 and start it again after a change. Without a `.env` file it uses a local SQLite file.
 For Postgres, copy `.env.example` to `.env` and set `DATABASE_URL`.
 
+## Run with Docker
+
+Build and run the production container:
+
+    docker build -t lighttime-backend .
+    docker run --rm -p 8080:8080 --env-file .env lighttime-backend
+
+The container listens on port 8080 and uses `DATABASE_URL` from `.env`. It binds
+to `0.0.0.0` and runs as a non-root user. For Cloud Run, the platform supplies
+`PORT`; the container already uses that value.
+
+Deploy directly from the repository with Cloud Build:
+
+    gcloud run deploy lighttime-api --source . --region us-central1 --port 8080
+
+Set `DATABASE_URL` through Secret Manager rather than committing it to the
+repository:
+
+    gcloud run services update lighttime-api --region us-central1 --set-secrets DATABASE_URL=database-url:latest
+
 ## Test
 
     python -m pytest -v
