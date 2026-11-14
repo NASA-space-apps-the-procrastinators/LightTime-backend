@@ -1,3 +1,5 @@
+import pathlib
+
 from common import dsn, lighttime, modes
 
 LOW = {"crew_id": 1, "spo2": 86}
@@ -82,3 +84,32 @@ def test_the_sources_route_lists_the_nasa_data_we_use(client):
     assert sum(s["agency"].startswith("NASA") for s in listed) >= 4
     assert all(set(s) == {"id", "agency", "name", "kind", "url", "used_for", "as_of"} for s in listed)
     assert listed[0]["id"] == "horizons" and "JPL Horizons" in listed[0]["as_of"]
+
+
+FEED = ('<dsn><dish name="DSS26"><target name="MRO" id="74" rtlt="1330.0"/></dish>'
+        '<dish name="DSS43"><target name="VGR2" id="32" rtlt="140000"/><target name="MVN" id="202" rtlt="1330.4"/>'
+        '</dish><timestamp>1</timestamp></dsn>')
+
+
+def test_only_mars_spacecraft_are_read_from_the_feed():
+    assert dsn.parse(FEED) == [{"dish": "DSS26", "craft": "MRO", "round_trip_s": 1330.0},
+                               {"dish": "DSS43", "craft": "MVN", "round_trip_s": 1330.4}]
+
+
+def test_the_saved_copy_of_the_real_feed_can_be_read():
+    sample = pathlib.Path("data/reference/dsn_sample.xml")
+    for seen in dsn.parse(sample.read_text(encoding="utf-8")) if sample.exists() else []:
+        assert 360 < seen["round_trip_s"] < 2700            # Mars is 3 to 22 minutes away, each way
+
+
+def test_earth_sees_two_nasa_figures_side_by_side(client, monkeypatch):
+    monkeypatch.setattr(dsn, "fetch", lambda: FEED)
+    dsn._cache.clear()
+    seen = client.get("/api/earth/network").get_json()
+    assert seen["dsn_one_way_s"] == 665.1 and len(seen["passes"]) == 2
+    assert seen["differ_s"] == round(abs(665.1 - seen["horizons_one_way_s"]), 1)
+
+
+def test_no_dsn_is_not_an_error(client):
+    seen = client.get("/api/earth/network").get_json()
+    assert seen["passes"] == [] and seen["dsn_one_way_s"] is None and seen["differ_s"] is None
