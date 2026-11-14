@@ -106,7 +106,7 @@ All JSON. The screens poll once a second.
 
 | Call | Used by | Gives |
 | --- | --- | --- |
-| `GET /api/base/state` | base, suit | dial stop, label, delay_s, link_up, mode, who_decides, light_time_source, speedup, all four stops |
+| `GET /api/base/state` | base, suit | dial stop, label, delay_s, link_up, mode, who_decides, light_time_source, path_km (delay x speed of light), round_trip_s (2 x delay), plays_as_s (real seconds one leg takes in the demo), speedup, all four stops |
 | `POST /api/base/dial` `{stop}` | base | new state; flushes the queue when the link is back |
 | `POST /api/base/readings` | suit, hardware, check-in | stores a reading, runs the rules, returns any alerts raised |
 | `GET /api/base/crew` | base | one entry per person: level, `latest` sensed reading, `typed` check-in reading |
