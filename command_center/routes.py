@@ -22,7 +22,9 @@ def inbox():
 
 @bp.post("/reply")
 def reply():
-    data = request.get_json()
+    data = request.get_json(silent=True) or {}
+    if not data.get("text"):
+        return jsonify(error="a reply needs text"), 400
     state = current_state()
     parent = db.session.get(LinkMessage, data["message_id"]) if data.get("message_id") else None
     message = link.send("to_ship", "reply",

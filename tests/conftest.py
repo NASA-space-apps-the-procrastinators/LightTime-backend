@@ -2,6 +2,7 @@ import pytest
 import requests
 
 from app import create_app
+from base_station import usual
 from common import lighttime
 
 
@@ -12,6 +13,7 @@ def app(monkeypatch):
 
     monkeypatch.setattr(lighttime, "fetch", offline)
     lighttime._cache.clear()
+    usual.clear()
     app = create_app("sqlite:///:memory:")
     app.config["TESTING"] = True
     return app
