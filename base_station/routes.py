@@ -1,8 +1,9 @@
 """The ship's side: readings in, alerts and reports out."""
 from flask import Blueprint, jsonify, request
 
+from base_station import rules
 from common import link, modes
-from common.models import VITALS, Crew, MissionState, Reading, db
+from common.models import VITALS, Alert, Crew, MissionState, Reading, db
 
 bp = Blueprint("base", __name__)
 
@@ -18,7 +19,7 @@ def ingest(data):
                       **{vital: data.get(vital) for vital in VITALS})
     db.session.add(reading)
     db.session.commit()
-    return reading, []
+    return reading, rules.evaluate(reading)
 
 
 @bp.get("/health")
@@ -60,7 +61,8 @@ def _latest(crew_id, typed):
 
 
 def _level(crew_id):
-    return "nominal"
+    levels = [alert.level for alert in Alert.query.filter_by(crew_id=crew_id, cleared_at=None)]
+    return max(levels, key=rules.RANK.get, default="nominal")
 
 
 @bp.get("/crew")
