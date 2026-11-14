@@ -20,6 +20,15 @@ def inbox():
                    messages=[link.to_dict(m, now) for m in link.delivered("to_earth", now)])
 
 
+@bp.get("/outbox")
+def outbox():
+    """What Earth has sent, with the mission time left until each lands on the ship."""
+    now = link.utcnow()
+    sent = (LinkMessage.query.filter_by(direction="to_ship")
+            .order_by(LinkMessage.created_at.desc(), LinkMessage.id.desc()))
+    return jsonify([link.to_dict(m, now) for m in sent])
+
+
 @bp.post("/reply")
 def reply():
     data = request.get_json(silent=True) or {}

@@ -16,15 +16,19 @@ def current_state():
 
 
 def timeline(alert):
-    """The round trip of one alert, for the stepper on the alert screen."""
+    """The round trip of one alert, for the stepper on the alert screen. The earliest reply
+    is the report's landing time plus the same leg back, as if the doctor answered at once."""
     report = db.session.get(LinkMessage, alert.report_id) if alert.report_id else None
     sent = link.to_dict(report) if report else {}
     reply = next((m for m in reversed(link.delivered("to_ship"))
                   if m.payload.get("alert_id") == alert.id), None)
+    earliest = (report.deliver_at + (report.deliver_at - report.sent_at)
+                if report is not None and report.sent_at is not None else None)
     return {
         "raised_at": iso(alert.at), "acknowledged_at": iso(alert.acknowledged_at),
         "sent_at": sent.get("sent_at"), "earth_eta_s": sent.get("eta_s"),
         "earth_at": sent.get("deliver_at") if sent.get("status") == "delivered" else None,
+        "earliest_reply_at": iso(earliest),
         "reply_at": iso(reply.deliver_at) if reply else None,
         "resolved_at": iso(alert.cleared_at),
     }

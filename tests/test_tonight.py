@@ -32,3 +32,25 @@ def test_the_state_shows_its_working(client):
     assert mars["plays_as_s"] == mars["delay_s"] / state["speedup"]
     assert abs(mars["path_km"] - mars["delay_s"] * 299_792.458) < 1
     assert moon["plays_as_s"] == moon["delay_s"]          # under a minute plays in real time
+
+
+def test_the_alert_says_when_the_earliest_reply_could_land(client):
+    client.post("/api/base/dial", json={"stop": "mars"})
+    sos(client)
+    line = client.get("/api/base/alerts").get_json()[0]["timeline"]
+    assert line["earliest_reply_at"] > line["sent_at"]
+
+
+def test_a_queued_report_has_no_reply_time_yet(client):
+    client.post("/api/base/dial", json={"stop": "sun"})
+    sos(client)
+    assert client.get("/api/base/alerts").get_json()[0]["timeline"]["earliest_reply_at"] is None
+
+
+def test_earth_can_watch_its_reply_in_flight(client):
+    client.post("/api/base/dial", json={"stop": "mars"})
+    sent = client.post("/api/earth/reply", json={"text": "Give oxygen."}).get_json()
+    out = client.get("/api/earth/outbox").get_json()
+    assert [m["id"] for m in out] == [sent["id"]] and out[0]["status"] == "in_flight"
+    assert 0 < out[0]["eta_s"] <= out[0]["delay_s"]
+    assert client.get("/api/base/inbox").get_json() == []       # the ship has not heard yet
