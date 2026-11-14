@@ -16,4 +16,4 @@ The checks below need a person. Rebecca, tick each line on Sunday morning. About
 | 8 | A NASA page on ISS communications through TDRS | The 0.25 s station figure is fair. If none is found, label it "assumed" on the dial | [ ] |
 | 9 | The cue list in the CSA advisor record (CMO-DA, STD-3001 section 7.3) | Verified before anyone says it in the pitch, or left out | [ ] |
 
-Note on line 4: DSN Now gives the round trip to three significant figures (1310 s on 14 Nov), so its one-way figure is only good to about 5 s. A gap of a few seconds against Horizons is rounding, not an error.
+Note on line 4: two things make DSN and Horizons differ by a few seconds. First, the app asks Horizons for the value at 00:00 UTC, and Mars light time is falling by about 4.2 s a day this month, so later in the day DSN reads lower. Second, DSN Now gives the round trip to three significant figures (1310 s), so its one-way figure is only good to about 2.5 s. On 14 Nov at 20:43 UTC, DSN read 655.0 s; Horizons for that hour is about 657.2 s, inside DSN's rounding band of 652.5 to 657.5 s.

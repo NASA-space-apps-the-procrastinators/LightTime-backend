@@ -15,10 +15,12 @@
 Rules that save you a bug each:
 
 - Never work out a delay or a countdown from your own maths. Show `delay_s`, `round_trip_s`, `eta_s` as given, and count down to the times `red_line_at` and `earliest_reply_at`.
+- Those two times run on different clocks. `red_line_at` is real time (bodies are not sped up). `earliest_reply_at` is on the demo clock (light played 60x faster). Do not compare them to decide whether Earth is in time: show `lookahead.earth_in_time` for that.
 - Mission seconds and demo seconds differ. A Mars leg is 661 mission seconds and plays in 11 real seconds. Label it "playing 60x faster" using `speedup`.
 - For the stop `sun`, show "No link". Ignore its `delay_s`.
 - Call `speakOnce(alert)` for every open alert on every poll. It only speaks once.
 - Show `why` on the alert screen and ask for a note when the crew resolves. The CSA advisor asked for both.
 - Alert ids can be reused after a reset (on SQLite they start again at 1). Never store one.
-- An empty form box can be sent as "". The backend treats it as no reading.
+- An empty form box can be left out or sent as null. The backend also treats "" as no reading.
+- A resolve `note` must be text. Anything else gets a 400.
 - Readings for one crew member include typed check-ins. Filter on `source` for a chart.

@@ -1,5 +1,6 @@
 """The ship's side: readings in, alerts and reports out."""
 import time
+from datetime import timedelta
 
 from flask import Blueprint, abort, current_app, jsonify, request
 
@@ -22,7 +23,7 @@ def timeline(alert):
     sent = link.to_dict(report) if report else {}
     reply = next((m for m in reversed(link.delivered("to_ship"))
                   if m.payload.get("alert_id") == alert.id), None)
-    earliest = (report.deliver_at + (report.deliver_at - report.sent_at)
+    earliest = (report.deliver_at + timedelta(seconds=link.real_delay_s(report.delay_s))
                 if report is not None and report.sent_at is not None else None)
     return {
         "raised_at": iso(alert.at), "acknowledged_at": iso(alert.acknowledged_at),
@@ -82,6 +83,17 @@ def tell_earth(alert, event, priority=1):
     state = current_state()
     link.send("to_earth", "update", {"alert_id": alert.id, **event},
               state["delay_s"], state["link_up"], priority=priority)
+
+
+def body():
+    """The JSON object a button sent, or {} for anything else."""
+    data = request.get_json(silent=True)
+    return data if isinstance(data, dict) else {}
+
+
+def person(value):
+    """Who pressed the button, cut to fit the 40-character column."""
+    return (value.strip()[:40] if isinstance(value, str) else "") or "crew"
 
 
 def crew_id_or_400(data):
@@ -200,7 +212,7 @@ def acknowledge(alert_id):
     alert = db.get_or_404(Alert, alert_id)
     if alert.acknowledged_at is None:
         alert.acknowledged_at = utcnow()
-        alert.acknowledged_by = (request.get_json(silent=True) or {}).get("by") or "crew"
+        alert.acknowledged_by = person(body().get("by"))
         db.session.commit()
         tell_earth(alert, {"event": "acknowledged", "by": alert.acknowledged_by})
     return jsonify(alert_dict(alert))
@@ -236,10 +248,13 @@ def send_alert(alert_id):
 def clear_alert(alert_id):
     alert = db.get_or_404(Alert, alert_id)
     if alert.cleared_at is None:        # a second press changes nothing
-        body = request.get_json(silent=True) or {}
+        sent = body()
+        note = sent.get("note")
+        if note is not None and not isinstance(note, str):
+            return jsonify(error="a note must be text"), 400
         alert.cleared_at = utcnow()
-        alert.cleared_by = body.get("by") or "crew"
-        alert.cleared_note = (body.get("note") or "")[:280] or None
+        alert.cleared_by = person(sent.get("by"))
+        alert.cleared_note = (note or "").strip()[:280] or None
         db.session.commit()
         tell_earth(alert, {"event": "resolved", "by": alert.cleared_by, "note": alert.cleared_note})
     return jsonify(alert_dict(alert))

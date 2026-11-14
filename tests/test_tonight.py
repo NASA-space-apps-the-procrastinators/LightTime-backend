@@ -113,3 +113,31 @@ def test_earth_sees_two_nasa_figures_side_by_side(client, monkeypatch):
 def test_no_dsn_is_not_an_error(client):
     seen = client.get("/api/earth/network").get_json()
     assert seen["passes"] == [] and seen["dsn_one_way_s"] is None and seen["differ_s"] is None
+
+
+def test_a_bad_resolve_body_is_a_400_not_a_crash_and_names_fit_the_column(client):
+    alert = sos(client)
+    url = f"/api/base/alerts/{alert['id']}/clear"
+    assert client.post(url, json={"note": 123}).status_code == 400
+    assert client.post(url, json=[1, 2]).status_code == 200            # not an object: treated as empty
+    done = client.post("/api/base/alerts/{}/ack".format(alert["id"]), json={"by": "x" * 80}).get_json()
+    assert len(done["acknowledged_by"]) == 40
+
+
+def test_the_earliest_reply_after_a_blackout_counts_one_leg_back(client):
+    client.post("/api/base/dial", json={"stop": "sun"})
+    for crew in (1, 2, 3):
+        client.post("/api/base/sos", json={"crew_id": crew})
+    client.post("/api/base/dial", json={"stop": "mars"})
+    from datetime import datetime
+    for a in client.get("/api/base/alerts").get_json():
+        line, leg = a["timeline"], lighttime.mars_seconds() / 60
+        sent = client.get("/api/base/outbox").get_json()
+        report = next(m for m in sent if m["kind"] == "report" and m["payload"]["alert_id"] == a["id"])
+        gap = (datetime.fromisoformat(line["earliest_reply_at"].replace("Z", "+00:00"))
+               - datetime.fromisoformat(report["deliver_at"].replace("Z", "+00:00"))).total_seconds()
+        assert abs(gap - leg) < 0.01
+
+
+def test_an_infinite_round_trip_in_the_feed_is_ignored():
+    assert dsn.parse('<dsn><dish name="D"><target name="MRO" rtlt="inf"/></dish></dsn>') == []

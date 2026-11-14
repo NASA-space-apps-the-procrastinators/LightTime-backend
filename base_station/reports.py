@@ -38,7 +38,7 @@ def why(alert):
                 "with a clean signal. A typed number counts once and stops at a warning.")
     return [f"What was seen: {alert.reason}.", f"Last readings: {values}{cfg['unit']}.", rule,
             f"Band table: {rules.LIMITS['source']}",
-            "This is a fixed rule, not a diagnosis. The crew medical officer decides."]
+            "This is a fixed rule, not a diagnosis. A person, not the ship, decides."]
 
 
 def _show(value, unit):

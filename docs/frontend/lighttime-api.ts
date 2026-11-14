@@ -40,7 +40,7 @@ export interface Lookahead {
 export interface Timeline {
   raised_at: string; acknowledged_at: string | null; sent_at: string | null;
   earth_eta_s: number | null; earth_at: string | null;
-  earliest_reply_at: string | null;     // count down to this for "earliest reply"
+  earliest_reply_at: string | null;     // count down to this for "earliest reply". Demo clock: never compare with red_line_at
   reply_at: string | null; resolved_at: string | null;
 }
 export interface Alert {

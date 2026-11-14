@@ -115,7 +115,7 @@ All JSON. The screens poll once a second.
 | `POST /api/base/alerts/<id>/ack` `{by}` | base | a person acknowledges the alert |
 | `POST /api/base/alerts/<id>/steps` `{index}` | base | ticks a checklist step |
 | `POST /api/base/alerts/<id>/send` | base | sends a report to the flight surgeon (an SOS has already gone) |
-| `POST /api/base/alerts/<id>/clear` `{by, note}` | base | a person resolves the alert; `note` is their reason in their own words (up to 280 characters), kept as `cleared_note` and sent to Earth with the resolved update |
+| `POST /api/base/alerts/<id>/clear` `{by, note}` | base | a person resolves the alert; `note` is their reason in their own words (up to 280 characters), kept as `cleared_note` and sent to Earth with the resolved update; a note that is not text gets 400. `by` is cut to 40 characters |
 | `POST /api/base/sos` `{crew_id}` | suit | manual SOS |
 | `POST /api/base/messages` `{text, alert_id, from}` | base | free text from the crew to the flight surgeon |
 | `GET /api/base/outbox` | base | everything the ship has sent, with status (queued, in_flight, delivered), eta_s and the three times |
@@ -134,7 +134,7 @@ An alert carries: `id`, `crew_id`, `crew`, `at`, `level`, `vital`, `value`, `uni
 
 `lookahead` is null unless a falling trend was found. It holds `now`, `per_min`, `eta_s`, `red_line`, `at`, `red_line_at`, `reply_s` and `earth_in_time`, frozen when the report left, so count down to `red_line_at`. The crew board adds `usual.heart_rate` (`low`, `high`, `n`, or null for the first ten minutes). Details: `docs/specs/2026-11-14-ship-ai-and-data-design.md` section 7.
 
-The `timeline` holds `raised_at`, `acknowledged_at`, `sent_at`, `earth_eta_s`, `earth_at`, `earliest_reply_at`, `reply_at` and `resolved_at`. A time is null until that step has happened. `earliest_reply_at` is the report's landing time plus the same leg back, as if the doctor answered at once; it is null while the report waits in the queue. `earth_eta_s` counts down in mission time to the moment Earth hears.
+The `timeline` holds `raised_at`, `acknowledged_at`, `sent_at`, `earth_eta_s`, `earth_at`, `earliest_reply_at`, `reply_at` and `resolved_at`. A time is null until that step has happened. `earliest_reply_at` is the report's landing time plus the same leg back, as if the doctor answered at once; it is null while the report waits in the queue. It is on the demo clock, like every link time; `lookahead.red_line_at` is real time, so screens use `earth_in_time` for the verdict. `earth_eta_s` counts down in mission time to the moment Earth hears.
 
 The three times on a sent message are `sent_at`, `arrives_after_s` (the one-way delay) and `earliest_reply_after_s` (twice the delay). Every update, message and reply carries `payload.alert_id`, so the thread for one alert is the outbox and inbox filtered by that id.
 

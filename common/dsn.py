@@ -1,5 +1,6 @@
 """NASA's Deep Space Network Now feed: which antennas are on Mars right now, and the
 round-trip light time NASA measures to its spacecraft there. A second check on Horizons."""
+import math
 import time
 import xml.etree.ElementTree as ET
 
@@ -24,7 +25,7 @@ def parse(text):
                 round_trip_s = float(target.get("rtlt", ""))
             except ValueError:
                 continue
-            if target.get("name", "").upper() in MARS_CRAFT and round_trip_s > 0:
+            if target.get("name", "").upper() in MARS_CRAFT and math.isfinite(round_trip_s) and round_trip_s > 0:
                 passes.append({"dish": dish.get("name"), "craft": target.get("name"), "round_trip_s": round_trip_s})
     return passes
 
