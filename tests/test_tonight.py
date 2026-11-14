@@ -54,3 +54,24 @@ def test_earth_can_watch_its_reply_in_flight(client):
     assert [m["id"] for m in out] == [sent["id"]] and out[0]["status"] == "in_flight"
     assert 0 < out[0]["eta_s"] <= out[0]["delay_s"]
     assert client.get("/api/base/inbox").get_json() == []       # the ship has not heard yet
+
+
+def test_every_alert_says_how_it_was_reached(client):
+    sos(client)
+    why = client.get("/api/base/alerts").get_json()[0]["why"]
+    assert why[1] == "Last readings: 86, 86, 86, 86, 86%."
+    assert any("NEWS2" in line for line in why) and why[-1].endswith("decides.")
+
+
+def test_a_manual_sos_says_no_rule_was_involved(client):
+    alert = client.post("/api/base/sos", json={"crew_id": 2}).get_json()
+    assert alert["why"] == ["A crew member pressed SOS. No rule was involved."]
+
+
+def test_resolving_keeps_the_crews_own_words_and_tells_earth(client):
+    alert = sos(client)
+    note = "Mask on. Back to 97 in two minutes."
+    done = client.post(f"/api/base/alerts/{alert['id']}/clear", json={"by": "Damola", "note": note}).get_json()
+    assert done["cleared_note"] == note
+    resolved = [m for m in client.get("/api/base/outbox").get_json() if m["payload"].get("event") == "resolved"]
+    assert resolved[0]["payload"]["note"] == note

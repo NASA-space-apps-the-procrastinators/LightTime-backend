@@ -3,6 +3,7 @@ import json
 import os
 from datetime import timedelta
 
+from base_station import lookahead, rules
 from common.models import Reading, iso, utcnow
 
 with open(os.path.join(os.path.dirname(__file__), "procedures.json")) as f:
@@ -18,6 +19,26 @@ REQUEST = {
 
 def steps_for(vital):
     return PROCEDURES.get(vital, PROCEDURES["default"])
+
+
+def why(alert):
+    """How the ship reached this alert, in plain lines a medical officer can check."""
+    if alert.vital == "manual":
+        return ["A crew member pressed SOS. No rule was involved."]
+    cfg = rules.LIMITS["vitals"].get(alert.vital)
+    if cfg is None:
+        return ["The sensor signal was not clean, so no reading was judged."]
+    recent = (Reading.query.filter(Reading.crew_id == alert.crew_id, getattr(Reading, alert.vital).isnot(None))
+              .order_by(Reading.at.desc(), Reading.id.desc()).limit(5).all())
+    values = ", ".join(f"{getattr(r, alert.vital):g}" for r in reversed(recent))
+    if alert.reason.endswith(lookahead.FALLING):
+        rule = "Rule: the reading is still in the normal band but falling steadily toward the red line."
+    else:
+        rule = ("Rule: the reading sat in an out-of-range band. A sensor needs five readings in a row "
+                "with a clean signal. A typed number counts once and stops at a warning.")
+    return [f"What was seen: {alert.reason}.", f"Last readings: {values}{cfg['unit']}.", rule,
+            f"Band table: {rules.LIMITS['source']}",
+            "This is a fixed rule, not a diagnosis. The crew medical officer decides."]
 
 
 def _show(value, unit):

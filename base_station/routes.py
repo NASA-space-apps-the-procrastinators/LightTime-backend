@@ -59,6 +59,7 @@ def alert_dict(alert):
         "steps": reports.steps_for(alert.vital), "steps_done": alert.steps_done,
         "acknowledged_by": alert.acknowledged_by,
         "cleared_at": iso(alert.cleared_at), "cleared_by": alert.cleared_by,
+        "cleared_note": alert.cleared_note, "why": reports.why(alert),
         "timeline": timeline(alert),
         "lookahead": look,
         "speak": speak,
@@ -235,10 +236,12 @@ def send_alert(alert_id):
 def clear_alert(alert_id):
     alert = db.get_or_404(Alert, alert_id)
     if alert.cleared_at is None:        # a second press changes nothing
+        body = request.get_json(silent=True) or {}
         alert.cleared_at = utcnow()
-        alert.cleared_by = (request.get_json(silent=True) or {}).get("by") or "crew"
+        alert.cleared_by = body.get("by") or "crew"
+        alert.cleared_note = (body.get("note") or "")[:280] or None
         db.session.commit()
-        tell_earth(alert, {"event": "resolved", "by": alert.cleared_by})
+        tell_earth(alert, {"event": "resolved", "by": alert.cleared_by, "note": alert.cleared_note})
     return jsonify(alert_dict(alert))
 
 

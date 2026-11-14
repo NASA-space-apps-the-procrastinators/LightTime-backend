@@ -115,7 +115,7 @@ All JSON. The screens poll once a second.
 | `POST /api/base/alerts/<id>/ack` `{by}` | base | a person acknowledges the alert |
 | `POST /api/base/alerts/<id>/steps` `{index}` | base | ticks a checklist step |
 | `POST /api/base/alerts/<id>/send` | base | sends a report to the flight surgeon (an SOS has already gone) |
-| `POST /api/base/alerts/<id>/clear` `{by}` | base | a person resolves the alert |
+| `POST /api/base/alerts/<id>/clear` `{by, note}` | base | a person resolves the alert; `note` is their reason in their own words (up to 280 characters), kept as `cleared_note` and sent to Earth with the resolved update |
 | `POST /api/base/sos` `{crew_id}` | suit | manual SOS |
 | `POST /api/base/messages` `{text, alert_id, from}` | base | free text from the crew to the flight surgeon |
 | `GET /api/base/outbox` | base | everything the ship has sent, with status (queued, in_flight, delivered), eta_s and the three times |
@@ -128,7 +128,7 @@ All JSON. The screens poll once a second.
 | `POST /api/earth/reply` `{message_id, text, from}` | earth | sends advice back, with the same delay |
 | `GET /api/earth/outbox` | earth | everything Earth has sent, newest first, with status and eta_s, so Earth can watch its reply in flight |
 
-An alert carries: `id`, `crew_id`, `crew`, `at`, `level`, `vital`, `value`, `unit`, `reason`, `source`, `auto`, `nasa_risk`, `steps`, `steps_done`, `acknowledged_by`, `cleared_at`, `cleared_by`, `speak` (for an emergency or a falling trend; say it once per alert id and level), `lookahead` and `timeline`.
+An alert carries: `id`, `crew_id`, `crew`, `at`, `level`, `vital`, `value`, `unit`, `reason`, `source`, `auto`, `nasa_risk`, `steps`, `steps_done`, `acknowledged_by`, `cleared_at`, `cleared_by`, `cleared_note`, `why` (how the ship reached the alert, in plain lines: what was seen, the last readings, the rule, the band table, and who decides), `speak` (for an emergency or a falling trend; say it once per alert id and level), `lookahead` and `timeline`.
 
 `lookahead` is null unless a falling trend was found. It holds `now`, `per_min`, `eta_s`, `red_line`, `at`, `red_line_at`, `reply_s` and `earth_in_time`, frozen when the report left, so count down to `red_line_at`. The crew board adds `usual.heart_rate` (`low`, `high`, `n`, or null for the first ten minutes). Details: `docs/specs/2026-11-14-ship-ai-and-data-design.md` section 7.
 

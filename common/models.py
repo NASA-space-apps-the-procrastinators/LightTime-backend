@@ -58,6 +58,7 @@ class Alert(db.Model):
     steps_done = db.Column(db.JSON, nullable=False, default=list)
     cleared_at = db.Column(db.DateTime)
     cleared_by = db.Column(db.String(40))
+    cleared_note = db.Column(db.String(280))     # the person's reason, in their own words
     acknowledged_at = db.Column(db.DateTime)
     acknowledged_by = db.Column(db.String(40))
     report_id = db.Column(db.Integer)
