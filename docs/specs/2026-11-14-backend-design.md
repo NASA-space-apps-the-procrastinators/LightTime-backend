@@ -1,0 +1,202 @@
+# LIGHT-TIME backend spec
+
+Date: 14 November 2026. Owner: TJ. Status: approved by TJ at 11:02, updated at 11:45 after Damola's screens and the CSA workshop.
+
+Build plan: `docs/plans/2026-11-14-backend-saturday.md`. The plan's code was built in a scratch folder before this was sent. All 45 tests pass on SQLite and on Postgres 16, and the Mars story was played end to end over HTTP on Postgres.
+
+## Problem
+
+On a trip to Mars a message to Earth takes 3 to 22 minutes each way, and sometimes there is no link at all. A crew member who collapses cannot wait for a doctor who will not hear about it for 11 minutes. Our three screens (suit, base station, Earth) need one ship computer behind them that watches the crew, decides when to raise the alarm, tells the crew what to do, and sends Earth a report that arrives late, the way it would in flight.
+
+## Goals
+
+1. A reading posted by the suit shows on the crew board within one second (block 1).
+2. Five bad readings in a row raise one SOS that says why. A loose sensor raises "check your sensor" and never an SOS (block 2).
+3. At the Mars stop, Earth cannot see a report until the real light time has passed (11 minutes, played in 11 seconds), and a reply takes the same time back (block 3).
+4. Damola's alert screen (acknowledge, send to flight surgeon, round trip, thread with ground) runs on real data, not mock data.
+5. Reset and start replay the same story every time, with no server restart.
+6. Every number on a screen has a named source, and simulated readings are labelled.
+
+## Not doing
+
+| Left out | Why |
+| --- | --- |
+| Logins and roles | Two-day demo on our own network |
+| A language model on stage | Rules and templates cannot stall or make things up in front of judges |
+| A real delay-tolerant network | We model the delay and the queue, not the protocol |
+| Diagnosis or treatment advice | The checklist text is demo wording until Rebecca sources it |
+| Baselines, habitat tiles, space weather, check-in schedule, FHIR export | Sunday work, one short plan each, only if the 16:15 run works |
+
+## Who uses it
+
+The astronaut in the suit (David) needs his readings checked every second, so the ship calls for help when he cannot. The crew medical officer at the base station (Damola) needs an alert that says why it fired and what to do, so he can act without waiting for Earth. The flight surgeon on Earth (a judge, with Rebecca as backup) needs to see only what has reached Earth and how old it is. The person driving the demo (Kyler) needs one reset call and one start call. The people building screens (Damola, David) need plain JSON they can poll once a second.
+
+## Words we use
+
+| Word | Meaning |
+| --- | --- |
+| Reading | One set of numbers for one person at one time. Sensed (source `suit` or `scenario`) or `typed` (a check-in) |
+| Alert | Something the ship noticed about one vital of one person. Levels: advisory, caution, warning, emergency |
+| SOS | An emergency alert. It sends a report to Earth by itself |
+| Dial stop | Where the mission is: `station`, `moon`, `mars`, `sun` |
+| Delay | One-way light time in seconds. The API always gives the true value |
+| Mode | Who decides: `doctor_live`, `crew_first` or `ship_alone` |
+| Report, update, message, reply | The four link messages: the handoff for one alert, a thing the crew did (acknowledged, step, resolved), free text from the crew, and Earth's answer |
+| Round trip | One alert's path: raised, acknowledged, sent, Earth hears, reply, resolved |
+| Speed-up | Delays of a minute or more play 60 times faster on stage. The screens say so |
+
+## Decisions
+
+1. **One Flask app, two blueprints.** `base_station/` serves `/api/base/*` (the ship). `command_center/` serves `/api/earth/*` (the ground). The folder names follow the repo README, with underscores so Python can import them. One process and one port, so there is one thing to start on stage.
+2. **Earth sees a report, not the raw stream.** The command center reads only the link table, never the ship's tables. Crew readings stay on the ship unless an alert sends them. This is also our answer to the CSA's advice to keep privacy in mind through the whole life of the data.
+3. **One Postgres database.** Set by `DATABASE_URL`. Without it the app falls back to a local SQLite file, so tests and a one-laptop demo run with nothing installed.
+4. **The delay is a rule, not a network.** Every message between ship and Earth is a row in `link_message` with a `deliver_at` time. The other side cannot see the row until that time passes. In a blackout the row waits with no send time, and the queue flushes, SOS first, when the dial moves off "Behind the Sun".
+5. **Long delays play 60 times faster, and the server keeps the clock.** A delay of 60 s or more plays at one sixtieth, so 11 minutes takes 11 seconds. Each message carries `eta_s`, the mission time left until it lands, worked out on the server, so laptops with different clocks still agree.
+6. **Mars light time is real.** It comes from NASA JPL Horizons (quantity 21, one-way light time). If the fetch fails, the app uses the values read from Horizons on 13 November and says so: 660.86 s (14 Nov), 656.62 s (15 Nov), 652.36 s (16 Nov).
+7. **Who decides is one rule on the delay.** No link: the crew alone. One-way delay of 300 s or more: the crew medical officer. Otherwise: the flight surgeon on Earth. The 300 s line comes from NASA's NEEMO 16 test (Rader et al. 2013).
+8. **Alerts come from fixed rules, and each one names its source.** Bands for blood oxygen, heart rate and systolic blood pressure follow the NEWS2 chart (Royal College of Physicians 2017). NEWS2 is a hospital score and is not validated for space, so we say our tiers are "inspired by" it. Band 1 is a caution, band 2 a warning, band 3 an emergency. Level names are NASA's.
+9. **It does not cry wolf.** A suit reading must stay out of range for 5 readings in a row with a clean signal before it alerts (5 seconds at one reading a second). A bad signal raises "check your sensor" and nothing else.
+10. **Acknowledge and resolve are two steps.** Acknowledge means a person has it. Resolve clears it. After a person resolves an alert, that vital stays quiet for 60 seconds unless it gets worse, like the alarm pause on a bedside monitor. The manual SOS button always works.
+11. **An SOS goes to Earth by itself. Anything less goes when the crew sends it.** A typed-in reading can raise a warning at most, so a typo cannot send an SOS. Earth gets updates only about alerts it already has a report for.
+12. **The round trip is one object.** Every alert carries a `timeline` with the six times of its round trip, so the stepper on the alert screen needs one call.
+13. **The story answers the crew.** In the scripted story the patient's blood oxygen stays low until the crew ticks the treatment step, then recovers. What the crew does on stage changes the numbers before Earth has heard anything.
+14. **The "ship AI" on Saturday is rules plus a report writer.** An emergency builds a handoff report (situation, background, assessment, request) and a line for the ship to speak. Personal baselines are Sunday work.
+
+## Requirements
+
+Must have on Saturday. Each one has tests in the plan.
+
+| Requirement | How we know it works | Plan task |
+| --- | --- | --- |
+| Store readings and show a crew board | `tests/test_base_api.py` | 1, 4 |
+| Real Mars light time with a dated fallback | `tests/test_lighttime.py` | 2 |
+| Dial with four stops and the who-decides rule | `tests/test_modes.py`, `tests/test_base_api.py` | 2, 4 |
+| Link that hides messages until they arrive, queues in a blackout, flushes SOS first | `tests/test_link.py` | 3 |
+| Alerts with a sustained check, a sensor check and an alarm pause | `tests/test_rules.py` | 5 |
+| SOS with reason, source, NASA risk, checklist, spoken line and Earth report | `tests/test_base_api.py` | 6 |
+| Acknowledge, send to Earth, crew message, round-trip timeline | `tests/test_base_api.py`, `tests/test_earth_api.py` | 6, 7 |
+| Earth inbox and delayed reply | `tests/test_earth_api.py` | 7 |
+| Scripted story that answers the crew, with reset | `tests/test_scenario.py` | 8 |
+| Runs on Postgres | Task 9 by hand | 9 |
+
+Sunday, in this order, if Saturday's run works:
+
+1. A week of history and personal baselines. This feeds the trend chart, the baseline numbers and the "over baseline for 3 days" alert on Damola's screens.
+2. Habitat tiles on real data: ISS cabin readings from NASA's Environmental Data App and space weather from NASA DONKI. The links and the download steps are in `docs/data-sources.md`.
+3. One line on the Earth console from NASA's Deep Space Network Now feed: the round-trip light time NASA's own antennas are waiting on for Mars.
+4. CSA's open heart-rate filter (github.com/asc-csa/heart-rate-filtering, MIT licence) as a noise rule in front of the sustained check.
+5. The check-in schedule and reminders.
+6. An "outside at Mars" tile from the CSA's Phoenix weather station data.
+
+Later: FHIR export, logins, a real DTN stack.
+
+## Tables
+
+| Table | Holds |
+| --- | --- |
+| `crew` | id, name, role |
+| `reading` | crew_id, at, source (suit, typed, scenario), signal_ok, heart_rate, spo2, skin_temp, bp_sys, bp_dia, glucose, sleep_hours, mood (1 to 5) |
+| `alert` | crew_id, at, level, vital, value, reason, auto, nasa_risk, steps_done, acknowledged_at, acknowledged_by, report_id, cleared_at, cleared_by |
+| `mission_state` | one row: the dial stop |
+| `link_message` | direction (to_earth, to_ship), kind (report, update, message, reply), priority, payload, created_at, sent_at, delay_s, deliver_at, in_reply_to |
+
+## API for the screens
+
+All JSON. The screens poll once a second.
+
+| Call | Used by | Gives |
+| --- | --- | --- |
+| `GET /api/base/state` | base, suit | dial stop, label, delay_s, link_up, mode, who_decides, light_time_source, speedup, all four stops |
+| `POST /api/base/dial` `{stop}` | base | new state; flushes the queue when the link is back |
+| `POST /api/base/readings` | suit, hardware, check-in | stores a reading, runs the rules, returns any alerts raised |
+| `GET /api/base/crew` | base | one entry per person: level, `latest` sensed reading, `typed` check-in reading |
+| `GET /api/base/crew/<id>/readings?limit=120` | base | readings for the trend chart, oldest first |
+| `GET /api/base/alerts?open=1` | base, suit | alerts, each with the fields listed below |
+| `POST /api/base/alerts/<id>/ack` `{by}` | base | a person acknowledges the alert |
+| `POST /api/base/alerts/<id>/steps` `{index}` | base | ticks a checklist step |
+| `POST /api/base/alerts/<id>/send` | base | sends a report to the flight surgeon (an SOS has already gone) |
+| `POST /api/base/alerts/<id>/clear` `{by}` | base | a person resolves the alert |
+| `POST /api/base/sos` `{crew_id}` | suit | manual SOS |
+| `POST /api/base/messages` `{text, alert_id, from}` | base | free text from the crew to the flight surgeon |
+| `GET /api/base/outbox` | base | everything the ship has sent, with status (queued, in_flight, delivered), eta_s and the three times |
+| `GET /api/base/inbox` | base, suit | replies from Earth that have arrived |
+| `POST /api/base/scenario/start` `{name}` and `/scenario/stop` | base | starts or stops the scripted story ("stage" or "full") |
+| `POST /api/base/reset` | base | clears readings, alerts and messages for a fresh run |
+| `GET /api/earth/inbox` | earth | link_up, mode, and everything that has arrived |
+| `POST /api/earth/reply` `{message_id, text, from}` | earth | sends advice back, with the same delay |
+
+An alert carries: `id`, `crew_id`, `crew`, `at`, `level`, `vital`, `value`, `unit`, `reason`, `source`, `auto`, `nasa_risk`, `steps`, `steps_done`, `acknowledged_by`, `cleared_at`, `cleared_by`, `speak` (only for an emergency) and `timeline`.
+
+The `timeline` holds `raised_at`, `acknowledged_at`, `sent_at`, `earth_eta_s`, `earth_at`, `reply_at` and `resolved_at`. A time is null until that step has happened. `earth_eta_s` counts down in mission time to the moment Earth hears.
+
+The three times on a sent message are `sent_at`, `arrives_after_s` (the one-way delay) and `earliest_reply_after_s` (twice the delay). Every update, message and reply carries `payload.alert_id`, so the thread for one alert is the outbox and inbox filtered by that id.
+
+## Damola's screens against the API
+
+| On the lo-fi screens | Comes from | Saturday |
+| --- | --- | --- |
+| Header: ground link, one-way delay | `GET /api/base/state` | Real. Show these values, not fixed text. NASA's range for Mars is 3 to 22 minutes |
+| Crew cards: heart rate, SpO2, temperature | `/crew`, under `latest` | Real. Label the tile "Skin temp": the suit reads skin temperature, as the CSA's Bio-Monitor does |
+| Crew cards: blood pressure, sleep, mood | `/crew`, under `typed` | Real once a check-in is posted. Mood is 1 to 5 |
+| OK, WATCH, ALERT badges | `level` | Use the map below, and add an SOS state |
+| Alert list and alert detail | `/alerts?open=1` | Real: `reason`, `value`, `unit`, `source`, `nasa_risk` |
+| "What to do now" | `steps`, `steps_done` | Real |
+| Round trip stepper | `timeline` | Real. Add "Earth hears" between "Sent to ground" and "Flight surgeon reply" |
+| Acknowledge, Send to flight surgeon | `/ack`, `/send` | Real |
+| Thread with ground and its message box | `/outbox`, `/inbox`, `/messages` | Real |
+| Restart demo | `/reset`, then `/scenario/start` | Real |
+| Check-in steps 2 and 3 | `POST /readings` with `source: "typed"` | Real |
+| Trend chart | `/crew/<id>/readings` | Real for the live minutes. The 7-day view is Sunday |
+| Baseline numbers and "over baseline for 3 days" | Not built | Sunday, first in line. Mock and label it until then |
+| Cabin CO2, pressure, radiation, space weather tiles | Not built | Mock, labelled SIMULATED. Do not print "DONKI" or "RadLab" on a mocked tile |
+| Schedule, streaks, badges, reaction test, body map | Frontend only | Frontend only |
+
+| API level | Badge on screen | NASA name |
+| --- | --- | --- |
+| `nominal` | OK | |
+| `advisory`, `caution` | WATCH | Advisory, Caution |
+| `warning` | ALERT | Warning |
+| `emergency` | SOS | Emergency |
+
+Three more notes for the screens. The crew the API returns is David, Damola and Youssef, the people on stage; the names on the lo-fi are placeholders. Source lines printed on a card should come from the API's `source` field or from Rebecca's checked list: NASA lists V1 3004 as "In-Mission Medical Care", not "vital-sign trending". The lo-fi's example alert is a slow trend; Saturday's live alert is the collapse, so the alert screen needs a red SOS look and the spoken line.
+
+## Data sources
+
+| Source | Used for | Box on the project page |
+| --- | --- | --- |
+| NASA JPL Horizons API | Real Earth to Mars light time | NASA Data |
+| NASA-STD-3001 Volume 2 | Alert level names | NASA Data |
+| NASA HRP risks page (challenge resource) | A NASA risk label on each alert, such as "Risk of Hypoxia" | NASA Data |
+| NASA HRP five hazards page (challenge resource) | "Distance from Earth" as the hazard we take on | NASA Data |
+| CSA "Why do we conduct science experiments in space?" (challenge resource) | Names communication delay and emergency medical help as deep-space risks | Space Agency Partner |
+| CSA Topical Teams 2023 report, Astronaut Health chapter | The Canadian research community asks for this: AH-EHI-06 (autonomous healthcare decision-making AI), AH-05 (monitoring that explains itself), AH-03 (guidance that does not wait on the ground) | Space Agency Partner |
+| CSA Bio-Monitor pages | The model for what the suit measures | Space Agency Partner |
+| NEWS2, Royal College of Physicians 2017 | Alert bands | Other Data |
+| Our own scripted readings | Crew vitals, labelled SIMULATED | Other Data |
+
+If we use any file from the CSA open data portal, the project page must name the source and link the Open Government Licence - Canada. That is the licence's condition.
+
+## Risks
+
+| Risk | What we do |
+| --- | --- |
+| The venue Wi-Fi stops laptops reaching each other | Test from Damola's laptop in block 1 (plan Task 4, step 5). Fall back to a phone hotspot, then to one laptop |
+| Horizons cannot be reached from the venue | The dated values load by themselves and the screen says so |
+| The screens and the API drift apart | The table above is the contract. A field or route changes only together with this file |
+| The hardware sends faster or slower than once a second | "5 readings in a row" still holds; the wording "for 5 s" in the reason needs a tweak |
+| A printed source is wrong | Rebecca checks every source line on a screen before the 16:15 run |
+
+## Open questions
+
+| Question | Who | Blocks |
+| --- | --- | --- |
+| Which Sunday picks in `docs/data-sources.md` do we wire, and has the cabin data been downloaded into `data/eda/`? | TJ | Sunday backlog |
+| Which Postgres do we point at: TJ's laptop or a hosted one? | TJ, Kyler | Task 9 |
+| Do the `reading` field names and the level map suit the frontend? | Damola | Block 2 |
+| What does the hardware send, how often, and can it flag a bad signal? | Youssef | Block 2 |
+| Sourced checklist wording for `base_station/procedures.json` | Rebecca | Sunday pitch |
+| Is any Bio-Monitor sample data open? Ask the CSA mentor on Discord | Rebecca | Sunday backlog |
+
+## Timeline
+
+Block 1: Tasks 1 to 4 (a posted heartbeat on the crew board). Block 2: Tasks 5 and 6 (SOS with its reason, acknowledge, round trip). Block 3: Tasks 7 and 8 (the report leaves, lands late, and the reply comes back). Before the 16:15 run: Task 9 (Postgres, README, pull request, hand the API to the screens).
