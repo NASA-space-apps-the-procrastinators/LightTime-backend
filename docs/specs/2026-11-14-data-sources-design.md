@@ -26,7 +26,7 @@ So we are already eligible: the NASA HRP risks page is on the Resources tab, and
 | Left out | Why |
 | --- | --- |
 | Scraping web pages | Pages change without notice, the CSA portal turns automated readers away, and a judge cannot check a scraped number. We use published APIs and published files |
-| Real health data about any person | None is open, and we would not store it if it were. Crew vitals stay simulated |
+| Health data that can identify a person | We use only open, de-identified research data under its licence, without its questionnaire files, and we label it as replayed |
 | A scheduler or a job queue | Two feeds do not need one |
 | Alerts from space weather or cabin data | Saturday and Sunday these are tiles only. Crew alerts stay on crew vitals |
 | Unit conversion by guesswork | We show the source's units, or convert with a factor we can cite |
@@ -47,9 +47,10 @@ So we are already eligible: the NASA HRP risks page is on the Resources tab, and
 | Folder | Holds | In git |
 | --- | --- | --- |
 | `data/reference/` | Small files of facts copied from NASA and CSA pages, each with its link and the date it was read | Yes |
-| `data/eda/` | Tables TJ downloads from NASA's Environmental Data App | Yes, if small |
+| `data/eda/` | Cabin and radiation tables from NASA's Environmental Data App, fetched through its API. Rodent Research 1 is in the folder | Yes |
+| `data/ppg_dalia/` | Wrist heart rate and skin temperature for three volunteers, cut from the PPG-DaLiA dataset | Yes |
 | `data/cache/` | The last good answer from each live feed, written by the app | No |
-| `data/README.md` | What goes where, the credit lines, and the rule against personal health data | Yes |
+| `data/README.md` | What goes where, the credit lines, and the rule against identifiable health data | Yes |
 
 ## Sources and how each comes in
 
@@ -59,7 +60,8 @@ So we are already eligible: the NASA HRP risks page is on the Resources tab, and
 | `hrp_risks` | NASA HRP risks page. Our required NASA source | Reference file | Read once | Not applicable | The risk name on every alert |
 | `donki` | NASA DONKI, solar particle events and flares | Live API, JSON, no key | 15 minutes | Saved answer with its age | Space weather tile |
 | `dsn` | NASA Deep Space Network Now | Live XML feed | 60 s | Saved answer with its age | One line on the Earth console |
-| `eda` | NASA OSDR Environmental Data App | Files in `data/eda/` | Replayed | Tile falls back to simulated, labelled | Cabin CO2, temperature, humidity, radiation |
+| `eda` | NASA OSDR Environmental Data App | Its API (`/eda/api/missions/RR-1/telemetry_data/` and `/radiation_data/`), saved as files in `data/eda/` | Replayed | Tile falls back to simulated, labelled | Cabin CO2 (ppm), temperature (degrees C), humidity (%), radiation (mGy a day) |
+| `ppg_dalia` | PPG-DaLiA, UCI Machine Learning Repository, CC BY 4.0 | Files in `data/ppg_dalia/` | Replayed | The scripted numbers | Calm-phase heart rate and skin temperature on the crew tiles, labelled as replayed research data, not our crew's own |
 | `radi_n2` | CSA Radi-N2 | Reference number (150 microsieverts of neutron dose a day on the ISS) | Read once | Not applicable | Footnote on the radiation tile |
 | `news2` | NEWS2 chart, Royal College of Physicians | Reference file (`base_station/limits.json`) | Read once | Not applicable | Alert bands |
 | `scenario` | Our scripted readings | Simulated | Not applicable | Not applicable | Crew vitals |
@@ -90,7 +92,7 @@ The DSN line reads from the feed's Mars spacecraft: which antenna, which spacecr
 ## Build order
 
 1. **Phase A, no downloads needed:** the helper, DONKI, DSN, the sources list, the offline switch, and the three calls (the cabin part of `/habitat` answers "simulated" until phase B).
-2. **Phase B, after TJ's download:** the cabin loader and replay, written against the real columns.
+2. **Phase B, the files are in the folder:** the cabin loader and replay, then the calm-phase replay of wrist heart rate and skin temperature, each written against the real columns.
 3. **Phase C, optional:** RadLab, Phoenix, the heart-rate filter.
 
 None of this starts before the Saturday plan's Task 9 is done and the 16:15 run works.
@@ -101,13 +103,13 @@ None of this starts before the Saturday plan's Task 9 is done and the 16:15 run 
 | --- | --- |
 | A feed changes shape or goes quiet during the weekend | The saved answer keeps the tile alive, and the tile shows its age |
 | The DSN feed is stale (the copy read on 14 November was stamped 13 November) | Show the feed's own time; never call it "live" unless it is under an hour old |
-| The cabin files use units we did not expect | Show them as given. Convert only with a cited factor |
+| A screen shows cabin CO2 in mmHg, as Damola's mock does, while NASA's file is in ppm | Show ppm as given. Convert only with a cited factor |
 | This work eats Saturday | It is gated behind Task 9 and the 16:15 run |
 
 ## Open questions
 
 | Question | Who | Blocks |
 | --- | --- | --- |
-| Which Rodent Research mission do we download from the Environmental Data App? | TJ | Phase B |
+| Do the crew tiles replay PPG-DaLiA in the calm phase, or keep the scripted numbers? | TJ | Phase B |
 | Does the Earth console want the DSN line? | David, Damola | Phase A, the last step |
 | Do Damola's cabin tiles keep their OK and WATCH badges? We have no sourced rule for them yet | Damola, Rebecca | Phase B |
