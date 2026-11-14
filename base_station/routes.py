@@ -1,10 +1,11 @@
 """The ship's side: readings in, alerts and reports out."""
 import time
+from datetime import timedelta
 
 from flask import Blueprint, abort, current_app, jsonify, request
 
 from base_station import habitat, lookahead, recorder, reports, rules, scenario, usual
-from common import link, modes
+from common import link, modes, sources
 from common.models import (VITALS, Alert, Crew, LinkMessage, MissionState, Reading, db, iso,
                            utcnow)
 
@@ -16,15 +17,19 @@ def current_state():
 
 
 def timeline(alert):
-    """The round trip of one alert, for the stepper on the alert screen."""
+    """The round trip of one alert, for the stepper on the alert screen. The earliest reply
+    is the report's landing time plus the same leg back, as if the doctor answered at once."""
     report = db.session.get(LinkMessage, alert.report_id) if alert.report_id else None
     sent = link.to_dict(report) if report else {}
     reply = next((m for m in reversed(link.delivered("to_ship"))
                   if m.payload.get("alert_id") == alert.id), None)
+    earliest = (report.deliver_at + timedelta(seconds=link.real_delay_s(report.delay_s))
+                if report is not None and report.sent_at is not None else None)
     return {
         "raised_at": iso(alert.at), "acknowledged_at": iso(alert.acknowledged_at),
         "sent_at": sent.get("sent_at"), "earth_eta_s": sent.get("eta_s"),
         "earth_at": sent.get("deliver_at") if sent.get("status") == "delivered" else None,
+        "earliest_reply_at": iso(earliest),
         "reply_at": iso(reply.deliver_at) if reply else None,
         "resolved_at": iso(alert.cleared_at),
     }
@@ -55,6 +60,7 @@ def alert_dict(alert):
         "steps": reports.steps_for(alert.vital), "steps_done": alert.steps_done,
         "acknowledged_by": alert.acknowledged_by,
         "cleared_at": iso(alert.cleared_at), "cleared_by": alert.cleared_by,
+        "cleared_note": alert.cleared_note, "why": reports.why(alert),
         "timeline": timeline(alert),
         "lookahead": look,
         "speak": speak,
@@ -77,6 +83,17 @@ def tell_earth(alert, event, priority=1):
     state = current_state()
     link.send("to_earth", "update", {"alert_id": alert.id, **event},
               state["delay_s"], state["link_up"], priority=priority)
+
+
+def body():
+    """The JSON object a button sent, or {} for anything else."""
+    data = request.get_json(silent=True)
+    return data if isinstance(data, dict) else {}
+
+
+def person(value):
+    """Who pressed the button, cut to fit the 40-character column."""
+    return (value.strip()[:40] if isinstance(value, str) else "") or "crew"
 
 
 def crew_id_or_400(data):
@@ -195,7 +212,7 @@ def acknowledge(alert_id):
     alert = db.get_or_404(Alert, alert_id)
     if alert.acknowledged_at is None:
         alert.acknowledged_at = utcnow()
-        alert.acknowledged_by = (request.get_json(silent=True) or {}).get("by") or "crew"
+        alert.acknowledged_by = person(body().get("by"))
         db.session.commit()
         tell_earth(alert, {"event": "acknowledged", "by": alert.acknowledged_by})
     return jsonify(alert_dict(alert))
@@ -231,10 +248,15 @@ def send_alert(alert_id):
 def clear_alert(alert_id):
     alert = db.get_or_404(Alert, alert_id)
     if alert.cleared_at is None:        # a second press changes nothing
+        sent = body()
+        note = sent.get("note")
+        if note is not None and not isinstance(note, str):
+            return jsonify(error="a note must be text"), 400
         alert.cleared_at = utcnow()
-        alert.cleared_by = (request.get_json(silent=True) or {}).get("by") or "crew"
+        alert.cleared_by = person(sent.get("by"))
+        alert.cleared_note = (note or "").strip()[:280] or None
         db.session.commit()
-        tell_earth(alert, {"event": "resolved", "by": alert.cleared_by})
+        tell_earth(alert, {"event": "resolved", "by": alert.cleared_by, "note": alert.cleared_note})
     return jsonify(alert_dict(alert))
 
 
@@ -316,3 +338,8 @@ def send_summaries():
         link.send("to_earth", "summary", recorder.daily_summary(crew),
                   state["delay_s"], state["link_up"], priority=3)
     return jsonify(sent=Crew.query.count(), pruned=recorder.prune())
+
+
+@bp.get("/sources")
+def data_sources():
+    return jsonify(sources.listing())
