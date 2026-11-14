@@ -1,0 +1,5 @@
+reminder_id,crew_id,alert_id,text,due_at,done_at,simulated,provenance
+R1,C2,A2,Take temperature,2026-11-02T16:09:41Z,2026-11-02T16:14:41Z,true,injected:AN05
+R2,C2,A2,Take temperature,2026-11-02T20:09:41Z,2026-11-02T20:18:41Z,true,injected:AN05
+R3,C2,A2,Take temperature,2026-11-03T00:09:41Z,2026-11-03T00:22:41Z,true,injected:AN05
+R4,C2,A2,Take temperature,2026-11-03T04:09:41Z,2026-11-03T04:26:41Z,true,injected:AN05

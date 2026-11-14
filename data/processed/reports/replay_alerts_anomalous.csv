@@ -1,0 +1,9 @@
+alert_id,crew_id,vital,first_ts,first_level,max_level,label,cleared_ts,false_alarm_class,sample_id,reason
+1,C1,bp_sys,2026-10-16T00:04:00Z,caution,warning,sleep,2026-10-16T06:08:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261016T0004Z,"Systolic blood pressure 100.2 mmHg, out of range for 5 s"
+2,C4,heart_rate,2026-10-16T00:04:00Z,caution,caution,sleep,2026-10-16T06:08:00Z,NC02 sleeping HR/BP (normal night dip),C4-M-20261016T0004Z,"Heart rate 44.6 bpm, out of range for 5 s"
+3,C2,bp_sys,2026-10-16T00:04:59Z,caution,warning,sleep,2026-10-16T06:10:59Z,NC02 sleeping HR/BP (normal night dip),C2-M-20261016T0005Z,"Systolic blood pressure 102.8 mmHg, out of range for 5 s"
+4,C3,bp_sys,2026-10-16T00:05:00Z,caution,warning,sleep,2026-10-16T07:40:00Z,NC02 sleeping HR/BP (normal night dip),C3-M-20261016T0005Z,"Systolic blood pressure 99.2 mmHg, out of range for 5 s"
+5,C4,bp_sys,2026-10-16T00:06:00Z,caution,caution,sleep,2026-10-16T06:01:00Z,NC02 sleeping HR/BP (normal night dip),C4-M-20261016T0006Z,"Systolic blood pressure 105.8 mmHg, out of range for 5 s"
+6,C1,heart_rate,2026-10-16T03:35:00Z,caution,caution,sleep,2026-10-16T04:04:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261016T0335Z,"Heart rate 48.1 bpm, out of range for 5 s"
+7,C4,heart_rate,2026-10-16T07:52:00Z,caution,emergency,exercise_cevis,,NC01 exercise HR/BP,C4-M-20261016T0752Z,"Heart rate 125.2 bpm, out of range for 5 s"
+8,C1,heart_rate,2026-10-16T08:10:00Z,caution,warning,exercise_ared,,NC01 exercise HR/BP,C1-M-20261016T0810Z,"Heart rate 115 bpm, out of range for 5 s"
