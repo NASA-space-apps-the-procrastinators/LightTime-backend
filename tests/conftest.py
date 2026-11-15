@@ -3,7 +3,7 @@ import requests
 
 from app import create_app
 from base_station import usual
-from common import dsn, lighttime
+from common import dsn, lighttime, models
 
 
 @pytest.fixture
@@ -16,6 +16,7 @@ def app(monkeypatch):
     lighttime._cache.clear()
     dsn._cache.clear()
     usual.clear()
+    models.set_clock(None)
     app = create_app("sqlite:///:memory:")
     app.config["TESTING"] = True
     return app

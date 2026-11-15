@@ -1,5 +1,5 @@
 """Tables for the ship, the ground and the link between them."""
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 from flask_sqlalchemy import SQLAlchemy
 
@@ -7,9 +7,19 @@ db = SQLAlchemy()
 
 VITALS = ["heart_rate", "spo2", "skin_temp", "bp_sys", "bp_dia", "glucose", "sleep_hours", "mood"]
 
+_clock_offset = timedelta(0)
+
 
 def utcnow():
-    return datetime.now(timezone.utc).replace(tzinfo=None)
+    """The ship's clock: real time, or the mission clock once set_clock has started one."""
+    return datetime.now(timezone.utc).replace(tzinfo=None) + _clock_offset
+
+
+def set_clock(now=None):
+    """Start the mission clock at `now` (naive UTC). None goes back to the real clock."""
+    global _clock_offset
+    real = datetime.now(timezone.utc).replace(tzinfo=None)
+    _clock_offset = now - real if now else timedelta(0)
 
 
 def iso(dt):
