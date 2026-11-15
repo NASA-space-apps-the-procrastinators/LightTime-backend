@@ -77,8 +77,8 @@ def test_heart_rate_alone_never_raises_an_alert(app):
 
 
 def test_an_estimated_blood_pressure_from_the_suit_never_alarms(client):
-    for _ in range(6):
-        raised = client.post("/api/base/readings", json={"crew_id": 1, "bp_sys": 95}).get_json()["alerts"]
+    raised = [alert for _ in range(6)
+              for alert in client.post("/api/base/readings", json={"crew_id": 1, "bp_sys": 95}).get_json()["alerts"]]
     assert raised == [] and client.get("/api/base/alerts").get_json() == []
     typed = client.post("/api/base/readings",
                         json={"crew_id": 1, "source": "typed", "bp_sys": 88}).get_json()["alerts"]

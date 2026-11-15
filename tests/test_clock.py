@@ -1,3 +1,4 @@
+import time
 from datetime import datetime, timezone
 
 from common import models
@@ -19,3 +20,13 @@ def test_without_a_mission_clock_the_ship_keeps_real_time():
     models.set_clock(None)
     real = datetime.now(timezone.utc).replace(tzinfo=None)
     assert abs((models.utcnow() - real).total_seconds()) < 5
+
+
+def test_the_mission_clock_moves_with_real_time():
+    models.set_clock(MORNING)
+    try:
+        first = models.utcnow()
+        time.sleep(0.05)
+        assert (models.utcnow() - first).total_seconds() >= 0.04
+    finally:
+        models.set_clock(None)

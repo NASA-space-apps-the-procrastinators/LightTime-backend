@@ -39,3 +39,11 @@ def test_days_out_of_band_count_back_from_today_and_the_rules_have_their_words()
     assert scoring.worst(["OK", "ALERT", "WATCH"]) == "ALERT" and scoring.worst([]) == "OK"
     text = scoring.rule_text()
     assert text["hr_rest"]["unit"] == "bpm" and text["co2_mmHg"]["source"] and "pending" not in str(text)
+
+
+def test_each_rule_stops_exactly_at_its_edge():
+    assert scoring.score("hr_rest", 80, BAND, 2, False) == "WATCH"           # two days out is not yet three
+    assert scoring.score("spo2", 94, [96, 99], 0, False) == "WATCH"
+    assert scoring.score("temp_c", 38.0, [36.3, 36.9], 0, False) == "WATCH"
+    assert scoring.score("resp", 20, [12, 16], 0, False) == "OK"
+    assert scoring.score("mood", 3, None, 0, False) == "OK"

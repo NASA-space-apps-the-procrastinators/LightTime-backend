@@ -1,3 +1,9 @@
+from datetime import datetime
+
+from common import models
+from tests.test_console import GOOD, later, reply_and_accept
+
+
 def test_the_morning_starts_at_half_past_six_on_day_158_at_mars(morning):
     state = morning.get("/api/base/state").get_json()
     assert (state["mission_day"], state["platform"], state["stop"]) == (158, "ISS", "mars")
@@ -27,3 +33,13 @@ def test_restart_puts_the_same_morning_back(morning):
     state = morning.get("/api/base/state").get_json()
     assert (state["stop"], state["mission_day"]) == ("mars", 158)
     assert morning.get("/api/base/crew/C2/readings").get_json() == []
+
+
+def test_restart_undoes_the_whole_loop(morning):
+    before = {path: morning.get(path).get_json() for path in ("/api/base/checkins/today", "/api/base/reminders")}
+    morning.post("/api/base/crew/C1/checkins", json=GOOD)
+    reply_and_accept(morning)
+    later(3600)
+    morning.post("/api/base/reset")
+    assert {path: morning.get(path).get_json() for path in before} == before
+    assert abs((models.utcnow() - datetime(2026, 11, 14, 6, 30)).total_seconds()) < 5

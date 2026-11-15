@@ -162,7 +162,7 @@ def test_the_report_carries_the_reasoning_and_how_steady_the_fall_is(client):
         client.post("/api/base/readings", json={"crew_id": 1, "spo2": round(98 - 0.1 * i, 1)})
     payload = client.get("/api/base/outbox").get_json()[0]["payload"]
     assert payload["why"][0].startswith("What was seen")
-    assert 0.5 <= payload["lookahead"]["agreement"] <= 1
+    assert payload["lookahead"]["agreement"] == 1.0                      # a steady fall: every pair agrees
 
 
 def test_the_alert_names_the_next_step(client):
@@ -170,3 +170,5 @@ def test_the_alert_names_the_next_step(client):
     assert alert["next_step"] == alert["steps"][0]
     after = client.post(f"/api/base/alerts/{alert['id']}/steps", json={"index": 0}).get_json()
     assert after["next_step"] == alert["steps"][1]
+    skipped = client.post(f"/api/base/alerts/{alert['id']}/steps", json={"index": 2}).get_json()
+    assert skipped["next_step"] == alert["steps"][1]                       # the first step not ticked, not a count
