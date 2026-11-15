@@ -85,6 +85,22 @@ export interface Network {
   passes: { dish: string; craft: string; round_trip_s: number }[]; source: string; url: string;
   dsn_one_way_s: number | null; horizons_one_way_s: number; differ_s: number | null;
 }
+/** One sensor stream of one suit minute in the health log (GET /api/base/packets). Simulated. */
+export interface Packet {
+  crew_id: string; suit_id: string; ts: string; mission_day: number; location: string;
+  source: "ecg" | "chest_band" | "ppg" | "thermistor" | "imu";
+  metric: "hr" | "resp" | "spo2" | "temp_c" | "skin_temp_c" | "activity_g";
+  value: number; unit: string; signal_quality: number; window_s: number;
+  sent_to_ground: false;                // the ship sends reports and summaries, never a raw packet
+  ack: null;
+  state?: "OK" | "ALERT" | "RECHECK";   // RECHECK under 0.6 signal; else only spo2 and temp_c are judged
+  baseline?: [number, number]; rule?: string;
+}
+/** Each sensor's lowest signal over the newest hour of packets (GET /api/base/stream-health). */
+export interface StreamHealth {
+  sensors: { source: Packet["source"]; lowest_signal_quality: number; state: "OK" | "RECHECK" }[];
+  window_minutes: number; simulated: boolean;
+}
 export type CheckIn = Partial<Pick<Reading, "bp_sys" | "bp_dia" | "glucose" | "sleep_hours" | "mood" | "spo2" | "heart_rate">>;
 
 const BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5000";
