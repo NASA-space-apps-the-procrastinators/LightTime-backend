@@ -1,9 +1,14 @@
 """The stats routes, served at /api/stats. Public, with no key."""
 import json
+from collections import Counter, defaultdict
+from datetime import timedelta
 
 from flask import Blueprint, jsonify, request
+from sqlalchemy import func
 
+from common.models import db
 from stats import counter
+from stats.models import StatCount, StatVisitor
 from stats.visitor import is_bot
 
 bp = Blueprint("stats", __name__)
@@ -42,3 +47,34 @@ def events():
     for event in events:
         counter.add(event["kind"], event["name"].strip()[:80])
     return "", 204
+
+
+def _top(totals):
+    """The ten largest {name: n}, largest first."""
+    return [{"name": name, "n": n} for name, n in sorted(totals.items(), key=lambda t: (-t[1], t[0]))[:10]]
+
+
+@bp.get("")
+def totals():
+    """Daily totals for the last ?days= days (1 to 90, default 7), oldest first, and the top ten
+    pages, clicks and routes over them. Flushes first, so the page is never 30 seconds behind."""
+    try:
+        days = int(request.args.get("days", "7"))
+    except ValueError:
+        days = 0
+    if not 1 <= days <= 90:
+        return bad("days must be a whole number from 1 to 90", "days")
+    counter.flush()
+    since = counter.today() - timedelta(days=days - 1)
+    by_day = defaultdict(lambda: dict.fromkeys(("visitors", "pageviews", "clicks", "requests", "polls"), 0))
+    tops = {"pageview": Counter(), "click": Counter(), "route": Counter()}
+    for row in StatCount.query.filter(StatCount.day >= since):
+        by_day[row.day][row.kind + "s"] += row.n
+        tops["route" if row.kind in ("request", "poll") else row.kind][row.name] += row.n
+    visitors = (db.session.query(StatVisitor.day, func.count()).filter(StatVisitor.day >= since)
+                .group_by(StatVisitor.day))
+    for day, n in visitors:
+        by_day[day]["visitors"] = n
+    return jsonify(days=[{"day": day.isoformat(), **by_day[day]} for day in sorted(by_day)],
+                   top_pages=_top(tops["pageview"]), top_clicks=_top(tops["click"]),
+                   top_routes=_top(tops["route"]))

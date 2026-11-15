@@ -1,7 +1,8 @@
-from datetime import date
+from datetime import date, timedelta
 
 from flask import request
 
+from common.models import db
 from stats import counter, visitor
 from stats.models import StatCount, StatVisitor
 
@@ -176,3 +177,54 @@ def test_a_body_over_16_kb_is_refused(client):
 def test_a_bot_is_answered_and_not_counted(app, client):
     assert _send(client, [{"kind": "pageview", "name": "/"}], agent="Googlebot/2.1").status_code == 204
     assert _counts(app) == {}
+
+
+def _seed(app, rows, visitors=()):
+    with app.app_context():
+        db.session.add_all(StatCount(day=day, kind=kind, name=name, n=n) for day, kind, name, n in rows)
+        db.session.add_all(StatVisitor(day=day, visitor=v) for day, v in visitors)
+        db.session.commit()
+
+
+def test_totals_come_back_by_day_in_date_order(app, client):
+    today = counter.today()
+    days = [today - timedelta(days=2), today - timedelta(days=1), today]
+    _seed(app, [(days[2], "pageview", "/", 5), (days[0], "pageview", "/", 1), (days[0], "click", "SOS", 2),
+                (days[1], "poll", "GET /api/base/state", 60), (days[1], "request", "POST /api/base/dial", 3),
+                (days[2], "pageview", "/crew/[id]", 4)],
+          [(days[0], "a"), (days[1], "a"), (days[1], "b"), (days[2], "c")])
+    stats = client.get("/api/stats?days=7").get_json()
+    assert stats["days"] == [
+        {"day": days[0].isoformat(), "visitors": 1, "pageviews": 1, "clicks": 2, "requests": 0, "polls": 0},
+        {"day": days[1].isoformat(), "visitors": 2, "pageviews": 0, "clicks": 0, "requests": 3, "polls": 60},
+        {"day": days[2].isoformat(), "visitors": 1, "pageviews": 9, "clicks": 0, "requests": 0, "polls": 0}]
+    assert stats["top_pages"] == [{"name": "/", "n": 6}, {"name": "/crew/[id]", "n": 4}]
+    assert stats["top_routes"] == [{"name": "GET /api/base/state", "n": 60}, {"name": "POST /api/base/dial", "n": 3}]
+
+
+def test_days_outside_the_window_are_left_out(app, client):
+    _seed(app, [(counter.today() - timedelta(days=7), "click", "old", 1)])
+    assert client.get("/api/stats?days=7").get_json()["top_clicks"] == []
+    assert client.get("/api/stats?days=8").get_json()["top_clicks"] == [{"name": "old", "n": 1}]
+
+
+def test_top_clicks_are_the_ten_most_pressed(app, client):
+    _seed(app, [(counter.today(), "click", f"button {i}", i) for i in range(1, 13)])
+    top = client.get("/api/stats").get_json()["top_clicks"]
+    assert [t["n"] for t in top] == [12, 11, 10, 9, 8, 7, 6, 5, 4, 3]
+
+
+def test_counts_in_memory_are_flushed_before_the_totals(client):
+    _send(client, [{"kind": "click", "name": "Dial: Mars"}])
+    assert client.get("/api/stats").get_json()["top_clicks"] == [{"name": "Dial: Mars", "n": 1}]
+
+
+def test_days_must_be_1_to_90(client):
+    for days in ("0", "91", "seven"):
+        answer = client.get(f"/api/stats?days={days}")
+        assert answer.status_code == 400 and answer.get_json()["field"] == "days"
+    assert client.get("/api/stats?days=90").status_code == 200
+
+
+def test_no_stats_yet_is_empty_lists(client):
+    assert client.get("/api/stats").get_json() == {"days": [], "top_pages": [], "top_clicks": [], "top_routes": []}
