@@ -24,6 +24,7 @@ export interface StopState {
 }
 export interface MissionState extends StopState {
   speedup: number; stops: StopState[]; mission_day: number; platform: string;
+  now: string;            // the ship's clock (UTC): count down from this, never from the browser's clock
   ship_ai: { name: string; line: string; version: string; parts: { name: string; does: string }[] };
 }
 
@@ -36,6 +37,8 @@ export interface UsualRange { low: number; high: number; n: number }
 export interface CrewMember {      // the ship AI's fields; the console's Crew type has the rest
   id: string; name: string; role: string; level: Level;
   latest: Reading | null; typed: Reading | null; usual: { heart_rate: UsualRange | null };
+  week: Record<string, (number | null)[]>;   // seven daily values per console metric, oldest first; the last is today's
+  simulated: boolean;                         // the daily values come from the generated month
 }
 
 export interface Lookahead {
@@ -56,6 +59,7 @@ export interface Alert {
   stage: "raised" | "acknowledged" | "sent" | "replied" | "resolved";
   metric: string; rule: string | null; symptoms: string[];
   value: number | null; unit: string | null; reason: string; source: string | null; auto: boolean;
+  raised_by: "console" | "lighttime" | "crew";   // a console rule, the ship AI, or a person pressing SOS
   nasa_risk: string; steps: string[]; steps_done: number[]; next_step: string | null; acknowledged_by: string | null;
   cleared_at: string | null; cleared_by: string | null; cleared_note: string | null;
   why: string[];                        // how the ship reached this alert. Show it

@@ -67,7 +67,8 @@ def test_every_alert_says_how_it_was_reached(client):
 
 def test_a_manual_sos_says_no_rule_was_involved(client):
     alert = client.post("/api/base/sos", json={"crew_id": 2}).get_json()
-    assert alert["why"] == ["A crew member pressed SOS. No rule was involved."]
+    assert alert["why"] == ["A crew member pressed SOS. No rule was involved.",
+                            "A person raised this, and a person decides what happens next."]
 
 
 def test_resolving_keeps_the_crews_own_words_and_tells_earth(client):

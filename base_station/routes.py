@@ -112,7 +112,9 @@ def alert_dict(alert):
         "level": alert.level, "state": "RECHECK" if alert.vital == "signal" else STATE[alert.level],
         "stage": stage(alert, line), "vital": alert.vital, "metric": alert.metric or alert.vital,
         "value": alert.value, "unit": unit, "reason": alert.reason, "rule": rule, "source": source,
-        "auto": alert.auto, "nasa_risk": alert.nasa_risk, "symptoms": alert.symptoms or [],
+        "auto": alert.auto,
+        "raised_by": "console" if text else "crew" if alert.vital == "manual" else "lighttime",
+        "nasa_risk": alert.nasa_risk, "symptoms": alert.symptoms or [],
         "steps": reports.steps_for(alert.vital), "steps_done": alert.steps_done,
         "next_step": todo[0] if todo else None,
         "acknowledged_by": alert.acknowledged_by,
@@ -225,6 +227,7 @@ def state():
     out["ship_ai"] = modes.SHIP_AI
     out["mission_day"] = dataset.mission_day(datetime.fromisoformat(dataset.mission_date(utcnow())))
     out["platform"] = dataset.mission()["platform"]
+    out["now"] = iso(utcnow())           # the ship's clock, so a screen never counts down on its own
     out["stops"] = [modes.describe(stop) for stop in modes.STOPS]
     return jsonify(out)
 
