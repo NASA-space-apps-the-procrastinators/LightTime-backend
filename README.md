@@ -21,10 +21,25 @@ The server listens on port 5000 and does not reload on its own: stop it with Ctr
 and start it again after a change. Without a `.env` file it uses a local SQLite file.
 For Postgres, copy `.env.example` to `.env` and set `DATABASE_URL`.
 
-For the demo, add `LIGHTTIME_MORNING=1` to `.env`. The ship then starts on the demo morning
-(14 November 2026, 06:30 UTC, mission day 158, alert `A1` just raised), and every
-`POST /api/base/reset` puts that morning back. Run one process only: the mission clock lives
-in the server's memory.
+## Run with Docker
+
+Build and run the production container:
+
+    docker build -t lighttime-backend .
+    docker run --rm -p 8080:8080 --env-file .env lighttime-backend
+
+The container listens on port 8080 and uses `DATABASE_URL` from `.env`. It binds
+to `0.0.0.0` and runs as a non-root user. For Cloud Run, the platform supplies
+`PORT`; the container already uses that value.
+
+Deploy directly from the repository with Cloud Build:
+
+    gcloud run deploy lighttime-api --source . --region us-central1 --port 8080
+
+Set `DATABASE_URL` through Secret Manager rather than committing it to the
+repository:
+
+    gcloud run services update lighttime-api --region us-central1 --set-secrets DATABASE_URL=database-url:latest
 
 ## Test
 
