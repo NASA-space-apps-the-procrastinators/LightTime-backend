@@ -14,6 +14,8 @@ TREATMENT_STEP = 1  # the second step of the spo2 checklist in procedures.json
 
 SCENARIOS = {
     "stage": {"calm_s": 4, "drift_s": 0, "collapse_s": 60, "recover_s": 8, "tail_s": 180},
+    # the guided tour: the same story with no calm and a quicker drift, so it fits in 30 seconds
+    "tour": {"calm_s": 0, "drift_s": 16, "collapse_s": 60, "recover_s": 8, "tail_s": 180},
     "full": {"calm_s": 20, "drift_s": 20, "collapse_s": 60, "recover_s": 8, "tail_s": 180},
     "real": {"calm_s": 0, "drift_s": 0, "collapse_s": 0, "recover_s": 8, "tail_s": 180, "event": True},
 }
@@ -22,6 +24,7 @@ _thread = None
 _stop = threading.Event()
 _lock = threading.Lock()
 _since = None       # when the running story started
+_name = None        # which story was started last; None once it is stopped
 
 
 def treated():
@@ -143,15 +146,22 @@ def _halt():
 
 
 def stop():
+    global _name
     with _lock:
         _halt()
+        _name = None
+
+
+def playing():
+    """The name of the story started last, or None once it has been stopped or the demo reset."""
+    return _name
 
 
 def start(app, name="full", real=False):
     """Start a story. With real=True the crew's heart rate and skin temperature are replayed
     from the volunteers' wrist data, and the recorder is given their earlier readings first.
     The "real" story always runs that way."""
-    global _thread, _stop, _since
+    global _thread, _stop, _since, _name
     with _lock:                             # two start calls at once still give one story
         _halt()
         _stop = threading.Event()           # a new flag for each run, so an old run stays stopped
@@ -160,6 +170,6 @@ def start(app, name="full", real=False):
             close_last_run()
             if real and Reading.query.filter_by(source="replay").count() == 0:
                 backfill()
-        _since = utcnow()
+        _since, _name = utcnow(), name
         _thread = threading.Thread(target=_run, args=(app, name, real, _stop), daemon=True, name="story")
         _thread.start()
