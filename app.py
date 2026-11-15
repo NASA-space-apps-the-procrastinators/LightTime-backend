@@ -11,8 +11,12 @@ from common.models import db, seed, utcnow
 def create_app(database_url=None, morning=None):
     load_dotenv()
     app = Flask(__name__)
-    app.config["SQLALCHEMY_DATABASE_URI"] = (
-        database_url or os.getenv("DATABASE_URL", "sqlite:///lighttime.db"))
+    main_url = database_url or os.getenv("DATABASE_URL", "sqlite:///lighttime.db")
+    app.config["SQLALCHEMY_DATABASE_URI"] = main_url
+    # Traffic stats outlive a deploy in their own database. With none set, or a database given
+    # (as the tests do), they share the main one.
+    stats_url = None if database_url else os.getenv("STATS_DATABASE_URL")
+    app.config["SQLALCHEMY_BINDS"] = {"stats": stats_url or main_url}
     # Morning mode loads the demo morning and starts the mission clock. Run one process only:
     # the clock lives in this process's memory.
     app.config["MORNING"] = os.getenv("LIGHTTIME_MORNING") == "1" if morning is None else morning
@@ -22,6 +26,7 @@ def create_app(database_url=None, morning=None):
     from base_station import console, log  # noqa: F401  (each adds its routes to the ship's blueprint)
     from base_station.routes import bp as base_bp
     from command_center.routes import bp as earth_bp
+    from stats import models as stats_models  # noqa: F401  (its tables, for create_all)
     app.register_blueprint(base_bp, url_prefix="/api/base")
     app.register_blueprint(earth_bp, url_prefix="/api/earth")
 

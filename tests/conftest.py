@@ -4,6 +4,7 @@ import requests
 from app import create_app
 from base_station import usual
 from common import dsn, lighttime, models
+from stats import counter
 
 
 def _offline(monkeypatch):
@@ -15,6 +16,7 @@ def _offline(monkeypatch):
     lighttime._cache.clear()
     dsn._cache.clear()
     usual.clear()
+    counter.clear()
     models.set_clock(None)
 
 
