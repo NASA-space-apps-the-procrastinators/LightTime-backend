@@ -68,3 +68,9 @@ def test_a_cleared_alert_stays_quiet_unless_it_gets_worse(app):
         db.session.commit()
         assert feed(1, N, spo2=95, heart_rate=72) == []
         assert [a.level for a in feed(1, N, spo2=86, heart_rate=72)] == ["emergency"]
+
+
+def test_heart_rate_alone_never_raises_an_alert(app):
+    with app.app_context():
+        assert feed(1, 4 * N, heart_rate=140, spo2=98) == []
+        assert rules.band("heart_rate", 140) == 3

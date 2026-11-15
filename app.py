@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from flask import Flask
 from flask_cors import CORS
 
+from common import lighttime
 from common.models import db, seed
 
 
@@ -23,6 +24,7 @@ def create_app(database_url=None):
     with app.app_context():
         db.create_all()
         seed()
+    lighttime.mars_seconds()    # ask JPL once now, so no screen waits on it later
     return app
 
 

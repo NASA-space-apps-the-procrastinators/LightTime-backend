@@ -6,8 +6,9 @@ Flask and Postgres backend for LIGHT-TIME (NASA Space Apps 2026). It is the ship
 
 - Design and API contract: `docs/specs/2026-11-14-backend-design.md`
 - Build plan: `docs/plans/2026-11-14-backend-saturday.md`
+- Tonight's plan: docs/plans/2026-11-14-tonight-integration.md
 
-Build the plan task by task, in order. Every step has the exact code and the exact test count to expect. The plan was run end to end before it was written down: 45 tests pass on SQLite and on Postgres 16.
+Build the plan task by task, in order. Every step has the exact code and the exact test count to expect. The plan was run end to end before it was written down: 110 tests pass on SQLite and on Postgres 16.
 
 ## Rules
 
