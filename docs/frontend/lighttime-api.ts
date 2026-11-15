@@ -1,5 +1,7 @@
 // Typed client for the LightTime backend. Copy to src/lib/lighttime-api.ts in the frontend repo.
 // The backend test tests/test_contract.py checks these field names. Do not rename them here.
+// The console's own types are the authority for Crew, history, station, check-in, thread and reminder shapes.
+// See docs/specs/2026-11-14-console-data-design.md.
 
 export type Stop = "station" | "moon" | "mars" | "sun";
 export type Mode = "doctor_live" | "crew_first" | "ship_alone";
@@ -21,7 +23,7 @@ export interface StopState {
   ship_ai_role: string;
 }
 export interface MissionState extends StopState {
-  speedup: number; stops: StopState[];
+  speedup: number; stops: StopState[]; mission_day: number; platform: string;
   ship_ai: { name: string; line: string; version: string; parts: { name: string; does: string }[] };
 }
 
@@ -31,8 +33,8 @@ export interface Reading {
   bp_dia: number | null; glucose: number | null; sleep_hours: number | null; mood: number | null;
 }
 export interface UsualRange { low: number; high: number; n: number }
-export interface CrewMember {
-  id: number; name: string; role: string; level: Level;
+export interface CrewMember {      // the ship AI's fields; the console's Crew type has the rest
+  id: string; name: string; role: string; level: Level;
   latest: Reading | null; typed: Reading | null; usual: { heart_rate: UsualRange | null };
 }
 
@@ -49,7 +51,10 @@ export interface Timeline {
   reply_at: string | null; resolved_at: string | null;
 }
 export interface Alert {
-  id: number; crew_id: number; crew: string; at: string; level: Level; vital: string;
+  id: string; crew_id: string; crew: string; at: string; level: Level; vital: string;   // "A1", "C1"
+  state: "OK" | "WATCH" | "ALERT" | "RECHECK" | "SOS";
+  stage: "raised" | "acknowledged" | "sent" | "replied" | "resolved";
+  metric: string; rule: string | null; symptoms: string[];
   value: number | null; unit: string | null; reason: string; source: string | null; auto: boolean;
   nasa_risk: string; steps: string[]; steps_done: number[]; next_step: string | null; acknowledged_by: string | null;
   cleared_at: string | null; cleared_by: string | null; cleared_note: string | null;
@@ -96,17 +101,17 @@ export const api = {
   state: () => call<MissionState>("/api/base/state"),
   dial: (stop: Stop) => call<{ state: StopState; flushed: number }>("/api/base/dial", { stop }),
   crew: () => call<CrewMember[]>("/api/base/crew"),
-  readings: (crewId: number, limit = 120) => call<Reading[]>(`/api/base/crew/${crewId}/readings?limit=${limit}`),
+  readings: (crewId: string | number, limit = 120) => call<Reading[]>(`/api/base/crew/${crewId}/readings?limit=${limit}`),
   alerts: () => call<Alert[]>("/api/base/alerts?open=1"),
   allAlerts: () => call<Alert[]>("/api/base/alerts"),
-  acknowledge: (id: number, by: string) => call<Alert>(`/api/base/alerts/${id}/ack`, { by }),
-  tickStep: (id: number, index: number) => call<Alert>(`/api/base/alerts/${id}/steps`, { index }),
-  sendToEarth: (id: number) => call<Alert>(`/api/base/alerts/${id}/send`, {}),
-  resolve: (id: number, by: string, note: string) => call<Alert>(`/api/base/alerts/${id}/clear`, { by, note }),
-  message: (text: string, from: string, alertId?: number) =>
+  acknowledge: (id: string | number, by: string) => call<Alert>(`/api/base/alerts/${id}/ack`, { by }),
+  tickStep: (id: string | number, index: number) => call<Alert>(`/api/base/alerts/${id}/steps`, { index }),
+  sendToEarth: (id: string | number) => call<Alert>(`/api/base/alerts/${id}/send`, {}),
+  resolve: (id: string | number, by: string, note: string) => call<Alert>(`/api/base/alerts/${id}/clear`, { by, note }),
+  message: (text: string, from: string, alertId?: string | number) =>
     call<LinkMessage>("/api/base/messages", { text, from, alert_id: alertId ?? null }),
-  sos: (crewId: number) => call<Alert>("/api/base/sos", { crew_id: crewId }),
-  checkIn: (crewId: number, values: CheckIn) =>
+  sos: (crewId: string | number) => call<Alert>("/api/base/sos", { crew_id: crewId }),
+  checkIn: (crewId: string | number, values: CheckIn) =>
     call<{ reading: Reading; alerts: Alert[] }>("/api/base/readings", { ...values, crew_id: crewId, source: "typed" }),
   outbox: () => call<LinkMessage[]>("/api/base/outbox"),    // everything that has left the ship: "What Earth has seen"
   inbox: () => call<LinkMessage[]>("/api/base/inbox"),

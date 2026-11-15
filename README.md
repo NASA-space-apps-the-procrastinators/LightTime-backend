@@ -21,6 +21,11 @@ The server listens on port 5000 and does not reload on its own: stop it with Ctr
 and start it again after a change. Without a `.env` file it uses a local SQLite file.
 For Postgres, copy `.env.example` to `.env` and set `DATABASE_URL`.
 
+For the demo, add `LIGHTTIME_MORNING=1` to `.env`. The ship then starts on the demo morning
+(14 November 2026, 06:30 UTC, mission day 158, alert `A1` just raised), and every
+`POST /api/base/reset` puts that morning back. Run one process only: the mission clock lives
+in the server's memory.
+
 ## Test
 
     python -m pytest -v

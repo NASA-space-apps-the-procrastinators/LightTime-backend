@@ -94,9 +94,11 @@ Later: FHIR export, logins, a real DTN stack.
 
 | Table | Holds |
 | --- | --- |
-| `crew` | id, name, role |
+| `crew` | id, code (`C1`), name, role, suit_id; seeded from `data/processed/reference/crew.csv` |
 | `reading` | crew_id, at, source (suit, typed, scenario, replay), context, signal_ok, heart_rate, spo2, skin_temp, bp_sys, bp_dia, glucose, sleep_hours, mood (1 to 5) |
-| `alert` | crew_id, at, level, vital, value, reason, auto, nasa_risk, steps_done, acknowledged_at, acknowledged_by, report_id, cleared_at, cleared_by |
+| `alert` | crew_id, at, level, vital, value, reason, auto, nasa_risk, steps_done, acknowledged_at, acknowledged_by, report_id, cleared_at, cleared_by, ref (`A1` for an alert loaded with the morning), metric, symptoms |
+| `checkin` | crew_id, day, completed_at, mood, sleep_h, pvt_ms, bp_sys, bp_dia (the morning cuff), symptoms, note; one row per person per day |
+| `reminder` | crew_id, alert_id, text, due_at, done_at |
 | `mission_state` | one row: the dial stop |
 | `link_message` | direction (to_earth, to_ship), kind (report, update, message, reply), priority, payload, created_at, sent_at, delay_s, deliver_at, in_reply_to |
 
@@ -106,15 +108,27 @@ All JSON. The screens poll once a second.
 
 | Call | Used by | Gives |
 | --- | --- | --- |
-| `GET /api/base/state` | base, suit | dial stop, label, delay_s, link_up, mode, who_decides, light_time_source, path_km (delay x speed of light), round_trip_s (2 x delay), plays_as_s (real seconds one leg takes in the demo), ship_ai_role (what LIGHTTIME does at this distance), speedup, all four stops, and `ship_ai` (name, line, version, parts) |
+| `GET /api/base/state` | base, suit | `mission_day` (day 1 is the launch date) and `platform` (changed: added by the console contract), dial stop, label, delay_s, link_up, mode, who_decides, light_time_source, path_km (delay x speed of light), round_trip_s (2 x delay), plays_as_s (real seconds one leg takes in the demo), ship_ai_role (what LIGHTTIME does at this distance), speedup, all four stops, and `ship_ai` (name, line, version, parts) |
 | `POST /api/base/dial` `{stop}` | base | new state; flushes the queue when the link is back |
-| `POST /api/base/readings` | suit, hardware, check-in | stores a reading, runs the rules, returns any alerts raised |
-| `GET /api/base/crew` | base | one entry per person: level, `latest` sensed reading, `typed` check-in reading |
+| `POST /api/base/readings` | suit, hardware, check-in | stores a reading, runs the rules, returns any alerts raised. `crew_id` may be `"C2"` or `2` |
+| `GET /api/base/crew` | base | changed: four Crew objects (`id` is `"C1"` to `"C4"`, `name`, `role`, `suit_id`, `state`, `note`, `baseline`, `today`, `metric_states`, `checkin_from`, `last_packet_at`), plus the ship AI's `level`, `latest` sensed reading, `typed` reading and `usual` |
+| `GET /api/base/crew/<id>` | console | one Crew object. `<id>` is `C1` or `1` everywhere a crew id appears in a path |
+| `GET /api/base/crew/<id>/history?metric=&days=7` | console | `crew_id`, `metric`, `unit`, `band` (null without one), `days` (`date`, `value`, up to 30), `days_out_of_band`, `simulated`. An unknown metric gets 400 with `field` `metric` |
 | `GET /api/base/crew/<id>/readings?limit=120` | base | readings for the trend chart, oldest first |
-| `GET /api/base/alerts?open=1` | base, suit | alerts, each with the fields listed below |
-| `POST /api/base/alerts/<id>/ack` `{by}` | base | a person acknowledges the alert |
+| `GET /api/base/thresholds` | console | the printed rules: for each console metric and `co2_mmHg`, `unit`, `watch`, `alert` and `source` |
+| `GET /api/base/station` | console | cabin `co2_mmHg`, `ppo2_mmHg`, `pressure_kPa`, `temp_c`, `rh_pct` and `dose_mSv_today`, each `{value, state, simulated}`, plus `updated_at`, `habitat`, `source` |
+| `GET /api/base/space-weather` | console | `state`, `headline`, `advisory`, `event_at`, `source`, `simulated` |
+| `GET /api/base/checkins/today` | console | `date`, `done` and `due` (crew ids), `streak`, `next_badge_at` |
+| `POST /api/base/crew/<id>/checkins` `{mood, sleep_h, symptoms, note, pvt_ms, bp_sys, bp_dia}` | console | saves today's check-in (a second one the same day replaces it), copies the symptoms to the person's open alerts; 201 with `crew_id`, `completed_at`, `first_today`, `streak`, `metric_states` (sleep, mood, reaction time), `open_alert_id`. A bad field gets 400 naming it |
+| `GET /api/base/alerts?open=1` | base, suit | changed: alerts, each with the fields listed below; `id` is `"A1"` and `crew_id` `"C1"` |
+| `GET /api/base/alerts/<id>` | console | one alert. `<id>` is `A1` or `1` everywhere an alert id appears in a path |
+| `GET /api/base/alerts/<id>/thread` | console | `alert_id` and `messages` (`id` `"M5"`, `alert_id`, `from` crew or ground, `author`, `text`, `kind`, `sent_at`, `arrived_at`, `status`), oldest first: everything sent about the alert, and what has arrived from Earth |
+| `POST /api/base/alerts/<id>/accept-plan` `{by}` | console | once Earth's reply has arrived: resolves the alert, sets four "Take temperature" reminders four hours apart and tells Earth; returns `alert` and `reminders`. Before that it changes nothing |
+| `GET /api/base/reminders?crew=&open=1` | console | reminders: `id` `"R1"`, `crew_id`, `text`, `due_at`, `done_at` |
+| `POST /api/base/reminders/<id>/done` | console | ticks a reminder off |
+| `POST /api/base/alerts/<id>/ack` `{by, symptoms}` | base | a person acknowledges the alert (changed: `symptoms` are kept on the alert) |
 | `POST /api/base/alerts/<id>/steps` `{index}` | base | ticks a checklist step |
-| `POST /api/base/alerts/<id>/send` | base | sends a report to the flight surgeon (an SOS has already gone) |
+| `POST /api/base/alerts/<id>/send` | base | sends a report to the flight surgeon (an SOS has already gone). Changed: for an alert raised by a console rule the report's payload adds `bundle` (seven days of `hr_rest`, `bp_sys`, `bp_dia`, `temp_c`, `sleep_h`, and today's check-in) and `text` |
 | `POST /api/base/alerts/<id>/clear` `{by, note}` | base | a person resolves the alert; `note` is their reason in their own words (up to 280 characters), kept as `cleared_note` and sent to Earth with the resolved update; a note that is not text gets 400. `by` is cut to 40 characters |
 | `POST /api/base/sos` `{crew_id}` | suit | manual SOS |
 | `POST /api/base/messages` `{text, alert_id, from}` | base | free text from the crew to the flight surgeon |
@@ -124,13 +138,15 @@ All JSON. The screens poll once a second.
 | `GET /api/base/habitat` | base | cabin temperature, humidity, CO2 and radiation dose, with source and date (NASA EDA, RR-1) |
 | `POST /api/base/summary/send` | base | sends the daily summaries to Earth (link kind `summary`) |
 | `GET /api/base/sources` | base | every outside source the app uses: id, agency, name, kind (live, file, hand), url, used_for, as_of |
-| `POST /api/base/reset` | base | clears readings, alerts and messages for a fresh run |
+| `POST /api/base/reset` | base | clears readings, alerts and messages for a fresh run. Changed: in morning mode (`LIGHTTIME_MORNING=1`) it loads the demo morning again, 14 November 2026 at 06:30 UTC with `A1` raised |
 | `GET /api/earth/inbox` | earth | link_up, mode, and everything that has arrived |
 | `POST /api/earth/reply` `{message_id, text, from}` | earth | sends advice back, with the same delay |
 | `GET /api/earth/network` | earth | two NASA figures for the Mars delay side by side: `passes` (dish, craft, round_trip_s from DSN Now), `source`, `url`, `dsn_one_way_s` (median round trip / 2, or null when no antenna is on Mars), `horizons_one_way_s`, `differ_s` |
 | `GET /api/earth/outbox` | earth | everything Earth has sent, newest first, with status and eta_s, so Earth can watch its reply in flight |
 
-An alert carries: `id`, `crew_id`, `crew`, `at`, `level`, `vital`, `value`, `unit`, `reason`, `source`, `auto`, `nasa_risk`, `steps`, `steps_done`, `next_step` (the first step not yet ticked, or null), `acknowledged_by`, `cleared_at`, `cleared_by`, `cleared_note`, `why` (how the ship reached the alert, in plain lines: what was seen, the last readings, the rule, the band table, and who decides), `speak` (for an emergency or a falling trend; say it once per alert id and level), `lookahead` and `timeline`.
+The shapes of the console's objects (Crew, the console rules, Alert, ThreadMessage, Reminder, errors) are in `docs/specs/2026-11-14-console-data-design.md` section 7. Errors on `/api/base` are JSON: 404 is `{"error": "not found"}`, 400 is `{"error", "field"}`.
+
+An alert carries: `id` (`"A1"`), `crew_id` (`"C1"`), `crew`, `at`, `level`, `state` (`WATCH`, `ALERT`, `SOS`, or `RECHECK` for a sensor check), `stage` (`raised`, `acknowledged`, `sent`, `replied`, `resolved`, worked out from the times), `metric` (the console metric, or the vital's name, `signal` or `manual`), `rule`, `symptoms`, `vital`, `value`, `unit`, `reason`, `source`, `auto`, `nasa_risk`, `steps`, `steps_done`, `next_step` (the first step not yet ticked, or null), `acknowledged_by`, `cleared_at`, `cleared_by`, `cleared_note`, `why` (how the ship reached the alert, in plain lines: what was seen, the last readings, the rule, the band table, and who decides), `speak` (for an emergency or a falling trend; say it once per alert id and level), `lookahead` and `timeline`.
 
 `lookahead` is null unless a falling trend was found. It holds `now`, `per_min`, `eta_s`, `red_line`, `at`, `red_line_at`, `reply_s`, `earth_in_time` and `agreement` (how steady the fall is, 0.5 to 1), frozen when the report left, so count down to `red_line_at`. The crew board adds `usual.heart_rate` (`low`, `high`, `n`, or null for the first ten minutes). Details: `docs/specs/2026-11-14-ship-ai-and-data-design.md` section 7.
 
