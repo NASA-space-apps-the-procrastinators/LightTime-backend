@@ -423,7 +423,7 @@ def reset():
 @bp.post("/scenario/start")
 def scenario_start():
     sent = body()
-    name, real = sent.get("name", "stage"), bool(sent.get("replay"))
+    name, real = sent.get("name", "full"), bool(sent.get("replay"))
     if not isinstance(name, str) or name not in scenario.SCENARIOS:
         return bad("unknown scenario", "name")
     scenario.start(current_app._get_current_object(), name, real)
