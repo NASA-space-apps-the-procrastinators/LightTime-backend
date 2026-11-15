@@ -5,7 +5,7 @@ ground_truth/ and reports/ are the answer key: the ship must never see them."""
 import csv
 import functools
 import os
-from datetime import date
+from datetime import date, datetime, timedelta
 
 ROOT = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data")
 ALLOWED = ("reference", "anomalous")
@@ -19,6 +19,17 @@ def table(name):
         raise ValueError(f"the ship does not read {name}")
     with open(os.path.join(ROOT, "processed", name + ".csv"), newline="", encoding="utf-8") as f:
         return list(csv.DictReader(f))
+
+
+@functools.lru_cache(maxsize=None)
+def last_minutes(hours=24):
+    """The suits' minute rows for the last `hours` before the demo morning, oldest first.
+    The file holds a month (168,600 rows). The log needs a day, so the rest is read past, not kept."""
+    stop = datetime.fromisoformat(mission()["demo_now"].replace("Z", ""))
+    since = (stop - timedelta(hours=hours)).isoformat()
+    with open(os.path.join(ROOT, "processed", "anomalous", "vitals_1min.csv"), newline="", encoding="utf-8") as f:
+        rows = [row for row in csv.DictReader(f) if row["sensor_ts"] >= since]
+    return sorted(rows, key=lambda row: (row["sensor_ts"][:19], row["crew_id"]))
 
 
 def num(text):

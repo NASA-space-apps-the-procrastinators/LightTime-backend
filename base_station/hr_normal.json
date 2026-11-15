@@ -1,0 +1,17 @@
+{
+  "effect": {
+    "CYCLING": 37.63,
+    "DRIVING": 22.599999999999994,
+    "STAIRS": 35.94500000000001,
+    "WALKING": 34.43000000000001,
+    "LUNCH": 20.94999999999999,
+    "WORKING": 14.950000000000003,
+    "SOCCER": 25.769999999999996,
+    "CLEAN_BASELINE": 14.990000000000002,
+    "NO_ACTIVITY": 33.73,
+    "BASELINE": 0.0
+  },
+  "limit_bpm": 72.9,
+  "worst_flagged_minutes_per_hour": 0.39,
+  "source": "PPG-DaLiA wrist recordings, 15 people, each held out in turn"
+}

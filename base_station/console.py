@@ -67,15 +67,24 @@ def day_of(crew, day):
     return values, checkin.symptoms or [], checkin.day, rows
 
 
+def week_of(rows, values, metric):
+    """Seven daily values, oldest first. The last is today's, with what the person typed carried forward."""
+    return [dataset.num(row[COLUMN[metric]]) for row in rows[:-1]] + [values[metric]]
+
+
 def states_of(crew, values, symptoms, rows):
     """OK, WATCH or ALERT for each of the ten daily measurements."""
     own, out = bands(crew.code), {}
     for metric in scoring.METRICS:
         band = own[metric] if metric in scoring.BANDED else None
-        week = [dataset.num(row[COLUMN[metric]]) for row in rows[:-1]] + [values[metric]]
+        week = week_of(rows, values, metric)
         days_out = scoring.days_out_of_band(week, band) if band else 0
         out[metric] = scoring.score(metric, values[metric], band, days_out, bool(symptoms), own["pvt_ms"])
     return out
+
+
+# What an open LIGHTTIME alert does to the person's card. A sensor check is not about the person.
+LIVE = {"nominal": "OK", "advisory": "OK", "caution": "WATCH", "warning": "ALERT", "emergency": "ALERT"}
 
 
 def crew_dict(crew):
@@ -88,10 +97,11 @@ def crew_dict(crew):
         note = "Out of band: " + ", ".join(flagged) + (". Symptoms: " + ", ".join(symptoms) if symptoms else "")
     dose = next((row for row in dataset.table("anomalous/radiation_daily") if row["date"] == day), None)
     latest = _latest(crew.id, typed=False)
+    level = _level(crew.id)
     quiet = iso(when(dataset.mission()["demo_now"]) - timedelta(minutes=1))   # the dataset's last minute row
     return {
         "id": crew.code, "name": crew.name, "role": crew.role, "suit_id": crew.suit_id,
-        "state": scoring.worst([state for state in states.values() if state]), "note": note,
+        "state": scoring.worst([state for state in states.values() if state] + [LIVE[level]]), "note": note,
         "baseline": baseline(crew.code),
         "today": {"hr_rest": values["hr_rest"], "bp": [values["bp_sys"], values["bp_dia"]],
                   "spo2": values["spo2"], "temp_c": values["temp_c"], "resp": values["resp"],
@@ -101,8 +111,10 @@ def crew_dict(crew):
         "metric_states": states, "checkin_from": checkin_day,
         "last_packet_at": latest["at"] if latest else quiet,
         # the ship AI's side of the same person
-        "level": _level(crew.id), "latest": latest, "typed": _latest(crew.id, typed=True),
+        "level": level, "latest": latest, "typed": _latest(crew.id, typed=True),
         "usual": {"heart_rate": usual.usual_range(crew.id)},
+        "week": {metric: week_of(rows, values, metric) for metric in scoring.METRICS},
+        "simulated": True,               # the daily values come from the generated month
     }
 
 
@@ -306,7 +318,8 @@ def thread_message(message, alert, now):
             "author": payload.get("from") or ("Ship (auto SOS)" if sos else None) or payload.get("crew")
                       or payload.get("by") or ("Ship" if ours else "Flight surgeon"),
             "text": _line(message), "kind": message.kind, "sent_at": sent["sent_at"],
-            "arrived_at": sent["deliver_at"] if sent["status"] == "delivered" else None, "status": sent["status"]}
+            "arrived_at": sent["deliver_at"] if sent["status"] == "delivered" else None, "status": sent["status"],
+            "simulated": bool(payload.get("simulated"))}
 
 
 @bp.get("/alerts/<alert_id>/thread")
