@@ -27,8 +27,10 @@ def create_app(database_url=None, morning=None):
     from base_station import console, log  # noqa: F401  (each adds its routes to the ship's blueprint)
     from base_station.routes import bp as base_bp
     from command_center.routes import bp as earth_bp
+    from stats.routes import bp as stats_bp
     app.register_blueprint(base_bp, url_prefix="/api/base")
     app.register_blueprint(earth_bp, url_prefix="/api/earth")
+    app.register_blueprint(stats_bp, url_prefix="/api/stats")
 
     @app.after_request
     def count_traffic(response):

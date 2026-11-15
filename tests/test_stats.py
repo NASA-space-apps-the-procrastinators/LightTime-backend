@@ -136,3 +136,43 @@ def test_bots_preflights_and_the_ships_own_calls_are_not_counted(app, client):
     assert _counts(app) == {}
     with app.app_context():
         assert StatVisitor.query.count() == 0
+
+
+def _send(client, events, agent=CHROME):
+    return client.post("/api/stats/events", json={"events": events}, headers={"User-Agent": agent})
+
+
+def test_page_views_and_clicks_from_the_console_are_counted(app, client):
+    answer = _send(client, [{"kind": "pageview", "name": "/crew/[id]"}, {"kind": "click", "name": "Dial: Mars"}])
+    assert answer.status_code == 204
+    assert _counts(app) == {("pageview", "/crew/[id]"): 1, ("click", "Dial: Mars"): 1}
+
+
+def test_a_beacon_sent_as_plain_text_is_read_as_json(app, client):
+    answer = client.post("/api/stats/events", data='{"events": [{"kind": "click", "name": "SOS"}]}',
+                         content_type="text/plain;charset=UTF-8", headers=BROWSER)
+    assert answer.status_code == 204
+    assert _counts(app) == {("click", "SOS"): 1}
+
+
+def test_bad_events_are_refused_and_nothing_is_counted(app, client):
+    too_many = _send(client, [{"kind": "click", "name": "a"}] * 21)
+    assert too_many.status_code == 400 and too_many.get_json()["field"] == "events"
+    assert _send(client, [{"kind": "x", "name": "a"}]).get_json() == {"error": "unknown kind", "field": "kind"}
+    assert _send(client, [{"kind": "click", "name": "a"}, {"kind": "click", "name": " "}]).status_code == 400
+    assert client.post("/api/stats/events", data="not json", headers=BROWSER).status_code == 400
+    assert _counts(app) == {}
+
+
+def test_a_long_name_is_cut_to_80_characters(app, client):
+    _send(client, [{"kind": "click", "name": "x" * 200}])
+    assert _counts(app) == {("click", "x" * 80): 1}
+
+
+def test_a_body_over_16_kb_is_refused(client):
+    assert _send(client, [{"kind": "click", "name": "x" * 17000}]).status_code == 413
+
+
+def test_a_bot_is_answered_and_not_counted(app, client):
+    assert _send(client, [{"kind": "pageview", "name": "/"}], agent="Googlebot/2.1").status_code == 204
+    assert _counts(app) == {}
