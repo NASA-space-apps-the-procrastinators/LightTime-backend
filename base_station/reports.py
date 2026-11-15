@@ -37,10 +37,13 @@ def why(alert):
         return [f"What was seen: {alert.reason}.", f"Rule: {text['alert']}.", f"Source: {text['source']}.",
                 NOT_A_DIAGNOSIS]
     if alert.vital == "manual":
-        return ["A crew member pressed SOS. No rule was involved."]
+        return ["A crew member pressed SOS. No rule was involved.",
+                "A person raised this, and a person decides what happens next."]
     cfg = rules.LIMITS["vitals"].get(alert.vital)
     if cfg is None:
-        return ["The sensor signal was not clean, so no reading was judged."]
+        return ["The sensor signal was not clean, so no reading was judged.",
+                "Rule: a reading with a poor signal is never judged, and nothing may alarm for the next ten readings.",
+                NOT_A_DIAGNOSIS]
     query = Reading.query.filter(Reading.crew_id == alert.crew_id, getattr(Reading, alert.vital).isnot(None))
     if cfg.get("typed_only"):                   # the suit's estimate never counts, so do not list it
         query = query.filter(Reading.source == "typed")

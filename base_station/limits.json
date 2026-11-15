@@ -1,5 +1,5 @@
 {
-  "source": "Bands follow the NEWS2 chart (Royal College of Physicians, 2017). NEWS2 is a hospital score and is not validated for spaceflight. These are demo tiers.",
+  "source": "Bands follow the NEWS2 chart (Royal College of Physicians, 2017). NEWS2 is a hospital score and has not been checked in spaceflight. These are demo tiers.",
   "sustain_n": 5,
   "settle_n": 10,
   "quiet_s": 60,

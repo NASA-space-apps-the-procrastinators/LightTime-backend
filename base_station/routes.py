@@ -112,7 +112,9 @@ def alert_dict(alert):
         "level": alert.level, "state": "RECHECK" if alert.vital == "signal" else STATE[alert.level],
         "stage": stage(alert, line), "vital": alert.vital, "metric": alert.metric or alert.vital,
         "value": alert.value, "unit": unit, "reason": alert.reason, "rule": rule, "source": source,
-        "auto": alert.auto, "nasa_risk": alert.nasa_risk, "symptoms": alert.symptoms or [],
+        "auto": alert.auto,
+        "raised_by": "console" if text else "crew" if alert.vital == "manual" else "lighttime",
+        "nasa_risk": alert.nasa_risk, "symptoms": alert.symptoms or [],
         "steps": reports.steps_for(alert.vital), "steps_done": alert.steps_done,
         "next_step": todo[0] if todo else None,
         "acknowledged_by": alert.acknowledged_by,
@@ -161,9 +163,20 @@ def person(value):
     return (value.strip()[:40] if isinstance(value, str) else "") or "crew"
 
 
+SUIT_NAMES = {"astronaut_id": "crew_id", "heart_rate_bpm": "heart_rate", "spo2_percent": "spo2",
+              "skin_temp_c": "skin_temp"}              # the suit firmware's names for the ship's fields
+READ = set(VITALS) | {"crew_id", "source", "signal_ok", "context"} | set(SUIT_NAMES)
+
+
+def in_our_words(data):
+    """The suit's firmware has its own field names. The ship's own name wins where both are sent."""
+    return {**{ours: data[theirs] for theirs, ours in SUIT_NAMES.items() if theirs in data}, **data}
+
+
 def find_crew(ref):
-    """A crew member from "C1" or from the row number, or None."""
-    crew = Crew.query.filter_by(code=str(ref)).first()
+    """A crew member from "C1", from a suit id such as "LT-04", or from the row number. Or None."""
+    text = str(ref)
+    crew = Crew.query.filter((Crew.code == text) | (Crew.suit_id == text)).first()
     number = row_number(ref, "")
     if crew is None and number is not None:
         crew = db.session.get(Crew, number)
@@ -225,6 +238,7 @@ def state():
     out["ship_ai"] = modes.SHIP_AI
     out["mission_day"] = dataset.mission_day(datetime.fromisoformat(dataset.mission_date(utcnow())))
     out["platform"] = dataset.mission()["platform"]
+    out["now"] = iso(utcnow())           # the ship's clock, so a screen never counts down on its own
     out["stops"] = [modes.describe(stop) for stop in modes.STOPS]
     return jsonify(out)
 
@@ -243,7 +257,7 @@ def dial():
 
 @bp.post("/readings")
 def post_reading():
-    data = body()
+    data = in_our_words(body())
     crew_id = crew_id_or_400(data)
     for vital in VITALS:
         try:
@@ -256,7 +270,8 @@ def post_reading():
         if data.get(field) is not None and not (isinstance(data[field], str) and len(data[field]) <= 12):
             return bad(f"{field} is text of at most 12 characters", field)
     reading, raised = ingest({**data, "crew_id": crew_id})
-    return jsonify(reading=reading.to_dict(), alerts=[alert_dict(a) for a in raised]), 201
+    ignored = sorted(key for key in data if key not in READ)      # for example the suit's radiation fields
+    return jsonify(reading=reading.to_dict(), alerts=[alert_dict(a) for a in raised], ignored=ignored), 201
 
 
 def _latest(crew_id, typed):
