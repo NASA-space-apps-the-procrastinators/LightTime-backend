@@ -169,6 +169,9 @@ def person(value):
 SUIT_NAMES = {"astronaut_id": "crew_id", "heart_rate_bpm": "heart_rate", "spo2_percent": "spo2",
               "skin_temp_c": "skin_temp"}              # the suit firmware's names for the ship's fields
 READ = set(VITALS) | {"crew_id", "source", "signal_ok", "context"} | set(SUIT_NAMES)
+# A heart rate outside this is refused as impossible input. A project choice for bad data,
+# not an alert rule: the alert bands live in limits.json.
+HEART_RATE_POSSIBLE = (20, 250)
 
 
 def in_our_words(data):
@@ -262,6 +265,7 @@ def dial():
 def post_reading():
     data = in_our_words(body())
     crew_id = crew_id_or_400(data)
+    given = {}
     for vital in VITALS:
         try:
             value = number(data.get(vital))
@@ -269,6 +273,13 @@ def post_reading():
             value = math.nan
         if value is not None and not math.isfinite(value):       # "inf" would break Earth's JSON
             return bad("a reading must be a number", vital)
+        if value is not None:
+            given[vital] = value
+    if not given:
+        return bad("a reading needs at least one vital sign, such as heart_rate or spo2", "heart_rate")
+    low, high = HEART_RATE_POSSIBLE
+    if not low <= given.get("heart_rate", low) <= high:
+        return bad(f"heart_rate must be between {low} and {high} beats a minute", "heart_rate")
     for field in ("source", "context"):
         if data.get(field) is not None and not (isinstance(data[field], str) and len(data[field]) <= 12):
             return bad(f"{field} is text of at most 12 characters", field)

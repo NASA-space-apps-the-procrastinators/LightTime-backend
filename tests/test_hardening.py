@@ -110,3 +110,22 @@ def test_one_bad_reading_does_not_end_the_story(app, monkeypatch):
         assert len(stories()) == 1
     finally:
         scenario.stop()
+
+
+def test_a_reading_with_no_vital_sign_is_refused(client):
+    for sent in ({"crew_id": "C1"}, {"crew_id": "C1", "source": "suit", "signal_ok": True},
+                 {"crew_id": "C1", "heart_rate": "", "spo2": None}, {"astronaut_id": "LT-04"}):
+        answer = client.post("/api/base/readings", json=sent)
+        assert answer.status_code == 400 and set(answer.get_json()) == {"error", "field"}, sent
+        assert "vital sign" in answer.get_json()["error"], sent
+    assert client.get("/api/base/crew/C1/readings").get_json() == []
+
+
+def test_a_heart_rate_outside_20_to_250_is_refused(client):
+    for rate in (-5, 0, 19, 250.5, 400):
+        for sent in ({"crew_id": "C1", "heart_rate": rate, "spo2": 98}, {"astronaut_id": "C1", "heart_rate_bpm": rate}):
+            answer = client.post("/api/base/readings", json=sent)
+            assert answer.status_code == 400 and answer.get_json()["field"] == "heart_rate", sent
+    assert client.get("/api/base/crew/C1/readings").get_json() == []
+    for rate in (20, 250):
+        assert client.post("/api/base/readings", json={"crew_id": "C1", "heart_rate": rate}).status_code == 201
