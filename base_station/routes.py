@@ -434,6 +434,16 @@ def reset():
     return jsonify(ok=True)
 
 
+@bp.post("/demo/start")
+def demo_start():
+    """One button for the stage: the demo starts again, the dial goes to Mars, the full story plays."""
+    reset()
+    db.session.get(MissionState, 1).stop = "mars"
+    db.session.commit()
+    scenario.start(current_app._get_current_object(), "full")
+    return jsonify(ok=True, name="full", state=current_state())
+
+
 @bp.post("/scenario/start")
 def scenario_start():
     sent = body()

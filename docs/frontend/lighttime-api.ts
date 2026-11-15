@@ -144,6 +144,7 @@ export const api = {
   reset: () => call<{ ok: boolean }>("/api/base/reset", {}),
   startStory: (name: Story, replay = true) => call<{ ok: boolean }>("/api/base/scenario/start", { name, replay }),
   stopStory: () => call<{ ok: boolean }>("/api/base/scenario/stop", {}),
+  startDemo: () => call<{ ok: boolean; name: string; state: StopState }>("/api/base/demo/start", {}),
   // Earth
   earthInbox: () => call<EarthInbox>("/api/earth/inbox"),
   earthOutbox: () => call<LinkMessage[]>("/api/earth/outbox"),

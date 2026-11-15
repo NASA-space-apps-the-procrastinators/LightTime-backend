@@ -138,6 +138,7 @@ All JSON. The screens poll once a second.
 | `GET /api/base/outbox` | base | everything the ship has sent, with status (queued, in_flight, delivered), eta_s and the three times |
 | `GET /api/base/inbox` | base, suit | replies from Earth that have arrived |
 | `POST /api/base/scenario/start` `{name, replay}` and `/scenario/stop` | base | starts or stops the scripted story ("stage", "full" or "real"; `replay: true` plays real wrist data). Changed: with no name the story is `full`, the one with the early warning. Changed: starting a story resolves the patient's blood-oxygen alert that an earlier story left open (`cleared_by` is `auto: a new story started`) and tells Earth, so the new story raises its own alert |
+| `POST /api/base/demo/start` | base | new: one call for the stage. Resets as `/reset` does, sets the dial to Mars and starts the "full" story. Returns `ok`, `name` ("full") and `state` |
 | `GET /api/base/habitat` | base | cabin temperature, humidity, CO2 and radiation dose, with source and date (NASA EDA, RR-1) |
 | `POST /api/base/summary/send` | base | sends the daily summaries to Earth (link kind `summary`) |
 | `GET /api/base/sources` | base | every outside source the app uses: id, agency, name, kind (live, file, hand), url, used_for, as_of |
