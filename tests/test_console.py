@@ -80,3 +80,21 @@ def test_a_normal_start_has_no_morning(client):
     assert client.get("/api/base/alerts").get_json() == []
     assert client.get("/api/base/state").get_json()["stop"] == "station"
     assert [member["id"] for member in client.get("/api/base/crew").get_json()] == ["C1", "C2", "C3", "C4"]
+
+
+def test_the_station_strip_says_which_numbers_are_nasas(morning):
+    station = morning.get("/api/base/station").get_json()
+    co2 = station["co2_mmHg"]
+    assert 1.0 < co2["value"] < 6.0 and co2["simulated"] is False
+    assert co2["state"] == ("ALERT" if co2["value"] >= 4.5 else "WATCH" if co2["value"] >= 2.8 else "OK")
+    assert station["temp_c"]["simulated"] is False and station["rh_pct"]["simulated"] is False
+    assert station["ppo2_mmHg"]["simulated"] is True and station["pressure_kPa"]["simulated"] is True
+    assert station["ppo2_mmHg"]["state"] is None                     # the ship has no sourced limit for it
+    assert station["dose_mSv_today"] == {"value": 0.51, "state": "OK", "note": "ALERT over 2", "simulated": True}
+    assert station["updated_at"].startswith("2026-11-14T06:2") and "Environmental Data App" in station["source"]
+
+
+def test_the_solar_event_is_shown_and_marked_simulated(morning):
+    weather = morning.get("/api/base/space-weather").get_json()
+    assert (weather["state"], weather["event_at"], weather["simulated"]) == ("WATCH", "2026-11-14T05:58:00Z", True)
+    assert weather["headline"] == "SEP event in progress" and "DONKI" in weather["source"]

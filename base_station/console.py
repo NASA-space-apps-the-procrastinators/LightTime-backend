@@ -149,3 +149,51 @@ def crew_history(ref):
 @bp.get("/thresholds")
 def thresholds():
     return jsonify(scoring.rule_text())
+
+
+CABIN_SOURCE = ("Cabin CO2, temperature and humidity: NASA OSDR Environmental Data App, Rodent Research 1 "
+                "(2014), replayed. CO2 is NASA's ppm converted with the cabin pressure. Oxygen, pressure and "
+                "the dose in mSv are simulated.")
+WEATHER_SOURCE = "Simulated event, laid out like a NASA DONKI SEP record"
+
+
+@functools.lru_cache(maxsize=None)
+def _cabin():
+    """Hab A's rows, oldest first. Its CO2, temperature and humidity are the NASA record."""
+    return [row for row in dataset.table("anomalous/cabin_env") if row["habitat_id"] == "H1"]
+
+
+@bp.get("/station")
+def station():
+    now = iso(utcnow())
+    row = next((r for r in reversed(_cabin()) if r["ts"] <= now), _cabin()[0])
+    real = dataset.listed(row["real_fields"])
+    dose = next((r for r in dataset.table("anomalous/radiation_daily") if r["date"] == today()), None)
+    co2, dose_day = dataset.num(row["co2_mmhg"]), dataset.num(dose["dose_msv_day"]) if dose else None
+
+    def reading(column, field):
+        return {"value": dataset.num(row[column]), "state": None, "simulated": field not in real}
+
+    return jsonify({
+        "co2_mmHg": {"value": co2, "state": "ALERT" if co2 >= 4.5 else "WATCH" if co2 >= 2.8 else "OK",
+                     "note": "WATCH from 2.8, ALERT from 4.5", "simulated": "co2_ppm" not in real},
+        "ppo2_mmHg": reading("ppo2_mmhg", "ppo2_mmhg"),
+        "pressure_kPa": reading("pressure_kpa", "pressure_kpa"),
+        "temp_c": reading("temp_c", "temp_c"),
+        "rh_pct": reading("rh_pct", "rh_pct"),
+        "dose_mSv_today": {"value": dose_day, "state": "ALERT" if dose_day is not None and dose_day > 2 else "OK",
+                           "note": "ALERT over 2", "simulated": True},
+        "updated_at": row["ts"], "habitat": row["habitat_id"], "simulated": True, "source": CABIN_SOURCE,
+    })
+
+
+@bp.get("/space-weather")
+def space_weather():
+    now = iso(utcnow())
+    event = next((e for e in dataset.table("anomalous/space_weather_events")
+                  if e["event_time"] <= now <= e["end_time"]), None)
+    if event is None:
+        return jsonify(state="OK", headline="No solar particle event", advisory=None, event_at=None,
+                       source=WEATHER_SOURCE, simulated=True)
+    return jsonify(state=event["state"], headline=event["headline"], advisory=event["advisory"],
+                   event_at=event["event_time"], source=WEATHER_SOURCE, simulated=True)
