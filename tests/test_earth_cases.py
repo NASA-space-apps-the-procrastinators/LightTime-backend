@@ -121,8 +121,8 @@ def test_the_earth_outbox_lists_what_the_ground_sent(client, monkeypatch):
     later(monkeypatch, 12)
     aid = cases(client)[0]["alert_id"]
     client.post("/api/earth/reply", json={"alert_id": aid, "text": "Mask on."})
-    [sent] = client.get("/api/earth/outbox").get_json()["messages"]
-    assert sent["status"] == "in_flight" and sent["alert_id"] == aid and sent["eta_s"] > 0
+    [sent] = client.get("/api/earth/outbox").get_json()
+    assert sent["status"] == "in_flight" and str(sent["payload"]["alert_id"]) == aid and sent["eta_s"] > 0
 
 
 def test_a_blackout_hides_the_case_until_the_queue_flushes(client, monkeypatch):

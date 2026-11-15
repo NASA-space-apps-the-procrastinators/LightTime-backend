@@ -95,7 +95,7 @@ Later: FHIR export, logins, a real DTN stack.
 | Table | Holds |
 | --- | --- |
 | `crew` | id, name, role |
-| `reading` | crew_id, at, source (suit, typed, scenario), signal_ok, heart_rate, spo2, skin_temp, bp_sys, bp_dia, glucose, sleep_hours, mood (1 to 5) |
+| `reading` | crew_id, at, source (suit, typed, scenario, replay), context, signal_ok, heart_rate, spo2, skin_temp, bp_sys, bp_dia, glucose, sleep_hours, mood (1 to 5) |
 | `alert` | crew_id, at, level, vital, value, reason, auto, nasa_risk, steps_done, acknowledged_at, acknowledged_by, report_id, cleared_at, cleared_by |
 | `mission_state` | one row: the dial stop |
 | `link_message` | direction (to_earth, to_ship), kind (report, update, message, reply), priority, payload, created_at, sent_at, delay_s, deliver_at, in_reply_to |
@@ -106,7 +106,7 @@ All JSON. The screens poll once a second.
 
 | Call | Used by | Gives |
 | --- | --- | --- |
-| `GET /api/base/state` | base, suit | dial stop, label, delay_s, link_up, mode, who_decides, light_time_source, speedup, all four stops |
+| `GET /api/base/state` | base, suit | dial stop, label, delay_s, link_up, mode, who_decides, light_time_source, path_km (delay x speed of light), round_trip_s (2 x delay), plays_as_s (real seconds one leg takes in the demo), speedup, all four stops |
 | `POST /api/base/dial` `{stop}` | base | new state; flushes the queue when the link is back |
 | `POST /api/base/readings` | suit, hardware, check-in | stores a reading, runs the rules, returns any alerts raised |
 | `GET /api/base/crew` | base | one entry per person: level, `latest` sensed reading, `typed` check-in reading |
@@ -115,12 +115,15 @@ All JSON. The screens poll once a second.
 | `POST /api/base/alerts/<id>/ack` `{by}` | base | a person acknowledges the alert |
 | `POST /api/base/alerts/<id>/steps` `{index}` | base | ticks a checklist step |
 | `POST /api/base/alerts/<id>/send` | base | sends a report to the flight surgeon (an SOS has already gone) |
-| `POST /api/base/alerts/<id>/clear` `{by}` | base | a person resolves the alert |
+| `POST /api/base/alerts/<id>/clear` `{by, note}` | base | a person resolves the alert; `note` is their reason in their own words (up to 280 characters), kept as `cleared_note` and sent to Earth with the resolved update; a note that is not text gets 400. `by` is cut to 40 characters |
 | `POST /api/base/sos` `{crew_id}` | suit | manual SOS |
 | `POST /api/base/messages` `{text, alert_id, from}` | base | free text from the crew to the flight surgeon |
 | `GET /api/base/outbox` | base | everything the ship has sent, with status (queued, in_flight, delivered), eta_s and the three times |
 | `GET /api/base/inbox` | base, suit | replies from Earth that have arrived |
-| `POST /api/base/scenario/start` `{name}` and `/scenario/stop` | base | starts or stops the scripted story ("stage" or "full") |
+| `POST /api/base/scenario/start` `{name, replay}` and `/scenario/stop` | base | starts or stops the scripted story ("stage", "full" or "real"; `replay: true` plays real wrist data) |
+| `GET /api/base/habitat` | base | cabin temperature, humidity, CO2 and radiation dose, with source and date (NASA EDA, RR-1) |
+| `POST /api/base/summary/send` | base | sends the daily summaries to Earth (link kind `summary`) |
+| `GET /api/base/sources` | base | every outside source the app uses: id, agency, name, kind (live, file, hand), url, used_for, as_of |
 | `POST /api/base/reset` | base | clears readings, alerts and messages for a fresh run |
 | `GET /api/earth/inbox` | earth | link_up, mode, and everything that has arrived |
 | `POST /api/earth/reply` `{message_id or alert_id, text, from}` | earth | sends advice back, with the same delay. `alert_id` replies to that case's report. 400 `{error, field}` for bad input, 404 for a message or case Earth has not received |
@@ -128,13 +131,14 @@ All JSON. The screens poll once a second.
 | `GET /api/earth/cases` | earth | one case per alert whose report has reached Earth, open and most serious first (added 14 Nov by Ore) |
 | `GET /api/earth/cases/<alert_id>` | earth | one case, plus the report's SBAR, steps and recent readings; 404 if Earth has not received it (added 14 Nov by Ore) |
 | `GET /api/earth/cases/<alert_id>/thread` | earth | every message about the case Earth can see, oldest first, in the contract's ThreadMessage shape (added 14 Nov by Ore) |
-| `GET /api/earth/outbox` | earth | everything the ground has sent, with status and eta_s (added 14 Nov by Ore) |
+| `GET /api/earth/network` | earth | two NASA figures for the Mars delay side by side: `passes` (dish, craft, round_trip_s from DSN Now), `source`, `url`, `dsn_one_way_s` (median round trip / 2, or null when no antenna is on Mars), `horizons_one_way_s`, `differ_s` |
+| `GET /api/earth/outbox` | earth | everything Earth has sent, newest first, with status and eta_s, so Earth can watch its reply in flight |
 
-An alert carries: `id`, `crew_id`, `crew`, `at`, `level`, `vital`, `value`, `unit`, `reason`, `source`, `auto`, `nasa_risk`, `steps`, `steps_done`, `acknowledged_by`, `cleared_at`, `cleared_by`, `speak` (only for an emergency) and `timeline`.
+An alert carries: `id`, `crew_id`, `crew`, `at`, `level`, `vital`, `value`, `unit`, `reason`, `source`, `auto`, `nasa_risk`, `steps`, `steps_done`, `acknowledged_by`, `cleared_at`, `cleared_by`, `cleared_note`, `why` (how the ship reached the alert, in plain lines: what was seen, the last readings, the rule, the band table, and who decides), `speak` (for an emergency or a falling trend; say it once per alert id and level), `lookahead` and `timeline`.
 
-The `timeline` holds `raised_at`, `acknowledged_at`, `sent_at`, `earth_eta_s`, `earth_at`, `reply_at` and `resolved_at`. A time is null until that step has happened. `earth_eta_s` counts down in mission time to the moment Earth hears.
+`lookahead` is null unless a falling trend was found. It holds `now`, `per_min`, `eta_s`, `red_line`, `at`, `red_line_at`, `reply_s` and `earth_in_time`, frozen when the report left, so count down to `red_line_at`. The crew board adds `usual.heart_rate` (`low`, `high`, `n`, or null for the first ten minutes). Details: `docs/specs/2026-11-14-ship-ai-and-data-design.md` section 7.
 
-A case (Earth console) carries: `alert_id`, `crew_id`, `crew`, `vital`, `level`, `state` (Decision 2 map: OK, WATCH, ALERT, SOS), `value`, `reason`, `nasa_risk`, `mode_at_send`, `who_decides_at_send`, `raised_at` (the payload's `raised_at` if present, else the report's `created_at`), `status` (reported, acknowledged, in_progress, resolved, as of the updates that have arrived), `acknowledged_by/at`, `resolved_by/at`, `steps_done`, `timeline` (`reported_at`, `sent_at`, `arrived_at`), `last_heard_at`, `replies`, `awaiting_reply`, `reply_status` and `data_age` (`report_age_s`, `queued_s`, `transit_s`, `newest_reading_at`, `newest_reading_age_s`, `last_heard_age_s`). Ages are mission time: the trip counts at its real light time, not the 60x stage time. Ids on the new Earth routes are strings; `/inbox` and `/reply` keep their integer ids. Everything is built from `link_message` in `command_center/cases.py`.
+The `timeline` holds `raised_at`, `acknowledged_at`, `sent_at`, `earth_eta_s`, `earth_at`, `earliest_reply_at`, `reply_at` and `resolved_at`. A time is null until that step has happened. `earliest_reply_at` is the report's landing time plus the same leg back, as if the doctor answered at once; it is null while the report waits in the queue. It is on the demo clock, like every link time; `lookahead.red_line_at` is real time, so screens use `earth_in_time` for the verdict. `earth_eta_s` counts down in mission time to the moment Earth hears.
 
 The three times on a sent message are `sent_at`, `arrives_after_s` (the one-way delay) and `earliest_reply_after_s` (twice the delay). Every update, message and reply carries `payload.alert_id`, so the thread for one alert is the outbox and inbox filtered by that id.
 

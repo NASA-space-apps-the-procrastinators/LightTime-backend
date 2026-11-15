@@ -9,6 +9,14 @@ FALLBACK_S = {"2026-11-14": 660.86, "2026-11-15": 656.62, "2026-11-16": 652.36}
 FALLBACK_NOTE = "JPL Horizons, read on 2026-11-13"
 _cache = {}
 
+C_KM_S = 299_792.458        # speed of light in km/s, exact by definition
+AU_KM = 149_597_870.7       # one astronomical unit in km (IAU 2012)
+
+
+def path_km(delay_s):
+    """How far a signal travels in delay_s seconds."""
+    return delay_s * C_KM_S
+
 
 def parse(text):
     """Return seconds from a Horizons CSV ephemeris that holds quantity 21."""

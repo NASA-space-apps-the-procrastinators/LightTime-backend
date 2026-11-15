@@ -92,7 +92,7 @@ def test_reset_gives_a_clean_run(client):
     client.post("/api/base/reset")
     assert client.get("/api/base/outbox").get_json() == []
     assert client.get("/api/base/alerts").get_json() == []
-    assert client.get("/api/base/state").get_json()["stop"] == "station"
+    assert client.get("/api/base/state").get_json()["stop"] == "mars"     # the dial stays put
 
 
 def test_acknowledging_tells_earth_and_shows_on_the_round_trip(client):
