@@ -18,7 +18,7 @@ def test_every_screen_gets_the_fields_the_typed_client_expects(client):
     assert set(state) == STOP | {"speedup", "stops", "mission_day", "platform", "ship_ai", "now"} and set(state["stops"][0]) == STOP
     for _ in range(5):
         posted = client.post("/api/base/readings", json={"crew_id": 1, "spo2": 86, "heart_rate": 88}).get_json()
-    assert set(posted) == {"reading", "alerts"} and set(posted["reading"]) == READING
+    assert set(posted) == {"reading", "alerts", "ignored"} and set(posted["reading"]) == READING
     alert = client.get("/api/base/alerts?open=1").get_json()[0]
     assert set(alert) == ALERT and set(alert["timeline"]) == TIMELINE
     member = client.get("/api/base/crew").get_json()[0]

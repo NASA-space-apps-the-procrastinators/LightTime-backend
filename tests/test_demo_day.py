@@ -52,3 +52,35 @@ def test_the_crew_object_carries_the_week(morning):
     chart = morning.get("/api/base/crew/C1/history?metric=bp_sys&days=7").get_json()
     assert week["bp_sys"] == [day["value"] for day in chart["days"]]
     assert week["bp_sys"][-1] == 110            # no cuff reading yet today, so yesterday's stands
+
+
+SUIT = {"astronaut_id": "LT-04", "heart_rate_bpm": 76, "spo2_percent": 98, "skin_temp_c": 33.9,
+        "radiation_dose_msv": 84.2, "radiation_rate_usvh": 12.5}
+
+
+def test_the_suit_can_use_its_own_field_names(client):
+    sent = client.post("/api/base/readings", json=SUIT)
+    answer = sent.get_json()
+    assert sent.status_code == 201 and answer["reading"]["crew_id"] == 4
+    reading = answer["reading"]
+    assert (reading["heart_rate"], reading["spo2"], reading["skin_temp"]) == (76, 98, 33.9)
+    assert answer["ignored"] == ["radiation_dose_msv", "radiation_rate_usvh"]      # said, not silently dropped
+    assert client.get("/api/base/crew/C4").get_json()["latest"]["heart_rate"] == 76
+
+
+def test_the_ships_own_names_still_work_and_win(client):
+    answer = client.post("/api/base/readings",
+                         json={"crew_id": "C4", "heart_rate": 70, "heart_rate_bpm": 99}).get_json()
+    assert answer["reading"]["heart_rate"] == 70 and answer["ignored"] == []
+
+
+def test_a_suit_nobody_wears_is_refused_by_name(client):
+    refused = client.post("/api/base/readings", json={"astronaut_id": "S1", "heart_rate_bpm": 76})
+    assert refused.status_code == 400 and refused.get_json()["field"] == "crew_id"
+
+
+def test_five_low_readings_in_the_suits_words_still_raise_the_sos(client):
+    for _ in range(5):
+        raised = client.post("/api/base/readings",
+                             json={"astronaut_id": "LT-04", "spo2_percent": 86}).get_json()["alerts"]
+    assert [(alert["crew_id"], alert["state"]) for alert in raised] == [("C4", "SOS")]
