@@ -10,6 +10,7 @@ Anyone else  their own record in full, a name card for the rest, and an SOS as a
 from flask import jsonify, request
 
 from common import dataset
+from common.models import Alert, Crew, db
 
 HEADER = "X-LightTime-Viewer"
 REFUSAL = "this record is for the person it is about and the crew medical officer"
@@ -30,6 +31,20 @@ def viewer():
 def may_read(code):
     who = viewer()
     return who is None or who == code or who in medical_officers()
+
+
+def may_read_message(message):
+    """A link message about one person (their report or summary, or anything tied to one of their
+    alerts) follows that person's record. A message about no one is for everyone."""
+    if viewer() is None:
+        return True
+    payload = message.payload
+    crew_id = payload.get("crew_id")
+    if crew_id is None and payload.get("alert_id") is not None:
+        alert = db.session.get(Alert, payload["alert_id"])
+        crew_id = alert.crew_id if alert else None
+    crew = db.session.get(Crew, crew_id) if crew_id is not None else None
+    return crew is None or may_read(crew.code)
 
 
 def refuse():

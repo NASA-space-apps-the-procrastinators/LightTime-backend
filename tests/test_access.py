@@ -79,3 +79,30 @@ def test_the_packet_log_shows_a_crew_member_only_their_own_suit(morning):
     assert packets and {p["suit_id"] for p in packets} == {"LT-03"}
     everyone = morning.get("/api/base/packets?limit=400").get_json()["packets"]
     assert len({p["suit_id"] for p in everyone}) > 1
+
+
+def test_alerts_the_buttons_return_say_they_are_complete(client):
+    alert = sos(client)
+    assert alert["restricted"] is False                                    # POST /readings
+    assert client.post(f"/api/base/alerts/{alert['id']}/ack", json={"by": "Kyler"}).get_json()["restricted"] is False
+    assert client.post("/api/base/sos", json={"crew_id": "C3"}).get_json()["restricted"] is False
+
+
+def test_the_outbox_and_inbox_follow_the_record_they_are_about(morning):
+    def whose(alerts):
+        return {int(a["id"][1:]): a["crew_id"] for a in alerts}
+
+    owners = whose(morning.get("/api/base/alerts").get_json())
+    everyone = morning.get("/api/base/outbox").get_json() + morning.get("/api/base/inbox").get_json()
+    mine = (morning.get("/api/base/outbox", headers=as_("C3")).get_json()
+            + morning.get("/api/base/inbox", headers=as_("C3")).get_json())
+    assert any(owners.get(m["payload"].get("alert_id")) not in (None, "C3") for m in everyone)
+    for message in mine:
+        payload = message["payload"]
+        assert payload.get("crew_id") in (None, 3), message["id"]
+        assert payload.get("alert_id") is None or owners[payload["alert_id"]] == "C3", message["id"]
+    assert ([m["id"] for m in mine if m["payload"].get("alert_id") is None]
+            == [m["id"] for m in everyone if m["payload"].get("alert_id") is None])
+    cmo = (morning.get("/api/base/outbox", headers=as_("C2")).get_json()
+           + morning.get("/api/base/inbox", headers=as_("C2")).get_json())
+    assert [m["id"] for m in cmo] == [m["id"] for m in everyone]

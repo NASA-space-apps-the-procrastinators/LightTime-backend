@@ -126,6 +126,7 @@ def alert_dict(alert):
         "timeline": line,
         "lookahead": look,
         "speak": speak,
+        "restricted": False,        # complete; access.alert_view swaps in a notice where the viewer rule says so
     }
 
 
@@ -418,12 +419,12 @@ def manual_sos():
 def outbox():
     messages = (LinkMessage.query.filter_by(direction="to_earth")
                 .order_by(LinkMessage.created_at.desc(), LinkMessage.id.desc()))
-    return jsonify([link.to_dict(m) for m in messages])
+    return jsonify([link.to_dict(m) for m in messages if access.may_read_message(m)])
 
 
 @bp.get("/inbox")
 def inbox():
-    return jsonify([link.to_dict(m) for m in link.delivered("to_ship")])
+    return jsonify([link.to_dict(m) for m in link.delivered("to_ship") if access.may_read_message(m)])
 
 
 @bp.post("/reset")
