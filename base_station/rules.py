@@ -2,7 +2,7 @@
 import json
 import os
 
-from base_station import lookahead
+from base_station import lookahead, scenario
 from common.models import Alert, Reading, db, utcnow
 
 with open(os.path.join(os.path.dirname(__file__), "limits.json")) as f:
@@ -97,7 +97,8 @@ def evaluate(reading):
             held = f", out of range for {n} s" if n > 1 else ", out of range"
             level, reason = LEVELS[score], f"{cfg['label']} {value:g}{cfg['unit']}{held}"
         elif (cfg.get("lookahead") and not typed
-              and lookahead.check(reading.crew_id, vital, cfg["bands"][0][0], reading.source)):
+              and lookahead.check(reading.crew_id, vital, cfg["bands"][0][0], reading.source,
+                                  scenario.since(reading.source))):
             # Still in the normal band, but on course for the red line.
             level, reason = "caution", f"{cfg['label']} {value:g}{cfg['unit']} {lookahead.FALLING}"
         else:

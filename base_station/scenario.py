@@ -34,6 +34,15 @@ def treated():
     return alert is not None and (TREATMENT_STEP in alert.steps_done or alert.cleared_at is not None)
 
 
+def since(source):
+    """When the running story began, for the scripted story's own readings, so a trend never reaches
+    back into an earlier story. None for any other sender (the "real" story's replayed wrist history
+    is meant to be in the window), or once the clock has been put back."""
+    if source != "scenario" or _since is None or _since > utcnow():
+        return None
+    return _since
+
+
 def close_last_run():
     """Resolve the patient's blood-oxygen alert that an earlier story left open, and tell Earth.
     An open alert cannot be raised again, so without this a second story raises nothing.
