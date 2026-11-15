@@ -28,6 +28,7 @@ def not_found():
 
 @bp.get("/state")
 def state():
+    """Earth's view of the dial, the last contact from the ship, and what Earth has queued, in flight and delivered."""
     now = link.utcnow()
     out = current_state()
     last_at, last_age, n = cases.last_contact(now)
@@ -39,6 +40,7 @@ def state():
 
 @bp.get("/inbox")
 def inbox():
+    """Every message from the ship that has reached Earth, newest first, with the current delay and mode."""
     now = link.utcnow()
     state = current_state()
     return jsonify(link_up=state["link_up"], delay_s=state["delay_s"], mode=state["mode"],
@@ -48,12 +50,14 @@ def inbox():
 
 @bp.get("/cases")
 def case_list():
+    """One case per alert whose report has reached Earth, built only from delivered messages."""
     now = link.utcnow()
     return jsonify(cases=cases.build_cases(now))
 
 
 @bp.get("/cases/<alert_id>")
 def case_detail(alert_id):
+    """One case by alert id; 404 until its report has reached Earth."""
     aid = cases.parse_id(alert_id)
     case = cases.find_case(aid, link.utcnow()) if aid is not None else None
     return jsonify(case) if case else not_found()
@@ -61,6 +65,7 @@ def case_detail(alert_id):
 
 @bp.get("/cases/<alert_id>/thread")
 def case_thread(alert_id):
+    """Everything about one case that Earth has received or sent; 404 until its report has reached Earth."""
     aid = cases.parse_id(alert_id)
     now = link.utcnow()
     if aid is None or cases.report_for(aid, now) is None:
@@ -84,12 +89,14 @@ def feed_start():
 
 @bp.post("/feed/stop")
 def feed_stop():
+    """Stop the suits' vitals feed to Earth."""
     feed.stop()
     return jsonify(feed.status())
 
 
 @bp.get("/feed")
 def feed_status():
+    """Whether the vitals feed to Earth is running, and how often it sends."""
     return jsonify(feed.status())
 
 

@@ -1,0 +1,12 @@
+flowchart TB
+    crew["Crew, in a browser"] --> LB
+    surgeon["Flight surgeon, in a browser"] --> LB
+    subgraph GCP["Google Cloud"]
+        LB["HTTPS load balancer<br/>lighttime.health"]
+        FE["Console<br/>Next.js on Cloud Run"]
+        BE["Ship and Earth API, one Flask app<br/>Cloud Run, one instance, one worker<br/>mission clock and SQLite inside"]
+    end
+    LB -- "/" --> FE
+    LB -- "/api/*" --> BE
+    BE -- "light time for the mission date" --> JPL["NASA JPL Horizons"]
+    BE -- "which dishes are on Mars" --> DSN["NASA DSN Now feed"]

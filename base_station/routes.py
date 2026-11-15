@@ -235,11 +235,13 @@ def ingest(data):
 
 @bp.get("/health")
 def health():
+    """Is the ship up? Always {"ok": true}; reads no table."""
     return jsonify(ok=True)
 
 
 @bp.get("/state")
 def state():
+    """The dial stop, its delay and who decides, the ship's clock, the mission day and all four stops."""
     out = current_state()
     out["speedup"] = link.SPEEDUP
     out["ship_ai"] = modes.SHIP_AI
@@ -252,6 +254,7 @@ def state():
 
 @bp.post("/dial")
 def dial():
+    """Move the dial to station, moon, mars or sun; a link that comes back sends its queue, most urgent first."""
     stop = body().get("stop")
     if not isinstance(stop, str) or stop not in modes.STOPS:
         return bad("unknown stop", "stop")
@@ -264,6 +267,7 @@ def dial():
 
 @bp.post("/readings")
 def post_reading():
+    """Store one reading and run the rules; returns the reading, any alert it raised, and the fields it ignored."""
     data = in_our_words(body())
     crew_id = crew_id_or_400(data)
     given = {}
@@ -303,6 +307,7 @@ def _level(crew_id):
 
 @bp.get("/crew/<ref>/readings")
 def crew_readings(ref):
+    """One person's recent readings for the trend chart, oldest first; ?limit= up to 600 (default 120)."""
     crew = crew_or_404(ref)
     if not access.may_read(crew.code):
         return access.refuse()
@@ -314,6 +319,7 @@ def crew_readings(ref):
 
 @bp.get("/alerts")
 def alerts():
+    """Every alert the viewer may see, newest first; ?open=1 for the ones not yet cleared."""
     query = Alert.query
     if request.args.get("open") == "1":
         query = query.filter_by(cleared_at=None)
@@ -323,12 +329,14 @@ def alerts():
 
 @bp.get("/alerts/<alert_id>")
 def one_alert(alert_id):
+    """One alert from "A1" or 1, or a short notice of someone else's SOS."""
     view = access.alert_view(alert_dict(alert_or_404(alert_id)))
     return access.refuse() if view is None else jsonify(view)
 
 
 @bp.post("/alerts/<alert_id>/ack")
 def acknowledge(alert_id):
+    """A crew member acknowledges an alert, with optional symptoms; Earth gets an update if it has the report."""
     alert = alert_or_404(alert_id)
     sent = body()
     if isinstance(sent.get("symptoms"), list):
@@ -344,6 +352,7 @@ def acknowledge(alert_id):
 
 @bp.post("/alerts/<alert_id>/steps")
 def tick_step(alert_id):
+    """Tick one checklist step on an alert by its index; Earth gets an update if it has the report."""
     alert = alert_or_404(alert_id)
     try:
         index = int(body()["index"])
@@ -370,6 +379,7 @@ def send_alert(alert_id):
 
 @bp.post("/alerts/<alert_id>/clear")
 def clear_alert(alert_id):
+    """Resolve an alert, with who and an optional note; a second press changes nothing."""
     alert = alert_or_404(alert_id)
     if alert.cleared_at is None:        # a second press changes nothing
         sent = body()
@@ -386,6 +396,7 @@ def clear_alert(alert_id):
 
 @bp.post("/messages")
 def crew_message():
+    """Free text from the crew to Earth, optionally about one alert, sent with the current delay."""
     data = body()
     if not data.get("text"):
         return bad("a message needs text", "text")
@@ -403,6 +414,7 @@ def crew_message():
 
 @bp.post("/sos")
 def manual_sos():
+    """A crew member presses SOS: an emergency alert whose report leaves for Earth at once."""
     crew_id = crew_id_or_400(body())
     alert = Alert.query.filter_by(crew_id=crew_id, vital="manual", cleared_at=None).first()
     if alert is not None:               # a second press changes nothing
@@ -417,6 +429,7 @@ def manual_sos():
 
 @bp.get("/outbox")
 def outbox():
+    """What the ship has sent toward Earth, with each message's status and time left to land."""
     messages = (LinkMessage.query.filter_by(direction="to_earth")
                 .order_by(LinkMessage.created_at.desc(), LinkMessage.id.desc()))
     return jsonify([link.to_dict(m) for m in messages if access.may_read_message(m)])
@@ -424,11 +437,13 @@ def outbox():
 
 @bp.get("/inbox")
 def inbox():
+    """What Earth has sent that has reached the ship so far, newest first."""
     return jsonify([link.to_dict(m) for m in link.delivered("to_ship") if access.may_read_message(m)])
 
 
 @bp.post("/reset")
 def reset():
+    """Clear readings, alerts, messages, check-ins and reminders; reload the demo morning if it is on."""
     scenario.stop()
     for model in (Reminder, Checkin, LinkMessage, Alert, Reading):
         model.query.delete()
@@ -451,6 +466,7 @@ def demo_start():
 
 @bp.post("/scenario/start")
 def scenario_start():
+    """Play a scripted story: {"name": "full", "stage" or "real"}, with "replay": true for recorded data."""
     sent = body()
     name, real = sent.get("name", "full"), bool(sent.get("replay"))
     if not isinstance(name, str) or name not in scenario.SCENARIOS:
@@ -461,12 +477,14 @@ def scenario_start():
 
 @bp.post("/scenario/stop")
 def scenario_stop():
+    """Stop the story that is playing."""
     scenario.stop()
     return jsonify(ok=True)
 
 
 @bp.get("/habitat")
 def habitat_now():
+    """The cabin and radiation values for this moment of the replayed record, with source and date."""
     return jsonify(habitat.at(time.monotonic() - habitat.STARTED))
 
 
@@ -482,6 +500,7 @@ def send_summaries():
 
 @bp.get("/sources")
 def data_sources():
+    """Every outside source the ship uses, what it is for and how fresh it is."""
     return jsonify(sources.listing())
 
 

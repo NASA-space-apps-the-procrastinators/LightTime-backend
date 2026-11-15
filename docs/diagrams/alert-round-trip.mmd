@@ -1,0 +1,16 @@
+sequenceDiagram
+    autonumber
+    participant S as Suit
+    participant B as Ship (LIGHTTIME)
+    participant C as Crew and CMO
+    participant L as Delayed link
+    participant E as Earth (flight surgeon)
+    S->>B: one reading a second
+    B->>B: trust, usual range, time left
+    B-->>C: caution: about N s left
+    B->>L: report (sent_at)
+    B-->>C: SOS after 5 in the red
+    Note over C: Crew acts now (5 min or more one way)
+    L->>E: report lands (deliver_at)
+    E->>L: reply
+    L->>C: reply lands, one more one-way delay

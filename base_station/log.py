@@ -67,6 +67,7 @@ def sent_today():
 
 @bp.get("/packets")
 def packets():
+    """The health log: the suits' minute stream as packets, newest first; ?crew=, ?state=, ?limit= up to 1000."""
     crew, state = request.args.get("crew"), request.args.get("state")
     member = find_crew(crew) if crew else None
     if crew and member is None:

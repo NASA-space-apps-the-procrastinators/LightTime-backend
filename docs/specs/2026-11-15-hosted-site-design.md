@@ -1,6 +1,6 @@
 # The hosted site, lighttime.health: what a judge gets when they open the link
 
-Sunday 15 November 2026, 07:10. This spec covers the public copy at https://lighttime.health/. It changes no rule and adds no feature. The plan is `docs/plans/2026-11-15-hosted-site.md`. The commands behind it are in `docs/deployment-commands.md`, each beside the Google page it was checked against.
+Sunday 15 November 2026, 07:10. This spec covers the public copy at https://lighttime.health/. It changes no rule and adds no feature. The plan is `docs/build-log/plans/2026-11-15-hosted-site.md`. The commands behind it are in `docs/deployment-commands.md`, each beside the Google page it was checked against.
 
 ## 1. What was checked, and what was found
 

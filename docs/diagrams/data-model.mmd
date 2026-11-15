@@ -1,0 +1,86 @@
+erDiagram
+    crew {
+        INTEGER id
+        VARCHAR name
+        VARCHAR role
+        VARCHAR code
+        VARCHAR suit_id
+    }
+    link_message {
+        INTEGER id
+        VARCHAR direction
+        VARCHAR kind
+        INTEGER priority
+        JSON payload
+        DATETIME created_at
+        DATETIME sent_at
+        FLOAT delay_s
+        DATETIME deliver_at
+        INTEGER in_reply_to
+    }
+    mission_state {
+        INTEGER id
+        VARCHAR stop
+    }
+    alert {
+        INTEGER id
+        INTEGER crew_id
+        DATETIME at
+        VARCHAR level
+        VARCHAR vital
+        FLOAT value
+        VARCHAR reason
+        BOOLEAN auto
+        VARCHAR nasa_risk
+        JSON steps_done
+        DATETIME cleared_at
+        VARCHAR cleared_by
+        VARCHAR cleared_note
+        DATETIME acknowledged_at
+        VARCHAR acknowledged_by
+        INTEGER report_id
+        VARCHAR ref
+        VARCHAR metric
+        JSON symptoms
+    }
+    crew ||--o{ alert : has
+    checkin {
+        INTEGER id
+        INTEGER crew_id
+        VARCHAR day
+        DATETIME completed_at
+        INTEGER mood
+        FLOAT sleep_h
+        INTEGER pvt_ms
+        FLOAT bp_sys
+        FLOAT bp_dia
+        JSON symptoms
+        VARCHAR note
+    }
+    crew ||--o{ checkin : has
+    reading {
+        INTEGER id
+        INTEGER crew_id
+        DATETIME at
+        VARCHAR source
+        BOOLEAN signal_ok
+        VARCHAR context
+        FLOAT heart_rate
+        FLOAT spo2
+        FLOAT skin_temp
+        FLOAT bp_sys
+        FLOAT bp_dia
+        FLOAT glucose
+        FLOAT sleep_hours
+        FLOAT mood
+    }
+    crew ||--o{ reading : has
+    reminder {
+        INTEGER id
+        INTEGER crew_id
+        INTEGER alert_id
+        VARCHAR text
+        DATETIME due_at
+        DATETIME done_at
+    }
+    crew ||--o{ reminder : has

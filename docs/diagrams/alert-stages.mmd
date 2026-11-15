@@ -1,0 +1,11 @@
+stateDiagram-v2
+    [*] --> raised: a rule fires or someone presses SOS
+    raised --> acknowledged: a crew member acknowledges
+    raised --> sent: an SOS or a falling-trend warning sends its report at once, or the crew presses send
+    acknowledged --> sent: the crew presses send
+    sent --> replied: Earth's reply lands on the ship
+    replied --> resolved: the crew clears it or accepts the plan
+    raised --> resolved: the crew clears it
+    acknowledged --> resolved: the crew clears it
+    sent --> resolved: the crew clears it before any reply
+    resolved --> [*]

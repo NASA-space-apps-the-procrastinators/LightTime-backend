@@ -1,0 +1,22 @@
+% Figure 2. Who decides, against one-way delay (log scale). Every number comes from generated/numbers.tex.
+\begin{figure}[t]\centering
+\begin{tikzpicture}
+\begin{semilogxaxis}[width=\columnwidth, height=46mm, xmin=0.1, xmax=30000, ymin=0, ymax=1, ytick=\empty,
+  xlabel={One-way light time (s, log scale)}, axis lines=left, clip=false]
+\fill[oiblue!15] (axis cs:0.1,0) rectangle (axis cs:\numCrewFirstAtS,1);
+\fill[oiverm!15] (axis cs:\numCrewFirstAtS,0) rectangle (axis cs:30000,1);
+\node[align=center, font=\scriptsize] at (axis cs:6,0.88) {flight surgeon on Earth\\directs care};
+\node[align=center, font=\scriptsize] at (axis cs:3100,0.88) {crew medical\\officer leads};
+\draw[thick] (axis cs:\numStationOneWayS,0) -- (axis cs:\numStationOneWayS,0.55)
+  node[above, font=\scriptsize]{station};
+\draw[thick] (axis cs:\numMoonOneWayS,0) -- (axis cs:\numMoonOneWayS,0.35)
+  node[above, font=\scriptsize]{Moon};
+\draw[thick] (axis cs:\numMarsOneWayS,0) -- (axis cs:\numMarsOneWayS,0.45)
+  node[above, font=\scriptsize, align=center, xshift=4mm]{Mars\\(our date)};
+\draw[dashed] (axis cs:\numCrewFirstAtS,0) -- (axis cs:\numCrewFirstAtS,1)
+  node[pos=0.62, left, font=\scriptsize]{\numCrewFirstAtS~s};
+\end{semilogxaxis}
+\end{tikzpicture}
+\caption{Who leads care, by one-way light time (log scale). The dashed line is the \numCrewFirstAtS~s switch, a design choice. With no link at all the crew act alone.}
+\label{fig:authority}
+\end{figure}
