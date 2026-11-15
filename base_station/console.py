@@ -1,15 +1,16 @@
 """The console's side of the ship: each person's day against their own band, the trend chart
 and the printed rules. Shapes follow the frontend owner's API contract of 14 November."""
+import collections
 import functools
-from datetime import timedelta
+from datetime import date, timedelta
 
 from flask import jsonify, request
 
 from base_station import scoring, usual
 from base_station.morning import when
-from base_station.routes import _latest, _level, bp, crew_or_404
+from base_station.routes import _latest, _level, alert_code, body, bp, crew_or_404
 from common import dataset
-from common.models import Checkin, Crew, iso, utcnow
+from common.models import Alert, Checkin, Crew, db, iso, utcnow
 
 COLUMN = {"hr_rest": "hr_rest_bpm", "bp_sys": "bp_sys_mmhg", "bp_dia": "bp_dia_mmhg", "spo2": "spo2_pct",
           "temp_c": "core_temp_c", "resp": "resp_rpm", "sleep_h": "sleep_h", "mood": "mood", "pvt_ms": "pvt_ms",
@@ -197,3 +198,78 @@ def space_weather():
                        source=WEATHER_SOURCE, simulated=True)
     return jsonify(state=event["state"], headline=event["headline"], advisory=event["advisory"],
                    event_at=event["event_time"], source=WEATHER_SOURCE, simulated=True)
+
+
+SYMPTOMS = {"headache", "short sleep", "congestion", "nausea", "blurred vision", "back pain"}
+
+
+def _number(value, low, high, whole=False):
+    """True for a real number in range. JSON true and false are not numbers here."""
+    kind = int if whole else (int, float)
+    return isinstance(value, kind) and not isinstance(value, bool) and low <= value <= high
+
+
+def streak(day):
+    """Days in a row, ending today or yesterday, on which every crew member checked in."""
+    everyone = Crew.query.count()
+    done = collections.Counter(found for (found,) in db.session.query(Checkin.day))
+    days, at = (1 if done[day] == everyone else 0), date.fromisoformat(day) - timedelta(days=1)
+    while done[at.isoformat()] == everyone:
+        days, at = days + 1, at - timedelta(days=1)
+    return days
+
+
+@bp.get("/checkins/today")
+def checkins_today():
+    day, crew = today(), Crew.query.order_by(Crew.id).all()
+    done = {crew_id for (crew_id,) in db.session.query(Checkin.crew_id).filter_by(day=day)}
+    days = streak(day)
+    return jsonify(date=day, done=[c.code for c in crew if c.id in done],
+                   due=[c.code for c in crew if c.id not in done], streak=days,
+                   next_badge_at=(days // 7 + 1) * 7)       # assumed: a badge every seventh day (spec Q3)
+
+
+@bp.post("/crew/<ref>/checkins")
+def post_checkin(ref):
+    crew, sent = crew_or_404(ref), body()
+    symptoms, note = sent.get("symptoms", []), sent.get("note") or ""
+    if not _number(sent.get("mood"), 1, 5, whole=True):
+        return bad("mood is a whole number from 1 to 5", "mood")
+    if not _number(sent.get("sleep_h"), 0, 24):
+        return bad("sleep_h is from 0 to 24", "sleep_h")
+    if not (isinstance(symptoms, list) and all(item in SYMPTOMS for item in symptoms)):
+        return bad("symptoms come from: " + ", ".join(sorted(SYMPTOMS)), "symptoms")
+    if not isinstance(note, str) or len(note) > 500:
+        return bad("note is at most 500 characters", "note")
+    if sent.get("pvt_ms") is not None and not _number(sent["pvt_ms"], 100, 3000, whole=True):
+        return bad("pvt_ms is a whole number from 100 to 3000", "pvt_ms")
+    for field in ("bp_sys", "bp_dia"):
+        if sent.get(field) is not None and not _number(sent[field], 30, 260):
+            return bad(f"{field} is a cuff reading in mmHg", field)
+
+    day = today()
+    row = Checkin.query.filter_by(crew_id=crew.id, day=day).first()
+    first = row is None
+    if first:
+        row = Checkin(crew_id=crew.id, day=day)
+        db.session.add(row)
+    earlier = (Checkin.query.filter(Checkin.crew_id == crew.id, Checkin.day < day)
+               .order_by(Checkin.day.desc()).first())
+    for field in ("bp_sys", "bp_dia"):       # the last cuff reading stands until a new one is sent
+        if sent.get(field) is not None:
+            setattr(row, field, float(sent[field]))
+        elif getattr(row, field) is None and earlier is not None:
+            setattr(row, field, getattr(earlier, field))
+    row.completed_at, row.mood, row.sleep_h = utcnow(), sent["mood"], float(sent["sleep_h"])
+    row.pvt_ms, row.symptoms, row.note = sent.get("pvt_ms"), symptoms, note
+    for alert in Alert.query.filter_by(crew_id=crew.id, cleared_at=None):
+        alert.symptoms = symptoms
+    db.session.commit()
+
+    values, _, _, rows = day_of(crew, day)
+    states = states_of(crew, values, symptoms, rows)
+    open_alert = (Alert.query.filter_by(crew_id=crew.id, cleared_at=None)
+                  .order_by(Alert.at.desc(), Alert.id.desc()).first())
+    return jsonify(crew_id=crew.code, completed_at=iso(row.completed_at), first_today=first, streak=streak(day),
+                   metric_states={metric: states[metric] for metric in ("sleep_h", "mood", "pvt_ms")},
+                   open_alert_id=alert_code(open_alert) if open_alert else None), 201

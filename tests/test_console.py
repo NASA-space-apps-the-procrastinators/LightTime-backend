@@ -98,3 +98,44 @@ def test_the_solar_event_is_shown_and_marked_simulated(morning):
     weather = morning.get("/api/base/space-weather").get_json()
     assert (weather["state"], weather["event_at"], weather["simulated"]) == ("WATCH", "2026-11-14T05:58:00Z", True)
     assert weather["headline"] == "SEP event in progress" and "DONKI" in weather["source"]
+
+
+GOOD = {"mood": 2, "sleep_h": 5.1, "symptoms": ["headache"], "note": "", "pvt_ms": 312}
+
+
+def test_the_morning_board_knows_who_has_checked_in(morning):
+    assert morning.get("/api/base/checkins/today").get_json() == {
+        "date": "2026-11-14", "done": ["C2", "C3", "C4"], "due": ["C1"], "streak": 12, "next_badge_at": 14}
+
+
+def test_a_check_in_is_saved_scored_and_copied_to_the_open_alert(morning):
+    saved = morning.post("/api/base/crew/C1/checkins", json={**GOOD, "bp_sys": 128, "bp_dia": 82})
+    body = saved.get_json()
+    assert saved.status_code == 201
+    assert (body["crew_id"], body["first_today"], body["streak"], body["open_alert_id"]) == ("C1", True, 13, "A1")
+    assert body["metric_states"] == {"sleep_h": "ALERT", "mood": "ALERT", "pvt_ms": "ALERT"}
+    c1 = morning.get("/api/base/crew/C1").get_json()
+    assert c1["today"]["bp"] == [128, 82] and c1["today"]["mood"] == 2 and c1["today"]["pvt_ms"] == 312
+    assert c1["checkin_from"] == "2026-11-14"
+    assert c1["metric_states"] == {      # the contract's own example for Okafor, value for value
+        "hr_rest": "ALERT", "bp_sys": "ALERT", "bp_dia": "ALERT", "spo2": "OK", "temp_c": "ALERT", "resp": "OK",
+        "sleep_h": "ALERT", "mood": "ALERT", "pvt_ms": "ALERT", "dose_mSv_day": "OK"}
+    assert morning.get("/api/base/alerts/A1").get_json()["symptoms"] == ["headache"]
+    assert morning.get("/api/base/checkins/today").get_json()["due"] == []
+
+
+def test_a_second_check_in_the_same_day_replaces_the_first(morning):
+    morning.post("/api/base/crew/C1/checkins", json=GOOD)
+    again = morning.post("/api/base/crew/C1/checkins", json={**GOOD, "mood": 4}).get_json()
+    assert (again["first_today"], again["streak"]) == (False, 13)
+    today = morning.get("/api/base/crew/C1").get_json()["today"]
+    assert today["mood"] == 4 and today["bp"] == [110, 71]      # no cuff reading was sent: yesterday's stands
+
+
+def test_a_bad_check_in_names_the_field(morning):
+    for field, value in (("mood", 6), ("mood", 2.5), ("sleep_h", 25), ("note", "x" * 501), ("pvt_ms", 50),
+                         ("symptoms", ["dizzy"]), ("bp_sys", "high")):
+        bad = morning.post("/api/base/crew/C1/checkins", json={**GOOD, field: value})
+        assert bad.status_code == 400 and bad.get_json()["field"] == field, field
+    assert morning.post("/api/base/crew/C9/checkins", json=GOOD).status_code == 404
+    assert morning.get("/api/base/checkins/today").get_json()["due"] == ["C1"]
