@@ -73,7 +73,7 @@ def test_a_manual_sos_says_no_rule_was_involved(client):
 def test_resolving_keeps_the_crews_own_words_and_tells_earth(client):
     alert = sos(client)
     note = "Mask on. Back to 97 in two minutes."
-    done = client.post(f"/api/base/alerts/{alert['id']}/clear", json={"by": "Damola", "note": note}).get_json()
+    done = client.post(f"/api/base/alerts/{alert['id']}/clear", json={"by": "Lindqvist", "note": note}).get_json()
     assert done["cleared_note"] == note
     resolved = [m for m in client.get("/api/base/outbox").get_json() if m["payload"].get("event") == "resolved"]
     assert resolved[0]["payload"]["note"] == note
@@ -131,9 +131,9 @@ def test_the_earliest_reply_after_a_blackout_counts_one_leg_back(client):
     client.post("/api/base/dial", json={"stop": "mars"})
     from datetime import datetime
     for a in client.get("/api/base/alerts").get_json():
-        line, leg = a["timeline"], lighttime.mars_seconds() / 60
         sent = client.get("/api/base/outbox").get_json()
-        report = next(m for m in sent if m["kind"] == "report" and m["payload"]["alert_id"] == a["id"])
+        report = next(m for m in sent if m["kind"] == "report" and f"A{m['payload']['alert_id']}" == a["id"])
+        line, leg = a["timeline"], report["delay_s"] / 60                  # one leg of the delay it was sent with
         gap = (datetime.fromisoformat(line["earliest_reply_at"].replace("Z", "+00:00"))
                - datetime.fromisoformat(report["deliver_at"].replace("Z", "+00:00"))).total_seconds()
         assert abs(gap - leg) < 0.01
@@ -141,3 +141,34 @@ def test_the_earliest_reply_after_a_blackout_counts_one_leg_back(client):
 
 def test_an_infinite_round_trip_in_the_feed_is_ignored():
     assert dsn.parse('<dsn><dish name="D"><target name="MRO" rtlt="inf"/></dish></dsn>') == []
+
+
+def test_the_ship_ai_introduces_itself(client):
+    ship_ai = client.get("/api/base/state").get_json()["ship_ai"]
+    assert ship_ai["name"] == "LIGHTTIME" and ship_ai["version"].startswith("rules ")
+    assert [part["name"] for part in ship_ai["parts"]] == ["Don't cry wolf", "Know each person", "Time left", "Ask ahead"]
+
+
+def test_its_role_changes_with_the_distance(client):
+    role = {}
+    for where in ("station", "mars", "sun"):
+        role[where] = client.post("/api/base/dial", json={"stop": where}).get_json()["state"]["ship_ai_role"]
+    assert role["station"].startswith("Drafts") and role["mars"].startswith("Coaches")
+    assert role["sun"].startswith("Main reference")
+
+
+def test_the_report_carries_the_reasoning_and_how_steady_the_fall_is(client):
+    for i in range(30):
+        client.post("/api/base/readings", json={"crew_id": 1, "spo2": round(98 - 0.1 * i, 1)})
+    payload = client.get("/api/base/outbox").get_json()[0]["payload"]
+    assert payload["why"][0].startswith("What was seen")
+    assert payload["lookahead"]["agreement"] == 1.0                      # a steady fall: every pair agrees
+
+
+def test_the_alert_names_the_next_step(client):
+    alert = sos(client)
+    assert alert["next_step"] == alert["steps"][0]
+    after = client.post(f"/api/base/alerts/{alert['id']}/steps", json={"index": 0}).get_json()
+    assert after["next_step"] == alert["steps"][1]
+    skipped = client.post(f"/api/base/alerts/{alert['id']}/steps", json={"index": 2}).get_json()
+    assert skipped["next_step"] == alert["steps"][1]                       # the first step not ticked, not a count

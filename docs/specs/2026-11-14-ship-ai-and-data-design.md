@@ -1,6 +1,6 @@
 # LIGHT-TIME: data and ship AI design
 
-Date: Saturday 14 November 2026. Owner: TJ. Reviewer: Kyler. Build plan: `docs/plans/2026-11-14-ship-ai-and-data.md`.
+Date: Saturday 14 November 2026. Owner: The backend owner. Reviewer: The reviewer. Build plan: `docs/plans/2026-11-14-ship-ai-and-data.md`.
 
 This is the second spec. The first (`2026-11-14-backend-design.md`) covers the API, the delayed link and the alert rules, and it is built. This one covers what is left: where the data comes from, how it is cleaned and mapped, what the ship's AI does with it, and the fixes from the code review.
 
@@ -13,8 +13,8 @@ The review found ten problems, none on the scripted happy path. All are fixed in
 | # | Problem | Fix |
 |---|---|---|
 | 1 | An unknown `crew_id` on `/sos` or `/readings` made `/alerts` fail on every poll until reset | Checked first, answers 400 |
-| 2 | A second sender for the same person (the story plus Youssef's sensor) hid the SOS | Each sender is judged on its own readings |
-| 3 | Pressing Resolve before ticking the mask step left David at 86% for a minute | Resolving also ends the collapse |
+| 2 | A second sender for the same person (the story plus the hardware owner's sensor) hid the SOS | Each sender is judged on its own readings |
+| 3 | Pressing Resolve before ticking the mask step left Okafor at 86% for a minute | Resolving also ends the collapse |
 | 4 | Two Start presses played two stories at double speed | One lock, one story |
 | 5 | One bad reading, or `"by": null`, killed the story thread silently | Caught and logged, story continues |
 | 6 | Reset moved the dial back to Station, so a restarted demo lost Mars | Reset leaves the dial alone |
@@ -76,7 +76,7 @@ One rule governs it: nothing may raise an alarm until it has been tried on real 
 
 ### Heart rate does not alarm
 
-On 15 healthy volunteers at a desk, the hospital heart-rate bands raised a caution for 14, a warning for 5 and an SOS for 1. A personal range learned from each person's own readings only stopped the false alarms once it was too wide to catch a 30 bpm rise (caught for 1 of 15). So heart rate is displayed, compared with the person's usual range, and sent to Earth. It never raises an alert on its own. This agrees with wearable studies that needed many nights of resting data to detect anything (Mishra 2020, Alavi 2022) and with Damola's rule of 20 bpm over baseline for three days, which needs more days than we hold.
+On 15 healthy volunteers at a desk, the hospital heart-rate bands raised a caution for 14, a warning for 5 and an SOS for 1. A personal range learned from each person's own readings only stopped the false alarms once it was too wide to catch a 30 bpm rise (caught for 1 of 15). So heart rate is displayed, compared with the person's usual range, and sent to Earth. It never raises an alert on its own. This agrees with wearable studies that needed many nights of resting data to detect anything (Mishra 2020, Alavi 2022) and with the frontend owner's rule of 20 bpm over baseline for three days, which needs more days than we hold.
 
 ### Blood oxygen: cleaning first
 
@@ -113,6 +113,8 @@ Six of six warned before the red line, a median of 97 seconds ahead. On the cont
 
 What these numbers do not show. The first version of this test, the one that worked on the scripted story, caught 2 of 6. The settings were then checked held-out (`python scripts/crossval_lookahead.py`, 14 Nov): chosen from 18 settings on five volunteers, tested on the sixth, six times. Held-out result: warned before the SOS for 6 of 6, median 97 s ahead (159, 106, 98, 96, 68 and 14 s). Every fold chose the settings the ship already uses. Limits of that check: the false-alarm cap (at most 3 trend warnings) uses the same control recording in every fold, so it is not held out, and volunteer 100006 is warned only 14 s ahead. Six people in one lab on finger oximeters is a small sample, and a fall this slow is the easy case. Harespod is the unseen test for Sunday. `python scripts/check_spo2_rules.py` reprints every number above.
 
+A second check, on generated data (14 Nov, evening). A simulated 30-day month for four crew, with a healthy copy, was read against these rules (`docs/reviews/2026-11-14-dataset-review.md`). Three results. The shirt's estimated blood pressure sat in the caution band or worse on 77,647 of 168,600 healthy minutes, so it no longer raises an alarm (the same decision as heart rate, for the same reason). The two injected oxygen falls are slow, about 0.2 and 0.5 points a minute: the bands caught both, 18 and 9 minutes before the red line, and the time-left test fired on neither, because it needs 2 points inside a minute. And minute data must never be fed to these one-a-second rules: it produced 24 false trend warnings. None of this is evidence that a rule is right. Generated data can only show that a rule is noisy or blind.
+
 ### Asked ahead
 
 A flight surgeon's first questions take 22 minutes each way to ask. So the report answers them before it leaves: how the reading moved over the last minute, how long until it is critical, whether the heart rate is normal for this person, whether the sensor is clean, what the crew has done, and the last check-in.
@@ -135,7 +137,7 @@ Today everything is statistics you can explain in a sentence, which is the right
 | Report to Earth | New `asked_ahead` (list of `q` and `a`), `lookahead`, `usual`. The strip is 60 readings. New link kind `summary`, new update event `escalated` |
 | Behaviour | Heart rate alone raises nothing. Reset keeps the dial. A second SOS press returns the same alert with 200. Bad input returns 400 |
 
-## 8. Damola's project document against this
+## 8. The frontend owner's project document against this
 
 Mostly the same product. His OK, WATCH and ALERT are our nominal, caution and warning, with SOS on top. "Send to flight surgeon" is `POST /alerts/<id>/send`. His daily summary is `POST /summary/send`. His blood-oxygen ALERT under 94% is our warning at 93. His baseline idea is the usual range.
 
@@ -155,9 +157,9 @@ Multi-day baselines, a learned model, a second backend, alerts from skin tempera
 
 ## 10. Open
 
-Kyler's Postgres host is `kyler.visserfamily.ca` (the `.cs` name was a typo). Checked on 14 November: Postgres 17.9, database `lighttime`, user `svc-lighttime`. The app created all five tables on first start, `reading.context` included, so no column change was needed, and the stage story reached its SOS there. The password goes in `.env` only, which git ignores.
+The reviewer's Postgres host is `kyler.visserfamily.ca` (the `.cs` name was a typo). Checked on 14 November: Postgres 17.9, database `lighttime`, user `svc-lighttime`. The app created all five tables on first start, `reading.context` included, so no column change was needed, and the stage story reached its SOS there. The password goes in `.env` only, which git ignores.
 
-One round trip from TJ's laptop to that host takes about 160 ms, and one reading makes 7 queries, so a reading takes about half a second. Played from the laptop against that database, a story runs about two and a half times slower than on SQLite: the stage SOS came at about 20 s instead of about 12 s. For the pitch, either run the server on a machine close to the database, or run it on the laptop with SQLite.
+One round trip from the backend owner's laptop to that host takes about 160 ms, and one reading makes 7 queries, so a reading takes about half a second. Played from the laptop against that database, a story runs about two and a half times slower than on SQLite: the stage SOS came at about 20 s instead of about 12 s. For the pitch, either run the server on a machine close to the database, or run it on the laptop with SQLite.
 
 ## References
 

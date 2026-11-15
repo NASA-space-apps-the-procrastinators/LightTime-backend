@@ -30,6 +30,11 @@ def parse_id(value):
     return None
 
 
+def code(prefix, number):
+    """The id the screens use, as the ship's API gives it: "A1", "C1", "M5". None stays None."""
+    return None if number is None else f"{prefix}{number}"
+
+
 def _seconds(a, b):
     return (a - b).total_seconds()
 
@@ -72,11 +77,11 @@ def thread_entry(message, now):
     else:
         author, text = p.get("from", "crew" if message.direction == "to_earth" else "Flight surgeon"), p.get("text", "")
     return {
-        "id": str(message.id), "alert_id": None if _alert_of(message) is None else str(_alert_of(message)),
+        "id": code("M", message.id), "alert_id": code("A", _alert_of(message)),
         "from": "crew" if message.direction == "to_earth" else "ground", "author": author, "kind": message.kind,
         "text": text, "created_at": iso(message.created_at), "sent_at": iso(message.sent_at),
         "arrived_at": iso(message.deliver_at) if status == "delivered" else None, "status": status,
-        "in_reply_to": None if message.in_reply_to is None else str(message.in_reply_to),
+        "in_reply_to": code("M", message.in_reply_to),
     }
 
 
@@ -87,7 +92,7 @@ def _case(report, updates, replies, now):
     report_age = mission_age(report, now)
     last = max([report] + updates, key=lambda m: m.deliver_at)
     case = {
-        "alert_id": str(p["alert_id"]), "crew_id": str(p.get("crew_id")), "crew": p.get("crew"),
+        "alert_id": code("A", p["alert_id"]), "crew_id": code("C", p.get("crew_id")), "crew": p.get("crew"),
         "vital": p.get("vital"), "level": p.get("level"), "state": STATE.get(p.get("level"), "WATCH"),
         "value": p.get("value"), "reason": p.get("reason"), "nasa_risk": p.get("nasa_risk"),
         "mode_at_send": p.get("mode"), "who_decides_at_send": p.get("who_decides"),
@@ -151,7 +156,7 @@ def build_cases(now, detail=False):
         if detail:
             p = report.payload
             case["report"] = {"sbar": p.get("sbar"), "steps": p.get("steps", []), "recent": p.get("recent", [])}
-            case["report_message_id"] = str(report.id)
+            case["report_message_id"] = code("M", report.id)
         out.append(case)
     out.sort(key=lambda c: c["raised_at"], reverse=True)
     out.sort(key=lambda c: RANK.get(c["state"], 0), reverse=True)
@@ -161,7 +166,7 @@ def build_cases(now, detail=False):
 
 def find_case(alert_id, now):
     for case in build_cases(now, detail=True):
-        if case["alert_id"] == str(alert_id):
+        if case["alert_id"] == code("A", alert_id):
             return case
     return None
 

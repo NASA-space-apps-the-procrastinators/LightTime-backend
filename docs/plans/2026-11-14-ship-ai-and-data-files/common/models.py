@@ -83,7 +83,7 @@ class LinkMessage(db.Model):
 
 def seed():
     if Crew.query.count() == 0:
-        db.session.add_all([Crew(name="David"), Crew(name="Damola", role="cmo"), Crew(name="Youssef")])
+        db.session.add_all([Crew(name="Okafor"), Crew(name="Lindqvist", role="cmo"), Crew(name="Sato")])
     if db.session.get(MissionState, 1) is None:
         db.session.add(MissionState(id=1, stop="station"))
     db.session.commit()

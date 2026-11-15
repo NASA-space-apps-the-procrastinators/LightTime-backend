@@ -34,7 +34,7 @@ No NASA or CSA open dataset with blood oxygen could be found, so these three com
 | Apnea-ECG, control record c01r (PhysioNet) | https://physionet.org/content/apnea-ecg/1.0.0/ | ODC-By 1.0 | Eight hours of blood oxygen from a person who is fine. Cite: Penzel T, Moody GB, Mark RG, Goldberger AL, Peter JH (2000). The Apnea-ECG Database. Computers in Cardiology 27: 255-258. doi:10.13026/C23W2R | `data/spo2_apnea_ecg/c01r_SpO2_1Hz.csv`, the false-alarm test |
 | Apnea-ECG, patient record a01r (PhysioNet) | https://physionet.org/content/apnea-ecg/1.0.0/ | ODC-By 1.0 | A sleep apnoea patient's night, with 579 fast oxygen falls. Same citation | `data/spo2_apnea_ecg/a01r_SpO2_1Hz.csv`, shows where the trend warning stops helping |
 
-## CSA sources from Damola's list
+## CSA sources from the frontend owner's list
 
 | Source | Link | What it holds | Use |
 | --- | --- | --- | --- |

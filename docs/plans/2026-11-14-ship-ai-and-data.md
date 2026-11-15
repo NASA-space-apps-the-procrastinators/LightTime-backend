@@ -42,7 +42,7 @@
 Run: `git status --short` and `git diff --stat aa0fdb9 -- app.py common base_station command_center tests`
 Expected: the second command prints nothing. Untracked files under `docs/` and `data/` are fine.
 
-If the second command prints anything, stop and tell TJ. The files in this plan replace whole files, and local edits would be lost.
+If the second command prints anything, stop and tell the backend owner. The files in this plan replace whole files, and local edits would be lost.
 
 - [ ] **Step 2: Confirm the new raw data is in place**
 
@@ -178,7 +178,7 @@ Six healthy volunteers breathing low-oxygen gas (UW, Masimo oximeter):
 Sleep apnoea patient (Apnea-ECG a01r), fast falls: 579 SOS, trend warning came first in 185 (32%), median 42 s ahead
 ```
 
-If the numbers differ, do not edit the spec to match. Tell TJ.
+If the numbers differ, do not edit the spec to match. Tell the backend owner.
 
 ---
 
@@ -209,7 +209,7 @@ curl -s -X POST localhost:5000/api/base/scenario/start -H "Content-Type: applica
 sleep 100
 curl -s "localhost:5000/api/base/alerts?open=1"
 ```
-Expected: one alert at `caution` or `warning` with a `lookahead` object, `"earth_in_time": false`, and `speak` ending `That is too late. Crew medical officer, check on David now.` The outbox already holds the report. About two minutes later the same alert becomes an `emergency`.
+Expected: one alert at `caution` or `warning` with a `lookahead` object, `"earth_in_time": false`, and `speak` ending `That is too late. Crew medical officer, check on Okafor now.` The outbox already holds the report. About two minutes later the same alert becomes an `emergency`.
 
 - [ ] **Step 4: Stop the story**
 
@@ -225,15 +225,15 @@ Add the rows of the table in spec section 7 to the API table in `README.md`. Add
 
 - [ ] **Step 2: Data sources**
 
-In `docs/data-sources.md` add the three blood-oxygen sources from spec section 2 with their licences and citations (they are in `data/spo2_uw/README.md` and `data/spo2_apnea_ecg/README.md`), plus CSA PRET and the report Canadian Healthcare in Deep Space from Damola's list.
+In `docs/data-sources.md` add the three blood-oxygen sources from spec section 2 with their licences and citations (they are in `data/spo2_uw/README.md` and `data/spo2_apnea_ecg/README.md`), plus CSA PRET and the report Canadian Healthcare in Deep Space from the frontend owner's list.
 
 - [ ] **Step 3: AI use**
 
 In `AI_USE.md` add: the time-left rule and its settings were designed with Claude and chosen on six real recordings; the results and their limits are in spec section 6.
 
-- [ ] **Step 4: Kyler's Postgres**
+- [ ] **Step 4: The reviewer's Postgres**
 
-Do this only once Kyler has confirmed the host name. `kyler.visserfamily.cs` does not resolve. Put one line in `.env` (git ignores it, never commit it):
+Do this only once the reviewer has confirmed the host name. `kyler.visserfamily.cs` does not resolve. Put one line in `.env` (git ignores it, never commit it):
 
 `DATABASE_URL=postgresql+psycopg://svc-lighttime:<password>@<host>:5432/lighttime`
 
@@ -246,12 +246,12 @@ git add README.md AI_USE.md docs
 git commit -m "docs: ship AI and data spec, plan, sources"
 git push
 ```
-Open a pull request from `Tj-Backend` into `main` for Kyler. Point him at spec section 1 (review fixes) and section 6 (evidence).
+Open a pull request from `Tj-Backend` into `main` for the reviewer. Point him at spec section 1 (review fixes) and section 6 (evidence).
 
 ---
 
-## For Damola and Youssef
+## For the frontend owner and the hardware owner
 
-Damola: spec section 7 is the full list of what changed for the screens. The three that matter most: show `lookahead` with a countdown to `red_line_at`, say `speak` once per alert id and level, and send empty form boxes as they are.
+The frontend owner: spec section 7 is the full list of what changed for the screens. The three that matter most: show `lookahead` with a countdown to `red_line_at`, say `speak` once per alert id and level, and send empty form boxes as they are.
 
-Youssef: your sensor can post for any crew member now without hiding the story's SOS. Send `{"crew_id": 2, "spo2": 97, "heart_rate": 71}` to `POST /api/base/readings` once a second. If the sensor has no reading, send `"signal_ok": false`.
+The hardware owner: your sensor can post for any crew member now without hiding the story's SOS. Send `{"crew_id": 2, "spo2": 97, "heart_rate": 71}` to `POST /api/base/readings` once a second. If the sensor has no reading, send `"signal_ok": false`.

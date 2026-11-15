@@ -1,30 +1,49 @@
 import os
 
 from dotenv import load_dotenv
-from flask import Flask
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 
-from common import lighttime
-from common.models import db, seed
+from common import dataset, lighttime
+from common.models import db, seed, utcnow
 
 
-def create_app(database_url=None):
+def create_app(database_url=None, morning=None):
     load_dotenv()
     app = Flask(__name__)
     app.config["SQLALCHEMY_DATABASE_URI"] = (
         database_url or os.getenv("DATABASE_URL", "sqlite:///lighttime.db"))
+    # Morning mode loads the demo morning and starts the mission clock. Run one process only:
+    # the clock lives in this process's memory.
+    app.config["MORNING"] = os.getenv("LIGHTTIME_MORNING") == "1" if morning is None else morning
     CORS(app)
     db.init_app(app)
 
+    from base_station import console  # noqa: F401  (adds the console's routes to the ship's blueprint)
     from base_station.routes import bp as base_bp
     from command_center.routes import bp as earth_bp
     app.register_blueprint(base_bp, url_prefix="/api/base")
     app.register_blueprint(earth_bp, url_prefix="/api/earth")
 
+    @app.errorhandler(404)
+    @app.errorhandler(405)
+    def api_error(error):
+        """A path or method no route has: JSON on the API, as every route's own errors are."""
+        if not request.path.startswith("/api/"):
+            return error
+        response = jsonify(error="not found" if error.code == 404 else "method not allowed")
+        if error.code == 405:
+            response.headers["Allow"] = ", ".join(error.valid_methods or [])
+        return response, error.code
+
     with app.app_context():
         db.create_all()
         seed()
+        if app.config["MORNING"]:
+            from base_station import morning as demo_morning
+            demo_morning.load()
     lighttime.mars_seconds()    # ask JPL once now, so no screen waits on it later
+    lighttime.mars_seconds(dataset.mission_date(utcnow()))   # and for the mission date, which the dial uses
     return app
 
 

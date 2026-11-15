@@ -87,7 +87,7 @@ def evaluate(reading):
     raised = []
     for vital, cfg in LIMITS["vitals"].items():
         value = getattr(reading, vital)
-        if value is None or not cfg.get("alert", True):
+        if value is None or not cfg.get("alert", True) or (cfg.get("typed_only") and not typed):
             continue
         # A typed number can be a typo, so it stops at a warning. SOS needs a sensor.
         score = min(band(vital, value), 2) if typed else band(vital, value)

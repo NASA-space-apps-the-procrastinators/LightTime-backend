@@ -25,7 +25,7 @@ def test_earth_sees_nothing_until_the_light_arrives(client, monkeypatch):
     later(monkeypatch, 12)
     messages = earth_messages(client)
     assert len(messages) == 1
-    assert messages[0]["payload"]["sbar"]["situation"].startswith("David")
+    assert messages[0]["payload"]["sbar"]["situation"].startswith("Okafor")
     assert messages[0]["status"] == "delivered"
 
 
@@ -71,3 +71,14 @@ def test_the_round_trip_shows_on_the_alert_timeline(client, monkeypatch):
     assert timeline()["earth_at"] is not None and timeline()["reply_at"] is None
     later(monkeypatch, 12)
     assert timeline()["reply_at"] is not None
+
+
+def test_every_report_says_when_its_alert_was_raised(morning):
+    morning.post("/api/base/alerts/A1/ack", json={"by": "Okafor"})
+    morning.post("/api/base/alerts/A1/send")
+    assert morning.get("/api/base/outbox").get_json()[0]["payload"]["raised_at"] == "2026-11-14T06:12:00Z"
+    loaded = [m for m in morning.get("/api/earth/inbox").get_json()["messages"] if m["kind"] == "report"]
+    assert loaded
+    for report in loaded:                                   # the reports that came with the morning, too
+        alert = morning.get(f"/api/base/alerts/{report['payload']['alert_id']}").get_json()
+        assert report["payload"]["raised_at"] == alert["at"]

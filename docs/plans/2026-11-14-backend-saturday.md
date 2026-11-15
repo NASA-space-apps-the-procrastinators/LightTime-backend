@@ -10,7 +10,7 @@
 
 **Design:** `docs/specs/2026-11-14-backend-design.md`
 
-**Updated 14 Nov, 11:40, after Damola's screens and the CSA workshop:** Tasks 6 and 7 gained acknowledge, send to Earth, a crew message and the round-trip timeline, so his alert screen runs on real data. The two packages are now `base_station` and `command_center`, to match the repo README. Apart from those names, Tasks 1 to 5 did not change, and Task 8 changed only in its test count.
+**Updated 14 Nov, 11:40, after the frontend owner's screens and the CSA workshop:** Tasks 6 and 7 gained acknowledge, send to Earth, a crew message and the round-trip timeline, so his alert screen runs on real data. The two packages are now `base_station` and `command_center`, to match the repo README. Apart from those names, Tasks 1 to 5 did not change, and Task 8 changed only in its test count.
 
 **Run every command from the repo root.** On Windows, activate the virtual environment first with `.venv\Scripts\activate`.
 
@@ -83,7 +83,7 @@ DATABASE_URL=postgresql+psycopg://lighttime:lighttime@localhost:5432/lighttime
 
 One line per use: date, who, tool, what for.
 
-- 2026-11-14, TJ, Claude: backend design, build plan and first version of the Flask backend code and tests.
+- 2026-11-14, the backend owner, Claude: backend design, build plan and first version of the Flask backend code and tests.
 ```
 
 - [ ] **Step 2: Install**
@@ -119,7 +119,7 @@ from common.models import Crew, MissionState, db
 
 def test_app_starts_with_three_crew_and_the_dial_at_station(app):
     with app.app_context():
-        assert [c.name for c in Crew.query.order_by(Crew.id)] == ["David", "Damola", "Youssef"]
+        assert [c.name for c in Crew.query.order_by(Crew.id)] == ["Okafor", "Lindqvist", "Sato"]
         assert db.session.get(MissionState, 1).stop == "station"
 
 
@@ -217,7 +217,7 @@ class LinkMessage(db.Model):
 
 def seed():
     if Crew.query.count() == 0:
-        db.session.add_all([Crew(name="David"), Crew(name="Damola", role="cmo"), Crew(name="Youssef")])
+        db.session.add_all([Crew(name="Okafor"), Crew(name="Lindqvist", role="cmo"), Crew(name="Sato")])
     if db.session.get(MissionState, 1) is None:
         db.session.add(MissionState(id=1, stop="station"))
     db.session.commit()
@@ -664,7 +664,7 @@ def test_a_reading_reaches_the_crew_board(client):
                          json={"crew_id": 1, "heart_rate": 72, "spo2": 98, "skin_temp": 33.5})
     assert posted.status_code == 201
     board = client.get("/api/base/crew").get_json()
-    assert board[0]["name"] == "David"
+    assert board[0]["name"] == "Okafor"
     assert board[0]["latest"]["heart_rate"] == 72
     assert board[0]["level"] == "nominal"
     assert board[1]["latest"] is None
@@ -794,7 +794,7 @@ Expected: 17 passed
 Run: `python app.py`, then open `http://localhost:5000/api/base/state`
 Expected: JSON with `"stop": "station"` and four entries under `"stops"`.
 
-Find this laptop's address with `ipconfig` (the IPv4 line) and ask Damola to open `http://<that address>:5000/api/base/health` on his laptop.
+Find this laptop's address with `ipconfig` (the IPv4 line) and ask the frontend owner to open `http://<that address>:5000/api/base/health` on his laptop.
 Expected: `{"ok": true}`. If it does not load, allow Python in the Windows firewall prompt. If it still does not load, the venue Wi-Fi is keeping laptops apart: put both laptops on one phone hotspot and try again. Do this check now, not at 16:00. Stop the server with Ctrl+C.
 
 - [ ] **Step 6: Commit**
@@ -804,7 +804,7 @@ git add -A
 git commit -m "feat: readings, crew board and the distance dial"
 ```
 
-**Block 1 goal met here:** a posted heartbeat shows on `/api/base/crew`. Give Damola and David the URL.
+**Block 1 goal met here:** a posted heartbeat shows on `/api/base/crew`. Give the frontend owner and Okafor the URL.
 
 ---
 
@@ -885,7 +885,7 @@ def test_a_typed_reading_alerts_at_once_but_never_above_warning(app):
 def test_a_cleared_alert_stays_quiet_unless_it_gets_worse(app):
     with app.app_context():
         caution = feed(1, N, spo2=95, heart_rate=72)[0]
-        caution.cleared_at, caution.cleared_by = utcnow(), "Damola"
+        caution.cleared_at, caution.cleared_by = utcnow(), "Lindqvist"
         db.session.commit()
         assert feed(1, N, spo2=95, heart_rate=72) == []
         assert [a.level for a in feed(1, N, spo2=86, heart_rate=72)] == ["emergency"]
@@ -1088,7 +1088,7 @@ def test_an_emergency_sends_a_report_with_three_times_and_a_spoken_line(client):
     report = client.get("/api/base/outbox").get_json()[0]
     assert report["kind"] == "report" and report["status"] == "in_flight"
     assert report["earliest_reply_after_s"] == 2 * report["arrives_after_s"]
-    assert report["payload"]["sbar"]["situation"].startswith("David: Blood oxygen 86%")
+    assert report["payload"]["sbar"]["situation"].startswith("Okafor: Blood oxygen 86%")
     assert report["payload"]["who_decides"] == "Crew medical officer"
 
 
@@ -1107,8 +1107,8 @@ def test_ticking_a_step_tells_earth(client):
 def test_a_person_clears_the_alert_and_the_tile_goes_back(client):
     alert = collapse(client)
     assert client.get("/api/base/crew").get_json()[0]["level"] == "emergency"
-    cleared = client.post(f"/api/base/alerts/{alert['id']}/clear", json={"by": "Damola"}).get_json()
-    assert cleared["cleared_by"] == "Damola"
+    cleared = client.post(f"/api/base/alerts/{alert['id']}/clear", json={"by": "Lindqvist"}).get_json()
+    assert cleared["cleared_by"] == "Lindqvist"
     assert client.get("/api/base/alerts?open=1").get_json() == []
     assert client.get("/api/base/crew").get_json()[0]["level"] == "nominal"
 
@@ -1116,7 +1116,7 @@ def test_a_person_clears_the_alert_and_the_tile_goes_back(client):
 def test_manual_sos_sends_a_report(client):
     alert = client.post("/api/base/sos", json={"crew_id": 2}).get_json()
     assert alert["level"] == "emergency" and alert["auto"] is False
-    assert client.get("/api/base/outbox").get_json()[0]["payload"]["crew"] == "Damola"
+    assert client.get("/api/base/outbox").get_json()[0]["payload"]["crew"] == "Lindqvist"
 
 
 def test_reset_gives_a_clean_run(client):
@@ -1131,8 +1131,8 @@ def test_reset_gives_a_clean_run(client):
 def test_acknowledging_tells_earth_and_shows_on_the_round_trip(client):
     alert = collapse(client)
     assert alert["timeline"]["sent_at"] is not None and alert["timeline"]["acknowledged_at"] is None
-    acked = client.post(f"/api/base/alerts/{alert['id']}/ack", json={"by": "Damola"}).get_json()
-    assert acked["acknowledged_by"] == "Damola" and acked["timeline"]["acknowledged_at"] is not None
+    acked = client.post(f"/api/base/alerts/{alert['id']}/ack", json={"by": "Lindqvist"}).get_json()
+    assert acked["acknowledged_by"] == "Lindqvist" and acked["timeline"]["acknowledged_at"] is not None
     events = [m["payload"].get("event") for m in client.get("/api/base/outbox").get_json()]
     assert "acknowledged" in events
 
@@ -1141,7 +1141,7 @@ def test_a_warning_goes_to_earth_only_when_the_crew_sends_it(client):
     posted = client.post("/api/base/readings", json={"crew_id": 2, "source": "typed", "bp_sys": 88})
     alert = posted.get_json()["alerts"][0]
     assert alert["level"] == "warning" and alert["unit"] == "mmHg" and "NEWS2" in alert["source"]
-    client.post(f"/api/base/alerts/{alert['id']}/ack", json={"by": "Damola"})
+    client.post(f"/api/base/alerts/{alert['id']}/ack", json={"by": "Lindqvist"})
     assert client.get("/api/base/outbox").get_json() == []
     client.post(f"/api/base/alerts/{alert['id']}/send")
     client.post(f"/api/base/alerts/{alert['id']}/send")
@@ -1166,7 +1166,7 @@ Expected: 9 failed, 4 passed (`KeyError: 'alerts'`, and the new routes return `4
 `base_station/procedures.json`
 ```json
 {
-  "note": "Demo checklist wording, not medical advice. Rebecca replaces each list with sourced text. Keep the treatment as the second step of the spo2 list: the scripted story waits for it.",
+  "note": "Demo checklist wording, not medical advice. The documentation owner replaces each list with sourced text. Keep the treatment as the second step of the spo2 list: the scripted story waits for it.",
   "spo2": [
     "Go to the crew member and check that they respond",
     "Fit the oxygen mask from the medical kit",
@@ -1497,7 +1497,7 @@ def test_earth_sees_nothing_until_the_light_arrives(client, monkeypatch):
     later(monkeypatch, 12)
     messages = earth_messages(client)
     assert len(messages) == 1
-    assert messages[0]["payload"]["sbar"]["situation"].startswith("David")
+    assert messages[0]["payload"]["sbar"]["situation"].startswith("Okafor")
     assert messages[0]["status"] == "delivered"
 
 
@@ -1612,7 +1612,7 @@ git commit -m "feat: Earth inbox and delayed replies"
 - Modify: `base_station/routes.py`
 - Test: `tests/test_scenario.py`
 
-The story: calm readings for three people, then David's blood oxygen falls. It stays low until the crew ticks the treatment step (the second step of the checklist), then it recovers and the readings carry on, so the tiles stay live for the rest of the demo.
+The story: calm readings for three people, then Okafor's blood oxygen falls. It stays low until the crew ticks the treatment step (the second step of the checklist), then it recovers and the readings carry on, so the tiles stay live for the rest of the demo.
 
 - [ ] **Step 1: Write the failing test**
 
@@ -1815,7 +1815,7 @@ git commit -m "feat: scripted story with treatment, recovery, start and stop"
 
 - [ ] **Step 1: Point the app at Postgres**
 
-Ask Kyler for the server's connection details, or create a local database:
+Ask the reviewer for the server's connection details, or create a local database:
 ```sql
 CREATE USER lighttime WITH PASSWORD 'lighttime';
 CREATE DATABASE lighttime OWNER lighttime;
@@ -1840,11 +1840,11 @@ About ten seconds after the start call:
 curl "localhost:5000/api/base/alerts?open=1"
 curl localhost:5000/api/base/outbox
 ```
-Expected: one `emergency` alert for David with a `speak` line, and one report with `"status": "in_flight"` (`"delivered"` if more than twenty seconds have passed). Note the alert's `id`.
+Expected: one `emergency` alert for Okafor with a `speak` line, and one report with `"status": "in_flight"` (`"delivered"` if more than twenty seconds have passed). Note the alert's `id`.
 
 Acknowledge it and tick the treatment step, with that id in place of `1`:
 ```bash
-curl -X POST localhost:5000/api/base/alerts/1/ack -H "Content-Type: application/json" -d "{\"by\": \"Damola\"}"
+curl -X POST localhost:5000/api/base/alerts/1/ack -H "Content-Type: application/json" -d "{\"by\": \"the frontend owner\"}"
 curl -X POST localhost:5000/api/base/alerts/1/steps -H "Content-Type: application/json" -d "{\"index\": 1}"
 ```
 Wait fifteen seconds, then:
@@ -1853,11 +1853,11 @@ curl localhost:5000/api/base/crew
 curl localhost:5000/api/earth/inbox
 curl -X POST localhost:5000/api/base/scenario/stop
 ```
-Expected: David's `spo2` is back above 96, and Earth's `"messages"` hold the report and two updates (acknowledged, step).
+Expected: Okafor's `spo2` is back above 96, and Earth's `"messages"` hold the report and two updates (acknowledged, step).
 
 - [ ] **Step 4: Extend the README**
 
-Kyler's README is already in the repo. Replace it with this, which keeps his two rules and uses the folder names as they are on disk.
+The reviewer's README is already in the repo. Replace it with this, which keeps his two rules and uses the folder names as they are on disk.
 
 `README.md`
 ```markdown
@@ -1909,14 +1909,14 @@ git commit -m "docs: README and run notes"
 git push
 ```
 
-Then open a pull request from `Tj-Backend` into `main` for Kyler to review.
+Then open a pull request from `Tj-Backend` into `main` for the reviewer to review.
 
 - [ ] **Step 6: Hand over**
 
-Send Damola and David the server address and the API table from the design doc. Ask Damola to check the reading field names against his list.
+Send the frontend owner and Okafor the server address and the API table from the design doc. Ask the frontend owner to check the reading field names against his list.
 
 ---
 
 ## What this plan leaves for Sunday
 
-In this order, each as its own short plan, started only if the 16:15 full run works: a week of history with personal baselines (feeds the trend chart and the baseline numbers on Damola's screens), live space weather from NASA DONKI for the habitat tiles, CSA's open heart-rate filter as a noise rule, the check-in schedule and reminders, and FHIR export.
+In this order, each as its own short plan, started only if the 16:15 full run works: a week of history with personal baselines (feeds the trend chart and the baseline numbers on the frontend owner's screens), live space weather from NASA DONKI for the habitat tiles, CSA's open heart-rate filter as a noise rule, the check-in schedule and reminders, and FHIR export.

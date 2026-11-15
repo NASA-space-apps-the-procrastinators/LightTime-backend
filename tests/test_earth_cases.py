@@ -43,8 +43,8 @@ def test_earth_has_no_case_until_the_report_arrives(client, monkeypatch):
     assert cases(client) == []
     later(monkeypatch, 12)
     [case] = cases(client)
-    assert case["alert_id"] == str(ship_alert_id(client))
-    assert case["crew"] == "David" and case["vital"] == "spo2"
+    assert case["alert_id"] == ship_alert_id(client) and case["alert_id"].startswith("A")
+    assert case["crew_id"] == "C1" and case["crew"] == "Okafor" and case["vital"] == "spo2"
     assert case["level"] == "emergency" and case["state"] == "SOS" and case["status"] == "reported"
     assert case["awaiting_reply"] is True
 
@@ -66,7 +66,7 @@ def test_case_status_follows_the_updates_that_arrive(client, monkeypatch):
     later(monkeypatch, 1)
     case = client.get(f"/api/earth/cases/{aid}").get_json()
     assert case["status"] == "in_progress" and case["acknowledged_by"] == "Damola"
-    assert case["steps_done"] == [0] and case["report"]["sbar"]["situation"].startswith("David")
+    assert case["steps_done"] == [0] and case["report"]["sbar"]["situation"].startswith("Okafor")
     client.post(f"/api/base/alerts/{aid}/clear", json={"by": "Damola"})
     later(monkeypatch, 2)
     assert client.get(f"/api/earth/cases/{aid}").get_json()["status"] == "resolved"
@@ -81,7 +81,8 @@ def test_the_thread_shows_both_sides_with_their_status(client, monkeypatch):
     report, reply = thread["messages"]
     assert report["from"] == "crew" and report["status"] == "delivered" and report["arrived_at"]
     assert reply["from"] == "ground" and reply["status"] == "in_flight" and reply["arrived_at"] is None
-    assert reply["text"] == "Keep the mask on." and isinstance(reply["id"], str)
+    assert reply["text"] == "Keep the mask on." and reply["id"].startswith("M") and reply["alert_id"] == aid
+    assert thread["alert_id"] == aid
     later(monkeypatch, 24)
     assert client.get(f"/api/earth/cases/{aid}/thread").get_json()["messages"][1]["status"] == "delivered"
 
@@ -90,7 +91,7 @@ def test_a_reply_by_alert_id_reaches_the_ship_timeline(client, monkeypatch):
     emergency_at(client, "mars")
     later(monkeypatch, 12)
     aid = cases(client)[0]["alert_id"]
-    client.post("/api/earth/reply", json={"alert_id": f"A{aid}", "text": "Mask on."})
+    client.post("/api/earth/reply", json={"alert_id": aid.lstrip("A"), "text": "Mask on."})   # a bare number works too
     assert cases(client)[0]["awaiting_reply"] is False and cases(client)[0]["reply_status"] == "in_flight"
     later(monkeypatch, 24)
     timeline = client.get("/api/base/alerts?open=1").get_json()[0]["timeline"]
@@ -122,7 +123,7 @@ def test_the_earth_outbox_lists_what_the_ground_sent(client, monkeypatch):
     aid = cases(client)[0]["alert_id"]
     client.post("/api/earth/reply", json={"alert_id": aid, "text": "Mask on."})
     [sent] = client.get("/api/earth/outbox").get_json()
-    assert sent["status"] == "in_flight" and str(sent["payload"]["alert_id"]) == aid and sent["eta_s"] > 0
+    assert sent["status"] == "in_flight" and f"A{sent['payload']['alert_id']}" == aid and sent["eta_s"] > 0
 
 
 def test_a_blackout_hides_the_case_until_the_queue_flushes(client, monkeypatch):

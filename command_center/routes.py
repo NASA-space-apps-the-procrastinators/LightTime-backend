@@ -64,7 +64,7 @@ def case_thread(alert_id):
     now = link.utcnow()
     if aid is None or cases.report_for(aid, now) is None:
         return not_found()
-    return jsonify(alert_id=str(aid), messages=cases.thread(aid, now))
+    return jsonify(alert_id=cases.code("A", aid), messages=cases.thread(aid, now))
 
 
 @bp.get("/outbox")

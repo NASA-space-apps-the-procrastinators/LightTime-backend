@@ -1,5 +1,6 @@
 """The four dial stops and the rule for who decides."""
-from common import lighttime, link
+from common import dataset, lighttime, link
+from common.models import utcnow
 
 # NASA's NEEMO 16 test (Rader et al. 2013): at about five minutes one way,
 # critical medical advice cannot always get through.
@@ -17,6 +18,22 @@ WHO_DECIDES = {
     "crew_first": "Crew medical officer",
     "ship_alone": "The crew, alone",
 }
+SHIP_AI = {
+    "name": "LIGHTTIME",
+    "line": "It knows how long the light takes, so it knows who has to act.",
+    "version": "rules 2026-11-14",
+    "parts": [
+        {"name": "Don't cry wolf", "does": "Throws out junk signal. Every alarm rule was first tried on real recordings."},
+        {"name": "Know each person", "does": "Learns each person's usual range from their own last 24 hours."},
+        {"name": "Time left", "does": "Works out how long until a falling reading is critical, and whether Earth can answer first."},
+        {"name": "Ask ahead", "does": "Answers the flight surgeon's first questions before the report leaves."},
+    ],
+}
+ROLE = {
+    "doctor_live": "Drafts the report. The flight surgeon directs care.",
+    "crew_first": "Coaches the crew medical officer. Earth reviews afterwards.",
+    "ship_alone": "Main reference until the link returns. Everything is kept for Earth.",
+}
 
 
 def mode_for(delay_s, link_up):
@@ -31,13 +48,15 @@ def describe(stop):
     """One dial stop with its working: the delay, the path it stands for, the round trip,
     and how long one leg takes on the demo clock."""
     fixed = stop in FIXED_DELAY_S
-    delay_s = FIXED_DELAY_S[stop] if fixed else lighttime.mars_seconds()
+    day = dataset.mission_date(utcnow())     # the date the console shows: 14 November on the demo morning (D13)
+    delay_s = FIXED_DELAY_S[stop] if fixed else lighttime.mars_seconds(day)
     link_up = STOPS[stop]["link_up"]
     mode = mode_for(delay_s, link_up)
     return {
         "stop": stop, "label": STOPS[stop]["label"], "link_up": link_up, "delay_s": delay_s,
         "mode": mode, "who_decides": WHO_DECIDES[mode],
-        "light_time_source": "fixed" if fixed else lighttime.source(),
+        "ship_ai_role": ROLE[mode],
+        "light_time_source": "fixed" if fixed else lighttime.source(day),
         "path_km": round(lighttime.path_km(delay_s)), "round_trip_s": 2 * delay_s,
         "plays_as_s": link.real_delay_s(delay_s),
     }
