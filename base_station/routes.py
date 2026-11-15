@@ -245,14 +245,6 @@ def _level(crew_id):
     return max(levels, key=rules.RANK.get, default="nominal")
 
 
-@bp.get("/crew")
-def crew_board():
-    return jsonify([{"id": c.id, "name": c.name, "role": c.role, "level": _level(c.id),
-                     "latest": _latest(c.id, typed=False), "typed": _latest(c.id, typed=True),
-                     "usual": {"heart_rate": usual.usual_range(c.id)}}
-                    for c in Crew.query.order_by(Crew.id)])
-
-
 @bp.get("/crew/<ref>/readings")
 def crew_readings(ref):
     crew = crew_or_404(ref)

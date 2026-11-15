@@ -19,6 +19,7 @@ def create_app(database_url=None, morning=None):
     CORS(app)
     db.init_app(app)
 
+    from base_station import console  # noqa: F401  (adds the console's routes to the ship's blueprint)
     from base_station.routes import bp as base_bp
     from command_center.routes import bp as earth_bp
     app.register_blueprint(base_bp, url_prefix="/api/base")

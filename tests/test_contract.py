@@ -21,7 +21,8 @@ def test_every_screen_gets_the_fields_the_typed_client_expects(client):
     alert = client.get("/api/base/alerts?open=1").get_json()[0]
     assert set(alert) == ALERT and set(alert["timeline"]) == TIMELINE
     member = client.get("/api/base/crew").get_json()[0]
-    assert set(member) == {"id", "name", "role", "level", "latest", "typed", "usual"}
+    assert set(member) == {"id", "name", "role", "suit_id", "state", "note", "baseline", "today", "metric_states",
+                           "checkin_from", "last_packet_at", "level", "latest", "typed", "usual"}
     assert set(member["latest"]) == READING and set(member["usual"]) == {"heart_rate"}
     assert set(client.get("/api/base/outbox").get_json()[0]) == MESSAGE
     assert set(client.get("/api/earth/inbox").get_json()) == {"link_up", "delay_s", "mode", "who_decides", "messages"}
