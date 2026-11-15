@@ -6,7 +6,7 @@
 export type Stop = "station" | "moon" | "mars" | "sun";
 export type Mode = "doctor_live" | "crew_first" | "ship_alone";
 export type Level = "nominal" | "advisory" | "caution" | "warning" | "emergency";
-export type Story = "stage" | "tour" | "full" | "real";
+export type Story = "stage" | "full" | "real";
 
 /** The four colours on screen. Add an SOS token next to ok, watch and alert. */
 export const LEVEL_LABEL: Record<Level, "OK" | "WATCH" | "ALERT" | "SOS"> = {
@@ -21,11 +21,6 @@ export interface StopState {
   round_trip_s: number;   // 2 x delay: the earliest a reply can come back
   plays_as_s: number;     // real seconds one leg takes in the demo
   ship_ai_role: string;
-}
-export interface TourBubble {
-  running: boolean; step: number; of: number;
-  id: "calm" | "time_left" | "sos" | "earth_hears" | null;
-  title: string | null; text: string | null; anchor: string | null; simulated: boolean;
 }
 export interface MissionState extends StopState {
   speedup: number; stops: StopState[]; mission_day: number; platform: string;
@@ -151,7 +146,7 @@ export const api = {
   reset: () => call<{ ok: boolean }>("/api/base/reset", {}),
   startStory: (name: Story, replay = true) => call<{ ok: boolean }>("/api/base/scenario/start", { name, replay }),
   stopStory: () => call<{ ok: boolean }>("/api/base/scenario/stop", {}),
-  startDemo: (name: "full" | "tour" = "full") => call<{ ok: boolean; name: string; state: StopState }>("/api/base/demo/start", { name }),
+  startDemo: () => call<{ ok: boolean; name: string; state: StopState }>("/api/base/demo/start", {}),
   // Earth
   earthInbox: () => call<EarthInbox>("/api/earth/inbox"),
   earthOutbox: () => call<LinkMessage[]>("/api/earth/outbox"),

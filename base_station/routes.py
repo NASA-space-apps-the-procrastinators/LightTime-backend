@@ -441,16 +441,12 @@ def reset():
 
 @bp.post("/demo/start")
 def demo_start():
-    """One button for the stage: the demo starts again, the dial goes to Mars, the story plays.
-    {"name": "tour"} plays the short story the guided tour uses; the default is "full"."""
-    name = body().get("name", "full")
-    if name not in ("full", "tour"):
-        return bad("name is full or tour", "name")
+    """One button for the stage: the demo starts again, the dial goes to Mars, the full story plays."""
     reset()
     db.session.get(MissionState, 1).stop = "mars"
     db.session.commit()
-    scenario.start(current_app._get_current_object(), name)
-    return jsonify(ok=True, name=name, state=current_state())
+    scenario.start(current_app._get_current_object(), "full")
+    return jsonify(ok=True, name="full", state=current_state())
 
 
 @bp.post("/scenario/start")
