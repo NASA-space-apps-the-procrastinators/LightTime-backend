@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LightTime traffic</title>
+<style>
+  :root { --bg: #f6f7fb; --card: #ffffff; --text: #141a2a; --muted: #5b6478; --line: #dde1ea; --accent: #2f5bd3; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #070c18; --card: #0f1626; --text: #e6e9f2; --muted: #9aa3b8; --line: #222b3e; --accent: #7ea2ff; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width: 960px; margin: 0 auto; padding: 32px 16px 48px; }
+  h1 { margin: 0; font-size: 26px; }
+  h2 { margin: 0 0 12px; font-size: 16px; }
+  .lede { margin: 4px 0 0; color: var(--muted); }
+  .tag { display: inline-block; margin-top: 12px; padding: 2px 10px; border: 1px solid var(--accent); border-radius: 999px;
+         color: var(--accent); font-size: 13px; font-weight: 600; }
+  section { margin-top: 24px; padding: 16px; background: var(--card); border: 1px solid var(--line); border-radius: 12px; }
+  .scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  th, td { padding: 6px 8px; border-bottom: 1px solid var(--line); text-align: right; white-space: nowrap; }
+  th:first-child, td:first-child { text-align: left; }
+  th { color: var(--muted); font-weight: 600; font-size: 13px; }
+  .tops { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+  .tops section { margin-top: 0; }
+  ol { margin: 0; padding: 0; list-style: none; }
+  li { display: flex; justify-content: space-between; gap: 12px; padding: 5px 0; border-bottom: 1px solid var(--line); }
+  li:last-child { border-bottom: 0; }
+  li span:first-child { overflow-wrap: anywhere; }
+  li span:last-child { font-variant-numeric: tabular-nums; color: var(--muted); }
+  .empty, #status { color: var(--muted); }
+  #status { margin-top: 24px; font-size: 13px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>LightTime traffic</h1>
+  <p class="lede">Page views, clicks, visitors and API calls on lighttime.health over the last 7 days, by UTC day.</p>
+  <span class="tag">Real traffic, not simulated</span>
+
+  <section>
+    <h2>By day</h2>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Day (UTC)</th><th>Visitors</th><th>Page views</th><th>Clicks</th><th>Requests</th><th>Polls</th></tr></thead>
+        <tbody id="days"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="tops" style="margin-top: 24px">
+    <section><h2>Top pages</h2><ol id="top_pages"></ol></section>
+    <section><h2>Top clicks</h2><ol id="top_clicks"></ol></section>
+    <section><h2>Top routes</h2><ol id="top_routes"></ol></section>
+  </div>
+
+  <p id="status">Loading.</p>
+  <p class="lede">A visitor is one browser on one day, known only by a hash that changes daily. No cookies, no stored IP addresses.
+    Polls are the console's once-a-second reads; requests are every other API call. Bots and health checks are not counted.</p>
+</main>
+<script>
+  // Every name here was sent by a browser, so it is written as text, never as markup.
+  function cell(tag, text) {
+    const node = document.createElement(tag);
+    node.textContent = text;
+    return node;
+  }
+
+  function fillDays(days) {
+    const body = document.getElementById("days");
+    body.replaceChildren();
+    if (!days.length) {
+      const row = body.insertRow();
+      const td = cell("td", "No traffic yet.");
+      td.colSpan = 6;
+      td.className = "empty";
+      row.append(td);
+      return;
+    }
+    for (const day of days) {
+      const row = body.insertRow();
+      row.append(cell("td", day.day));
+      for (const key of ["visitors", "pageviews", "clicks", "requests", "polls"]) {
+        row.append(cell("td", day[key].toLocaleString()));
+      }
+    }
+  }
+
+  function fillTop(id, items) {
+    const list = document.getElementById(id);
+    list.replaceChildren();
+    if (!items.length) {
+      list.append(cell("li", "None yet."));
+      list.firstChild.className = "empty";
+      return;
+    }
+    for (const item of items) {
+      const li = document.createElement("li");
+      li.append(cell("span", item.name), cell("span", item.n.toLocaleString()));
+      list.append(li);
+    }
+  }
+
+  async function load() {
+    const status = document.getElementById("status");
+    try {
+      const answer = await fetch("/api/stats?days=7", { cache: "no-store" });
+      if (!answer.ok) throw new Error("the server answered " + answer.status);
+      const stats = await answer.json();
+      fillDays(stats.days);
+      fillTop("top_pages", stats.top_pages);
+      fillTop("top_clicks", stats.top_clicks);
+      fillTop("top_routes", stats.top_routes);
+      status.textContent = "Updated " + new Date().toISOString().slice(11, 19) + " UTC. Refreshes every 30 seconds.";
+    } catch (error) {
+      status.textContent = "Could not load the stats (" + error.message + "). Trying again in 30 seconds.";
+    }
+  }
+
+  load();
+  setInterval(load, 30000);
+</script>
+</body>
+</html>

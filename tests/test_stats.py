@@ -228,3 +228,12 @@ def test_days_must_be_1_to_90(client):
 
 def test_no_stats_yet_is_empty_lists(client):
     assert client.get("/api/stats").get_json() == {"days": [], "top_pages": [], "top_clicks": [], "top_routes": []}
+
+
+def test_the_page_is_one_html_file_that_reads_the_totals(client):
+    answer = client.get("/api/stats/page")
+    page = answer.get_data(as_text=True)
+    assert answer.status_code == 200 and answer.mimetype == "text/html"
+    assert "/api/stats" in page and "Real traffic, not simulated" in page
+    assert "<script src" not in page        # no outside scripts
+    assert "innerHTML" not in page          # names are public input: written as text, never as markup

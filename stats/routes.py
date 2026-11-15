@@ -2,8 +2,9 @@
 import json
 from collections import Counter, defaultdict
 from datetime import timedelta
+from pathlib import Path
 
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, send_file
 from sqlalchemy import func
 
 from common.models import db
@@ -16,6 +17,7 @@ bp = Blueprint("stats", __name__)
 EVENT_KINDS = ("pageview", "click")
 MAX_EVENTS = 20
 MAX_BODY = 16 * 1024
+PAGE = Path(__file__).with_name("page.html")
 
 
 def bad(message, field, status=400):
@@ -78,3 +80,9 @@ def totals():
     return jsonify(days=[{"day": day.isoformat(), **by_day[day]} for day in sorted(by_day)],
                    top_pages=_top(tops["pageview"]), top_clicks=_top(tops["click"]),
                    top_routes=_top(tops["route"]))
+
+
+@bp.get("/page")
+def page():
+    """The public stats page: one HTML file that reads GET /api/stats."""
+    return send_file(PAGE, mimetype="text/html")
