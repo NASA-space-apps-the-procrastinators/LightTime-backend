@@ -66,7 +66,7 @@ def _alert_of(message):
 
 
 # The demo morning's preloaded messages carry only text and an author, not the fields a live
-# report or update carries. Earth reads what the message itself says: "Sato: Blood oxygen 91 %...
+# report or update carries. Earth reads what the message itself says: "Kyler: Blood oxygen 91 %...
 # Handoff report..." for a report, "Resolved by Lindqvist." for an update.
 REPORT_TEXT = re.compile(r"^(?P<crew>[^:]{1,40}): (?P<reason>.+?)(?:\.? Handoff report.*)?\.?$")
 UPDATE_TEXT = re.compile(r"^(?P<event>Acknowledged|Resolved) by (?P<by>[^.]{1,40})\.")

@@ -36,7 +36,7 @@ def _number(text):
 
 
 def _crew():
-    """[("C1", "Okafor"), ...] from the mission's reference crew list."""
+    """[("C1", "TJ"), ...] from the mission's reference crew list."""
     return [(row["crew_id"], row["name"]) for row in dataset.table("reference/crew")]
 
 
