@@ -10,7 +10,7 @@ Flask and Postgres backend for LIGHT-TIME (NASA Space Apps 2026). It is the ship
 - Done: `docs/plans/2026-11-14-console-contract.md` (148 tests). Its spec is `docs/specs/2026-11-14-console-data-design.md`, and the dataset it uses is reviewed in `docs/reviews/2026-11-14-dataset-review.md`
 - The ship AI: `docs/specs/2026-11-14-lighttime-ai-design.md`
 
-Build a plan task by task, in order. The first two plans were run end to end before they were written down: 110 tests pass on SQLite and on Postgres 16. The console contract plan was written by reading the code and the data, then run task by task on SQLite: 148 tests pass.
+Build a plan task by task, in order. The first two plans were run end to end before they were written down: 110 tests pass on SQLite and on Postgres 16. The console contract plan was written by reading the code and the data, then run task by task on SQLite: 148 tests pass. Two reviews of that work followed; their fixes and `raised_at` on reports brought the suite to 175 tests, passing on SQLite and on Postgres 16 (the review tests are in `tests/test_review.py`).
 
 ## Rules
 
