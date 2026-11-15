@@ -36,11 +36,13 @@ def falling(values, red_line):
             "agreement": round(agreement, 2)}
 
 
-def check(crew_id, vital, red_line, source=None):
+def check(crew_id, vital, red_line, source=None, since=None):
     """The same, for one person's last WINDOW clean sensor readings in the recorder.
-    Give the source to look at one sender only."""
+    Give the source to look at one sender only, and `since` to ignore readings before it."""
     column = getattr(Reading, vital)
     sender = Reading.source == source if source else Reading.source != "typed"
-    recent = (Reading.query.filter(Reading.crew_id == crew_id, column.isnot(None), Reading.signal_ok, sender)
-              .order_by(Reading.at.desc(), Reading.id.desc()).limit(WINDOW).all())
+    query = Reading.query.filter(Reading.crew_id == crew_id, column.isnot(None), Reading.signal_ok, sender)
+    if since is not None:
+        query = query.filter(Reading.at >= since)
+    recent = query.order_by(Reading.at.desc(), Reading.id.desc()).limit(WINDOW).all()
     return falling([getattr(r, vital) for r in reversed(recent)], red_line)

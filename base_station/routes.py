@@ -47,7 +47,7 @@ def look_ahead(alert, source=None):
     """Ship AI: the falling trend behind an open alert, if there is one."""
     cfg = rules.LIMITS["vitals"].get(alert.vital)
     if cfg and cfg.get("lookahead") and alert.cleared_at is None and alert.level != "emergency":
-        return lookahead.check(alert.crew_id, alert.vital, cfg["bands"][0][0], source)
+        return lookahead.check(alert.crew_id, alert.vital, cfg["bands"][0][0], source, scenario.since(source))
 
 
 STATE = {"advisory": "WATCH", "caution": "WATCH", "warning": "ALERT", "emergency": "SOS"}

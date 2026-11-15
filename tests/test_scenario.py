@@ -1,6 +1,6 @@
 from base_station import rules, scenario
 from base_station.routes import ingest
-from common.models import Alert, LinkMessage
+from common.models import Alert, LinkMessage, utcnow
 
 
 def test_the_story_is_the_same_every_run():
@@ -66,3 +66,19 @@ def test_the_story_with_no_name_is_the_one_with_the_early_warning(client, monkey
     monkeypatch.setattr(scenario, "start", lambda app, name, real: started.append(name))
     assert client.post("/api/base/scenario/start", json={}).get_json()["name"] == "full"
     assert started == ["full"]
+
+
+def test_a_new_storys_trend_does_not_reach_back_into_the_last_story(app, monkeypatch):
+    """Without a restart, the second story's calm start must not be read as a fall:
+    the last 60 readings still hold the first story's drop to 86 %."""
+    with app.app_context():
+        for second in list(scenario.frames(**scenario.SCENARIOS["full"]))[:60]:    # calm, drift, the drop
+            for reading in second:
+                ingest(reading)
+        assert scenario.close_last_run() == 1
+        monkeypatch.setattr(scenario, "_since", utcnow())
+        raised = []
+        for second in list(scenario.frames(**scenario.SCENARIOS["full"]))[:10]:    # the new story's calm
+            for reading in second:
+                raised += ingest(reading)[1]
+        assert [(a.vital, a.level) for a in raised] == []
