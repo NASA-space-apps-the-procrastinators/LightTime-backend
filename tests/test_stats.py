@@ -237,3 +237,37 @@ def test_the_page_is_one_html_file_that_reads_the_totals(client):
     assert "/api/stats" in page and "Real traffic, not simulated" in page
     assert "<script src" not in page        # no outside scripts
     assert "innerHTML" not in page          # names are public input: written as text, never as markup
+
+
+def test_a_failed_flush_keeps_the_counts_for_the_next(app, client, monkeypatch):
+    write = counter._write
+
+    def down(counts, visitors):
+        raise OSError("stats database unreachable")
+
+    client.get("/api/base/state", headers=BROWSER)
+    with app.app_context():
+        monkeypatch.setattr(counter, "_write", down)
+        assert counter.flush() is False
+        assert StatCount.query.count() == 0
+        monkeypatch.setattr(counter, "_write", write)
+        assert counter.flush() is True
+        assert [(r.name, r.n) for r in StatCount.query] == [("GET /api/base/state", 1)]
+        assert StatVisitor.query.count() == 1
+
+
+def test_no_flush_thread_is_started_under_test(client):
+    client.get("/api/base/state", headers=BROWSER)
+    assert counter._thread is None
+
+
+def test_outside_tests_the_first_request_starts_one_flush_thread(app, client, monkeypatch):
+    ran, at_exit = [], []
+    monkeypatch.setattr(counter, "_thread", None)
+    monkeypatch.setattr(counter, "_run", ran.append)
+    monkeypatch.setattr(counter.atexit, "register", lambda flush, *args: at_exit.append(args))
+    app.config["TESTING"] = False
+    client.get("/api/base/state", headers=BROWSER)
+    client.get("/api/base/state", headers=BROWSER)
+    counter._thread.join(1)
+    assert ran == [app] and at_exit == [(app,)]

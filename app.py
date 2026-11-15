@@ -44,6 +44,8 @@ def create_app(database_url=None, morning=None):
         name = f"{request.method} {request.url_rule.rule}" if request.url_rule else "unmatched"
         counter.add("poll" if request.method == "GET" else "request", name)
         counter.see(visitor.visitor_id(request))
+        if not app.testing:     # set only after create_app returns, so it is read here
+            counter.start(app)
         return response
 
     @app.errorhandler(404)

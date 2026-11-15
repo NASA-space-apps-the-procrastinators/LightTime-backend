@@ -3,7 +3,9 @@
 The console polls once a second, so writing on every request would lock SQLite. Requests only
 touch memory here; flush() writes. The counts are swapped out under the lock and written outside
 it, so a slow or unreachable stats database never holds up a ship request."""
+import atexit
 import threading
+import time
 from collections import Counter
 from datetime import datetime, timezone
 
@@ -12,10 +14,13 @@ from flask import current_app
 from common.models import db
 from stats.models import StatCount, StatVisitor
 
-_lock = threading.Lock()        # guards the counts in memory
+FLUSH_EVERY_S = 30
+
+_lock = threading.Lock()        # guards the counts in memory and the thread
 _writing = threading.Lock()     # one flush writes at a time
 _counts = Counter()             # (day, kind, name) -> n
 _visitors = set()               # (day, visitor)
+_thread = None
 
 
 def today():
@@ -82,3 +87,26 @@ def flush():
             current_app.logger.warning("traffic stats were not written; kept for the next try", exc_info=True)
             return False
     return True
+
+
+def _flush_in(app):
+    with app.app_context():
+        flush()
+
+
+def _run(app):
+    while True:
+        time.sleep(FLUSH_EVERY_S)
+        _flush_in(app)
+
+
+def start(app):
+    """Start the one thread that flushes every 30 seconds, and flush once more at shutdown.
+    A second call does nothing."""
+    global _thread
+    with _lock:
+        if _thread is not None:
+            return
+        _thread = threading.Thread(target=_run, args=(app,), daemon=True, name="stats-flush")
+    _thread.start()
+    atexit.register(_flush_in, app)
