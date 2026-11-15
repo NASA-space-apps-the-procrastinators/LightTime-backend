@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 
 from flask import Blueprint, abort, current_app, jsonify, make_response, request
 
-from base_station import habitat, lookahead, morning, recorder, reports, rules, scenario, usual
+from base_station import access, habitat, lookahead, morning, recorder, reports, rules, scenario, usual
 from common import dataset, link, modes, sources
 from common.models import (VITALS, Alert, Checkin, Crew, LinkMessage, MissionState, Reading, Reminder, db,
                            iso, utcnow)
@@ -303,6 +303,8 @@ def _level(crew_id):
 @bp.get("/crew/<ref>/readings")
 def crew_readings(ref):
     crew = crew_or_404(ref)
+    if not access.may_read(crew.code):
+        return access.refuse()
     limit = min(request.args.get("limit", 120, type=int), 600)
     rows = (Reading.query.filter_by(crew_id=crew.id)
             .order_by(Reading.at.desc(), Reading.id.desc()).limit(limit).all())
@@ -314,12 +316,14 @@ def alerts():
     query = Alert.query
     if request.args.get("open") == "1":
         query = query.filter_by(cleared_at=None)
-    return jsonify([alert_dict(a) for a in query.order_by(Alert.at.desc(), Alert.id.desc())])
+    views = [access.alert_view(alert_dict(a)) for a in query.order_by(Alert.at.desc(), Alert.id.desc())]
+    return jsonify([view for view in views if view is not None])
 
 
 @bp.get("/alerts/<alert_id>")
 def one_alert(alert_id):
-    return jsonify(alert_dict(alert_or_404(alert_id)))
+    view = access.alert_view(alert_dict(alert_or_404(alert_id)))
+    return access.refuse() if view is None else jsonify(view)
 
 
 @bp.post("/alerts/<alert_id>/ack")

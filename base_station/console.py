@@ -6,7 +6,7 @@ from datetime import date, timedelta
 
 from flask import jsonify, request
 
-from base_station import scoring, usual
+from base_station import access, scoring, usual
 from base_station.morning import when
 from base_station.routes import (_latest, _level, alert_code, alert_dict, alert_or_404, bad, body, bp,
                                  crew_or_404, person, row_number, stage, tell_earth, timeline)
@@ -133,17 +133,22 @@ def history(crew, metric, days):
 
 @bp.get("/crew")
 def crew_board():
-    return jsonify([crew_dict(crew) for crew in Crew.query.order_by(Crew.id)])
+    return jsonify([access.crew_view(crew_dict(crew)) for crew in Crew.query.order_by(Crew.id)])
 
 
 @bp.get("/crew/<ref>")
 def one_crew(ref):
-    return jsonify(crew_dict(crew_or_404(ref)))
+    crew = crew_or_404(ref)
+    if not access.may_read(crew.code):
+        return access.refuse()
+    return jsonify(access.crew_view(crew_dict(crew)))
 
 
 @bp.get("/crew/<ref>/history")
 def crew_history(ref):
     crew = crew_or_404(ref)
+    if not access.may_read(crew.code):
+        return access.refuse()
     metric = request.args.get("metric")
     if metric not in COLUMN:
         return bad("metric must be one of " + ", ".join(COLUMN), "metric")
@@ -326,6 +331,8 @@ def thread_message(message, alert, now):
 def alert_thread(alert_id):
     """Everything the ship sent about one alert, and everything from Earth that has arrived. Oldest first."""
     alert, now = alert_or_404(alert_id), utcnow()
+    if not access.may_read(db.session.get(Crew, alert.crew_id).code):
+        return access.refuse()
     rows = [m for m in LinkMessage.query.order_by(LinkMessage.created_at, LinkMessage.id)
             if m.payload.get("alert_id") == alert.id
             and (m.direction == "to_earth" or (m.deliver_at is not None and m.deliver_at <= now))]

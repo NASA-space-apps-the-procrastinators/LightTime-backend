@@ -5,7 +5,7 @@ READING = {"id", "crew_id", "at", "source", "signal_ok", "context", "heart_rate"
            "bp_sys", "bp_dia", "glucose", "sleep_hours", "mood"}
 TIMELINE = {"raised_at", "acknowledged_at", "sent_at", "earth_eta_s", "earth_at", "earliest_reply_at",
             "earth_after_s", "earliest_reply_after_s", "reply_at", "resolved_at"}
-ALERT = {"id", "crew_id", "crew", "at", "level", "vital", "value", "unit", "reason", "source", "auto",
+ALERT = {"id", "crew_id", "crew", "at", "level", "restricted", "vital", "value", "unit", "reason", "source", "auto",
          "nasa_risk", "steps", "steps_done", "acknowledged_by", "cleared_at", "cleared_by", "cleared_note",
          "why", "timeline", "lookahead", "speak", "state", "stage", "metric", "rule", "symptoms", "next_step",
          "raised_by"}
@@ -23,7 +23,8 @@ def test_every_screen_gets_the_fields_the_typed_client_expects(client):
     assert set(alert) == ALERT and set(alert["timeline"]) == TIMELINE
     member = client.get("/api/base/crew").get_json()[0]
     assert set(member) == {"id", "name", "role", "suit_id", "state", "note", "baseline", "today", "metric_states",
-                           "checkin_from", "last_packet_at", "level", "latest", "typed", "usual", "week", "simulated"}
+                           "checkin_from", "last_packet_at", "level", "latest", "typed", "usual", "week", "simulated",
+                           "is_cmo", "restricted"}
     assert set(member["latest"]) == READING and set(member["usual"]) == {"heart_rate"}
     assert set(client.get("/api/base/outbox").get_json()[0]) == MESSAGE
     assert set(client.get("/api/earth/inbox").get_json()) == {"link_up", "delay_s", "mode", "who_decides", "messages"}

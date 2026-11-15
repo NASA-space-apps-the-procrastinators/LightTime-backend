@@ -8,7 +8,7 @@ from datetime import timedelta
 
 from flask import jsonify, request
 
-from base_station import scoring
+from base_station import access, scoring
 from base_station.console import bands
 from base_station.morning import when
 from base_station.routes import bad, bp, find_crew
@@ -78,7 +78,7 @@ def packets():
     own, out = {}, []
     for row in reversed(_rows(utcnow())):
         code = row["crew_id"]
-        if member is not None and code != member.code:
+        if (member is not None and code != member.code) or not access.may_read(code):
             continue
         if code not in own:
             own[code] = bands(code)
