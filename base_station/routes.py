@@ -35,6 +35,9 @@ def timeline(alert):
         "sent_at": sent.get("sent_at"), "earth_eta_s": sent.get("eta_s"),
         "earth_at": sent.get("deliver_at") if sent.get("status") == "delivered" else None,
         "earliest_reply_at": iso(earliest),
+        # the true length of each leg, in mission seconds: the stamps above are on the demo clock
+        "earth_after_s": sent.get("arrives_after_s"),
+        "earliest_reply_after_s": sent.get("earliest_reply_after_s"),
         "reply_at": iso(reply.deliver_at) if reply else None,
         "resolved_at": iso(alert.cleared_at),
     }
