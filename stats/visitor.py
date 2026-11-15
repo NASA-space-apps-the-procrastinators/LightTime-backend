@@ -7,18 +7,26 @@ import hashlib
 import secrets
 import threading
 
+from flask import current_app
+
 from stats.counter import today
 
 BOT_MARKERS = ("bot", "crawler", "spider", "googlehc", "uptimechecks")
 
 _lock = threading.Lock()
 _salt = (None, "")      # (day, salt)
+_shape_logged = False
 
 
 def client_ip(request):
     """The second from last X-Forwarded-For entry (the one the Google load balancer adds),
     else the address the request came from."""
+    global _shape_logged
     hops = [hop.strip() for hop in request.headers.get("X-Forwarded-For", "").split(",") if hop.strip()]
+    if hops and not _shape_logged:      # once a process, the count only, never an address
+        _shape_logged = True
+        current_app.logger.warning("X-Forwarded-For has %d entries; the visitor is taken from the second from last",
+                                   len(hops))
     return hops[-2] if len(hops) >= 2 else request.remote_addr or ""
 
 

@@ -313,3 +313,13 @@ def test_the_ship_starts_when_the_stats_database_cannot_be_reached(monkeypatch, 
     with app.app_context():
         assert counter.flush() is True          # the tables are made once the database is there
         assert StatCount.query.count() == 1
+
+
+def test_the_forwarded_shape_is_logged_once_without_addresses(app, caplog, monkeypatch):
+    monkeypatch.setattr(visitor, "_shape_logged", False)
+    with caplog.at_level("WARNING"):
+        for _ in range(2):
+            with _request(app, forwarded="192.0.2.44, 35.191.0.1"):
+                visitor.client_ip(request)
+    lines = [r.getMessage() for r in caplog.records if "X-Forwarded-For" in r.getMessage()]
+    assert lines == ["X-Forwarded-For has 2 entries; the visitor is taken from the second from last"]
