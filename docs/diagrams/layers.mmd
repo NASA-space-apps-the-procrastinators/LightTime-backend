@@ -1,0 +1,10 @@
+flowchart TB
+    S["Suit<br/>one reading a second"] --> B["Ship computer: LIGHTTIME<br/>trust, usual range, time left, who decides"]
+    B --> C["Crew and crew medical officer<br/>caution, SOS, checklist"]
+    B -- "report, stamped" --> L
+    subgraph ground [" "]
+        direction LR
+        L["Delayed link<br/>sent, lands, earliest reply"] -- "one-way light time" --> E["Earth: flight surgeon<br/>sees only what crossed the link"]
+    end
+    E -. "reply, one more one-way light time" .-> C
+    style ground fill:none,stroke:none

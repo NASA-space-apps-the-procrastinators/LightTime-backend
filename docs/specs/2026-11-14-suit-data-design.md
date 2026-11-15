@@ -1,6 +1,6 @@
 # The suit and its data: design
 
-Date: 14 November 2026, revised in the evening. Plans: `docs/plans/2026-11-14-connect-everything.md`, Tasks 5 and 6 (hardware note and sensor test), and `docs/plans/2026-11-14-console-contract.md`, Tasks 2 and 10. Hardware note: ESP32 DevKitC with a MAX30102 optical sensor (heart rate and blood oxygen), a muscle-activity input, a radiation input and a Bluetooth cuff.
+Date: 14 November 2026, revised in the evening. Plans: `docs/build-log/plans/2026-11-14-connect-everything.md`, Tasks 5 and 6 (hardware note and sensor test), and `docs/build-log/plans/2026-11-14-console-contract.md`, Tasks 2 and 10. Hardware note: ESP32 DevKitC with a MAX30102 optical sensor (heart rate and blood oxygen), a muscle-activity input, a radiation input and a Bluetooth cuff.
 
 ## 1. Problem
 
@@ -54,7 +54,7 @@ An empty string counts as no reading. Anything that is not a number returns 400 
 
 Everything in section 5 assumes one reading a second from one sender. "Five in a row" means five seconds. The settle period is ten seconds. The time-left rule reads a fall per reading as a fall per second.
 
-So data that arrives once a minute must never be posted to `/api/base/readings`. Tried offline on the generated month, minute rows gave 24 false trend warnings in 30 healthy days and a time-left figure wrong by a factor of 60 (`docs/reviews/2026-11-14-dataset-review.md`, F3).
+So data that arrives once a minute must never be posted to `/api/base/readings`. Tried offline on the generated month, minute rows gave 24 false trend warnings in 30 healthy days and a time-left figure wrong by a factor of 60 (`docs/build-log/reviews/2026-11-14-dataset-review.md`, F3).
 
 | Data | Speed | Door | Judged by |
 |---|---|---|---|

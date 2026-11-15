@@ -30,7 +30,7 @@ No language model runs in the request path.
 - What LIGHTTIME learns is per person and explainable: each person's usual range from their own last 24 hours, and settings chosen by holding out one volunteer at a time.
 - Two rules were already switched off under this decision: heart rate judged with hospital bands (tripped for 14 of 15 healthy people at a desk) and the suit's blood pressure estimate (in the caution band or worse on 77,647 of 168,600 minutes of the generated month's healthy build, the figure recorded in `base_station/limits.json`).
 - Gaps stay visible: nothing catches a fast heart rate at rest, a slow one in sleep, or a stuck sensor. Each is listed with the evidence a rule would need first.
-- The one adviser allowed so far is a learned normal heart rate by activity (`docs/plans/2026-11-15-backend-polish.md`, Task 8), behind its gate.
+- The one adviser allowed so far is a learned normal heart rate by activity (`docs/build-log/plans/2026-11-15-backend-polish.md`, Task 8), behind its gate.
 
 ## What was considered and not chosen
 

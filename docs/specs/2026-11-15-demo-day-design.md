@@ -2,7 +2,7 @@
 
 Date: Saturday 14 November 2026, 22:30. This is the spec for what is left to build. It covers the app only.
 
-Plans: `docs/plans/2026-11-15-backend-polish.md` (this repo) and `docs/plans/2026-11-15-console-wiring.md` (console repo). The order to run them in: `docs/plans/2026-11-15-tonight.md`. Words: `CONTEXT.md`. Why no trained model decides: `docs/adr/0001-rules-decide-learned-models-advise.md`. Shapes the console and the ship already agreed on: `docs/specs/2026-11-14-console-data-design.md`.
+Plans: `docs/build-log/plans/2026-11-15-backend-polish.md` (this repo) and `docs/build-log/plans/2026-11-15-console-wiring.md` (console repo). The order to run them in: `docs/build-log/plans/2026-11-15-tonight.md`. Words: `CONTEXT.md`. Why no trained model decides: `docs/adr/0001-rules-decide-learned-models-advise.md`. Shapes the console and the ship already agreed on: `docs/specs/2026-11-14-console-data-design.md`.
 
 ## 1. Where we stand
 

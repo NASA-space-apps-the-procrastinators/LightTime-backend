@@ -1,0 +1,18 @@
+% Figure 1. Three layers and the delayed link. Drawn in TikZ so it stays sharp and editable.
+\begin{figure*}[t]\centering
+\begin{tikzpicture}[font=\small, box/.style={draw, rounded corners=2pt, align=center, minimum height=11mm, inner sep=4pt, text width=28mm},
+  arr/.style={-{Latex[length=2mm]}, thick}]
+\node[box, fill=oiblue!12] (suit) {\textbf{Suit}\\one reading a second per crew member};
+\node[box, fill=oigreen!12, right=8mm of suit, text width=42mm] (ship) {\textbf{Ship computer (LIGHTTIME)}\\trust $\rightarrow$ usual range $\rightarrow$ time left $\rightarrow$ who decides};
+\node[box, fill=oiorange!15, right=13mm of ship] (link) {\textbf{Delayed link}\\stamps sent, lands, earliest reply};
+\node[box, fill=oigrey!12, right=8mm of link] (earth) {\textbf{Earth}\\flight surgeon sees only what crossed the link};
+\node[box, fill=oiverm!10, below=8mm of ship, text width=42mm] (crew) {\textbf{Crew and crew medical officer}\\alerts, SOS, checklist};
+\draw[arr] (suit) -- (ship);
+\draw[arr] (ship) -- node[above]{report} (link);
+\draw[arr] (link) -- node[above]{$\Delta t$} (earth);
+\draw[arr] (ship) -- (crew);
+\draw[arr, dashed] (earth.south) |- node[pos=0.75, below]{reply after another $\Delta t$} (crew.east);
+\end{tikzpicture}
+\caption{The three layers. The ship's rules set who acts from the one-way light time $\Delta t$; Earth reads only what has crossed the link.}
+\label{fig:architecture}
+\end{figure*}

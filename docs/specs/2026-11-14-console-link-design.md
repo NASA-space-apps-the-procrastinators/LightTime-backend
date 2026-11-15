@@ -1,6 +1,6 @@
 # Console, ship and Earth: how the screens connect
 
-Date: 14 November 2026, revised in the evening. Plan: `docs/plans/2026-11-14-console-contract.md`. Contract: the frontend owner's API contract of 14 November, served as described in `docs/specs/2026-11-14-console-data-design.md`.
+Date: 14 November 2026, revised in the evening. Plan: `docs/build-log/plans/2026-11-14-console-contract.md`. Contract: the frontend owner's API contract of 14 November, served as described in `docs/specs/2026-11-14-console-data-design.md`.
 
 **What changed since the first version.** The frontend owner wrote an API contract and is wiring his own screens to it, one at a time. So the "live layer" this spec first proposed (a provider, a bar and a panel added beside his screens) is not being built, and sections 4 and 5 below are rewritten. Sections 6 and 7 (the two clocks, and what leaves the ship) still hold and matter more now, because his screens will read these fields directly.
 
@@ -108,5 +108,5 @@ The backend's requirements moved to `docs/specs/2026-11-14-console-data-design.m
 
 ## 10. Open questions
 
-- Team: who builds the dial control and the Earth screen, and by when? Blocking for the pitch. The earlier plan has a draft of both (`docs/plans/2026-11-14-connect-everything.md`, Tasks 2 and 4) that would need re-pointing at the frontend owner's structure.
+- Team: who builds the dial control and the Earth screen, and by when? Blocking for the pitch. The earlier plan has a draft of both (`docs/build-log/plans/2026-11-14-connect-everything.md`, Tasks 2 and 4) that would need re-pointing at the frontend owner's structure.
 - Team: which laptop is the ship, which is Earth, for the pitch? Not blocking for the build.

@@ -1,6 +1,6 @@
 # LIGHTTIME, the ship AI: design
 
-Date: 14 November 2026, revised in the evening after the generated crew month arrived. Plan: `docs/plans/2026-11-14-console-contract.md`, Tasks 10 and 11. Evidence: `docs/specs/2026-11-14-ship-ai-and-data-design.md`, section 6, and `docs/reviews/2026-11-14-dataset-review.md`, findings F2, F3 and section 5.
+Date: 14 November 2026, revised in the evening after the generated crew month arrived. Plan: `docs/build-log/plans/2026-11-14-console-contract.md`, Tasks 10 and 11. Evidence: `docs/specs/2026-11-14-ship-ai-and-data-design.md`, section 6, and `docs/build-log/reviews/2026-11-14-dataset-review.md`, findings F2, F3 and section 5.
 
 ## 1. Problem
 

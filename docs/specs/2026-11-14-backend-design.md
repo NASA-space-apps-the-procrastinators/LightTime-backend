@@ -2,7 +2,7 @@
 
 Date: 14 November 2026. Owner: The backend owner. Status: approved by the backend owner at 11:02, updated at 11:45 after the frontend owner's screens and the CSA workshop.
 
-Build plan: `docs/plans/2026-11-14-backend-saturday.md`. The plan's code was built in a scratch folder before this was sent. All 45 tests pass on SQLite and on Postgres 16, and the Mars story was played end to end over HTTP on Postgres.
+Build plan: `docs/build-log/plans/2026-11-14-backend-saturday.md`. The plan's code was built in a scratch folder before this was sent. All 45 tests pass on SQLite and on Postgres 16, and the Mars story was played end to end over HTTP on Postgres.
 
 ## Problem
 

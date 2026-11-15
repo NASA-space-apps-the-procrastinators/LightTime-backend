@@ -1,0 +1,15 @@
+% Figure 3. The three questions LIGHTTIME asks of every reading, in order.
+\begin{figure}[t]\centering
+\begin{tikzpicture}[font=\scriptsize, node distance=4mm,
+  q/.style={draw, rounded corners=2pt, fill=oigreen!12, align=center, text width=0.82\columnwidth, inner sep=3pt},
+  outbox/.style={draw, dashed, rounded corners=2pt, align=center, text width=0.82\columnwidth, inner sep=3pt},
+  arr/.style={-{Latex[length=1.6mm]}, thick}]
+\node[q] (trust) {\textbf{1. Can this reading be trusted?}\\plausible range \numPlausibleSpoTwoLow--\numPlausibleSpoTwoHigh\%, signal good, \numSettleN{} readings to settle after a dropout};
+\node[q, below=of trust] (usual) {\textbf{2. Is it out of range for long enough?}\\band (caution $\le$\numSpoTwoCaution, warning $\le$\numSpoTwoWarning, emergency $\le$\numSpoTwoEmergency), held for \numSustainN{} readings; the personal usual range is shown, not alarmed on};
+\node[q, below=of usual] (left) {\textbf{3. How long is left, and can Earth answer first?}\\Theil--Sen slope over the last \numWindowN{} readings; time left $=(\text{now}-\text{red line})/(-\text{slope})$; compare with $2\Delta t$};
+\node[outbox, below=of left] (act) {\textbf{Out:} a caution with the time left, or an SOS; a report to Earth; who acts follows $\Delta t$};
+\draw[arr] (trust) -- (usual); \draw[arr] (usual) -- (left); \draw[arr] (left) -- (act);
+\end{tikzpicture}
+\caption{The order in which the ship checks a reading. Each step can stop a false alarm before the next one runs.}
+\label{fig:pipeline}
+\end{figure}
