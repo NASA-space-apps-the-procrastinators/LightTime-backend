@@ -34,8 +34,8 @@ def test_the_ship_cannot_open_the_answer_key():
 def test_the_ship_starts_with_the_four_crew_from_the_dataset(app):
     with app.app_context():
         crew = [(c.id, c.code, c.name, c.suit_id) for c in Crew.query.order_by(Crew.id)]
-    assert crew == [(1, "C1", "Okafor", "LT-01"), (2, "C2", "Lindqvist", "LT-02"),
-                    (3, "C3", "Sato", "LT-03"), (4, "C4", "Mensah", "LT-04")]
+    assert crew == [(1, "C1", "Okafor", "LT-01"), (2, "C2", "Linda Rodenburg", "LT-02"),
+                    (3, "C3", "Sato", "LT-03"), (4, "C4", "Rebecca Qi", "LT-04")]
 
 
 def test_a_reading_can_name_its_crew_member_either_way(client):

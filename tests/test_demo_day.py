@@ -91,3 +91,15 @@ def test_the_ship_never_uses_the_words_to_avoid(client):
         raised = client.post("/api/base/readings", json={"crew_id": "C3", "spo2": 86}).get_json()["alerts"]
     said = " ".join([raised[0]["source"], *raised[0]["why"]]).lower()
     assert not [word for word in ("machine learning", "trained", "validated", "predicts illness") if word in said]
+
+
+def test_the_timeline_gives_each_leg_its_true_length(morning):
+    before = morning.get("/api/base/alerts/A1").get_json()["timeline"]
+    assert before["earth_after_s"] is None and before["earliest_reply_after_s"] is None
+    morning.post("/api/base/alerts/A1/ack", json={"by": "Okafor"})
+    morning.post("/api/base/alerts/A1/send", json={})
+    line = morning.get("/api/base/alerts/A1").get_json()["timeline"]
+    state = morning.get("/api/base/state").get_json()
+    assert state["stop"] == "mars"
+    assert line["earth_after_s"] == state["delay_s"]
+    assert line["earliest_reply_after_s"] == state["round_trip_s"]

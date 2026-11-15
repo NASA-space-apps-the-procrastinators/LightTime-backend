@@ -48,7 +48,7 @@ So we are already eligible: the NASA HRP risks page is on the Resources tab, and
 | --- | --- | --- |
 | `data/reference/` | Small files of facts copied from NASA and CSA pages, each with its link and the date it was read | Yes |
 | `data/eda/` | Cabin and radiation tables from NASA's Environmental Data App, fetched through its API. Rodent Research 1 is in the folder | Yes |
-| `data/ppg_dalia/` | Wrist heart rate and skin temperature for three volunteers, cut from the PPG-DaLiA dataset | Yes |
+| `data/ppg_dalia/` | Wrist heart rate and skin temperature for fifteen volunteers, cut from the PPG-DaLiA dataset | Yes |
 | `data/cache/` | The last good answer from each live feed, written by the app | No |
 | `data/README.md` | What goes where, the credit lines, and the rule against identifiable health data | Yes |
 

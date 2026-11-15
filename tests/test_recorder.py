@@ -32,4 +32,4 @@ def test_summaries_travel_to_earth_like_everything_else(client, monkeypatch):
     clock = link.utcnow
     monkeypatch.setattr(link, "utcnow", lambda: clock() + timedelta(seconds=2))
     arrived = client.get("/api/earth/inbox").get_json()["messages"]
-    assert sorted(m["payload"]["crew"] for m in arrived if m["kind"] == "summary") == ["Lindqvist", "Mensah", "Okafor", "Sato"]
+    assert sorted(m["payload"]["crew"] for m in arrived if m["kind"] == "summary") == ["Linda Rodenburg", "Okafor", "Rebecca Qi", "Sato"]

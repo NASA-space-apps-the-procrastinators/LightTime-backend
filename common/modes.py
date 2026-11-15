@@ -2,8 +2,9 @@
 from common import dataset, lighttime, link
 from common.models import utcnow
 
-# NASA's NEEMO 16 test (Rader et al. 2013): at about five minutes one way,
-# critical medical advice cannot always get through.
+# NASA's NEEMO 16 analog mission ran a simulated medical emergency at a five-minute delay and
+# recommended more crew medical autonomy at five minutes or more (Rader et al. 2013, NTRS 20130011552).
+# The switch at exactly 300 s is our design choice, not a measured threshold.
 CREW_FIRST_AT_S = 300
 
 STOPS = {

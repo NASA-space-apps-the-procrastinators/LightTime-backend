@@ -1,5 +1,5 @@
 """NASA's Deep Space Network Now feed: which antennas are on Mars right now, and the
-round-trip light time NASA measures to its spacecraft there. A second check on Horizons."""
+round-trip light time NASA reports for its spacecraft there. A second check on Horizons."""
 import math
 import time
 import xml.etree.ElementTree as ET

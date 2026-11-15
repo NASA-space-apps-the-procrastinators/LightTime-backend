@@ -1,0 +1,411 @@
+diff --git a/src/components/base-station/alert-actions.tsx b/src/components/base-station/alert-actions.tsx
+index 46ed31d..8f7d515 100644
+--- a/src/components/base-station/alert-actions.tsx
++++ b/src/components/base-station/alert-actions.tsx
+@@ -3,8 +3,8 @@
+ import { Check, Send, ThumbsUp } from "lucide-react";
+ import { useEffect, useRef } from "react";
+ import { Button } from "@/components/ui/button";
++import { canAcknowledge } from "@/lib/alerts";
+ import { GROUND, MISSION } from "@/lib/crew";
+-import { clock } from "@/lib/format";
+ import { type Alert, type AlertStage, useMission } from "@/lib/mission-store";
+ import { span } from "@/lib/ship-api";
+ 
+@@ -28,9 +28,11 @@ export function AlertActions({ alert }: { alert: Alert }) {
+   function statusLine(): string {
+     if (!ship || !alert.live) return STATUS[alert.stage];
+     if (alert.stage === "sent") {
+-      const earliest = alert.live.timeline.earliest_reply_at;
++      // The true length of the round trip the report left with. Its clock stamp is on the demo clock.
++      const reply =
++        alert.live.timeline.earliest_reply_after_s ?? ship.round_trip_s;
+       return ship.link_up
+-        ? `Sent. Earth is ${span(ship.delay_s)} away. Earliest possible reply: ${earliest ? clock(earliest) : `in ${span(ship.round_trip_s)}`}.`
++        ? `Sent. Earth is ${span(ship.delay_s)} away. Earliest possible reply: ${span(reply)} after sending.`
+         : "Sent. No link to Earth right now: any reply waits for the link.";
+     }
+     if (alert.stage === "acknowledged" && !ship.link_up)
+@@ -87,6 +89,21 @@ export function AlertActions({ alert }: { alert: Alert }) {
+           </Button>
+         </div>
+       )}
++      {canAcknowledge(alert) && (
++        <div>
++          <Button
++            variant="outline"
++            className="min-h-11"
++            onClick={(e) => {
++              if (e.detail > 1) return;
++              dispatch({ type: "acknowledge", alertId: alert.id, at: now() });
++            }}
++          >
++            <Check aria-hidden />
++            Acknowledge
++          </Button>
++        </div>
++      )}
+     </div>
+   );
+ }
+diff --git a/src/components/base-station/alert-detail.tsx b/src/components/base-station/alert-detail.tsx
+index 9167810..fea1c98 100644
+--- a/src/components/base-station/alert-detail.tsx
++++ b/src/components/base-station/alert-detail.tsx
+@@ -11,6 +11,7 @@ import { StatePill } from "@/components/shared/state-pill";
+ import { getCrew } from "@/lib/crew";
+ import { clock, metricLabel } from "@/lib/format";
+ import { useMission } from "@/lib/mission-store";
++import { span } from "@/lib/ship-api";
+ import { cn } from "@/lib/utils";
+ 
+ const LEGEND = [
+@@ -23,7 +24,7 @@ const LEGEND = [
+ ] as const;
+ 
+ export function AlertDetail({ alertId }: { alertId: string }) {
+-  const { state } = useMission();
++  const { state, ship } = useMission();
+   const alert = state.alerts.find((a) => a.id === alertId);
+   if (!alert) return <NotFoundMessage title="Alert not found" />;
+ 
+@@ -74,7 +75,14 @@ export function AlertDetail({ alertId }: { alertId: string }) {
+       <div className="flex min-w-0 flex-col gap-4">
+         <AlertSummary alert={alert} />
+         <LightTimeCard alert={alert} />
+-        <RoundTrip alert={alert} />
++        <RoundTrip
++          alert={alert}
++          note={
++            ship && ship.plays_as_s < ship.delay_s
++              ? `Clock times are the demo's. The link plays ${ship.speedup} times faster: ${span(ship.delay_s)} of light time passes in ${Math.round(ship.plays_as_s)} s.`
++              : undefined
++          }
++        />
+         <AlertActions alert={alert} />
+         <GroundThread alert={alert} />
+       </div>
+diff --git a/src/components/base-station/console-effects.tsx b/src/components/base-station/console-effects.tsx
+index 4cd2db4..7810bfc 100644
+--- a/src/components/base-station/console-effects.tsx
++++ b/src/components/base-station/console-effects.tsx
+@@ -3,23 +3,26 @@
+ import { useEffect, useRef } from "react";
+ import { useAlarm } from "@/hooks/use-alarm";
+ import { useGroundLink } from "@/hooks/use-ground-link";
++import { beeps } from "@/lib/alerts";
+ import { useMission } from "@/lib/mission-store";
+ 
+ /** Console-wide side effects: the alert beep and the delayed link to the ground. */
+ export function ConsoleEffects() {
+   const { state } = useMission();
+-  useAlarm(
+-    state.alerts.some(
+-      (a) =>
+-        a.stage === "raised" || (a.live?.state === "SOS" && !a.acknowledgedAt),
+-    ),
+-    state.soundOn,
+-  );
++  useAlarm(state.alerts.some(beeps), state.soundOn);
+   // LIGHTTIME's sentence, spoken once per alert and level. Browsers allow speech only after a click:
+   // the "Sound on" button is that click.
+   const said = useRef(new Set<string>());
+   useEffect(() => {
+-    if (!state.soundOn || typeof window.speechSynthesis === "undefined") return;
++    // An alert that has left the list (a restart clears them) is spoken again when it comes back.
++    const present = new Set(state.alerts.map((a) => a.id));
++    for (const key of said.current)
++      if (!present.has(key.split(":")[0])) said.current.delete(key);
++    if (typeof window.speechSynthesis === "undefined") return;
++    if (!state.soundOn) {
++      window.speechSynthesis.cancel(); // "Sound off" also cuts a sentence in progress
++      return;
++    }
+     for (const alert of state.alerts) {
+       const line = alert.live?.speak;
+       const key = `${alert.id}:${alert.live?.level}`;
+diff --git a/src/components/base-station/lighttime-card.tsx b/src/components/base-station/lighttime-card.tsx
+index ef7da6d..db049b6 100644
+--- a/src/components/base-station/lighttime-card.tsx
++++ b/src/components/base-station/lighttime-card.tsx
+@@ -1,5 +1,6 @@
+ "use client";
+ 
++import { timeLeft } from "@/lib/format";
+ import { type Alert, useMission } from "@/lib/mission-store";
+ import { ship as shipApi, span } from "@/lib/ship-api";
+ import { cn } from "@/lib/utils";
+@@ -10,6 +11,7 @@ export function LightTimeCard({ alert }: { alert: Alert }) {
+   const live = alert.live;
+   if (!live || live.raised_by !== "lighttime") return null;
+   const look = live.lookahead;
++  const left = look ? timeLeft(look, ship?.now, live.level) : null;
+   return (
+     <section
+       aria-label="LIGHTTIME"
+@@ -32,7 +34,11 @@ export function LightTimeCard({ alert }: { alert: Alert }) {
+             <dt className="text-[11px] text-muted-foreground">
+               Time left to the red line
+             </dt>
+-            <dd className="text-lg font-bold">{span(look.eta_s)}</dd>
++            <dd
++              className={cn("text-lg font-bold", left?.urgent && "text-alert")}
++            >
++              {left?.text}
++            </dd>
+           </div>
+           <div className="rounded-lg border border-border-soft px-3 py-2.5">
+             <dt className="text-[11px] text-muted-foreground">
+diff --git a/src/components/base-station/round-trip.tsx b/src/components/base-station/round-trip.tsx
+index ae57619..c1d7c29 100644
+--- a/src/components/base-station/round-trip.tsx
++++ b/src/components/base-station/round-trip.tsx
+@@ -11,7 +11,7 @@ const STEPS = [
+   { label: "Resolved", at: (a: Alert) => a.resolvedAt },
+ ];
+ 
+-export function RoundTrip({ alert }: { alert: Alert }) {
++export function RoundTrip({ alert, note }: { alert: Alert; note?: string }) {
+   // The first step without a time is the one in progress.
+   const current = STEPS.findIndex((s) => !s.at(alert));
+ 
+@@ -54,6 +54,7 @@ export function RoundTrip({ alert }: { alert: Alert }) {
+           );
+         })}
+       </ol>
++      {note && <p className="mt-3 text-xs text-muted-foreground">{note}</p>}
+     </section>
+   );
+ }
+diff --git a/src/components/command-center/earth-console.tsx b/src/components/command-center/earth-console.tsx
+index 694d16a..f6acbe3 100644
+--- a/src/components/command-center/earth-console.tsx
++++ b/src/components/command-center/earth-console.tsx
+@@ -14,6 +14,7 @@ type Message = {
+   eta_s: number | null;
+   sent_at: string | null;
+   deliver_at: string | null;
++  delay_s?: number | null;
+   payload: Record<string, unknown>;
+ };
+ type Inbox = {
+@@ -144,7 +145,9 @@ export function EarthConsole() {
+         <p className="text-xs text-muted-foreground">
+           {text(p.level) && `Level ${text(p.level)} · `}raised{" "}
+           {clock(text(p.raised_at))} UTC · reached Earth{" "}
+-          {report.deliver_at ? clock(report.deliver_at) : ""} UTC
++          {report.delay_s != null
++            ? `${span(report.delay_s)} after it was sent`
++            : ""}
+         </p>
+         {p.sbar != null && (
+           <dl className="grid gap-2 text-sm md:grid-cols-2">
+@@ -186,7 +189,7 @@ export function EarthConsole() {
+           <ul className="flex flex-col gap-1 border-t border-border-soft pt-2 text-sm">
+             {updates.map((u) => (
+               <li key={u.id}>
+-                {u.deliver_at ? clock(u.deliver_at) : ""} ·{" "}
++                {u.sent_at ? `sent ${clock(u.sent_at)}` : ""} ·{" "}
+                 {text(u.payload.text) || text(u.payload.event) || u.kind}
+               </li>
+             ))}
+@@ -244,7 +247,7 @@ export function EarthConsole() {
+             Mars light time today: {span(network.horizons_one_way_s)} worked out
+             by NASA JPL Horizons
+             {network.dsn_one_way_s !== null &&
+-              `, ${span(network.dsn_one_way_s)} measured by NASA's Deep Space Network (${network.differ_s} s apart)`}
++              `, ${span(network.dsn_one_way_s)} reported by NASA's Deep Space Network (${network.differ_s} s apart)`}
+             .
+           </p>
+         )}
+diff --git a/src/lib/alerts.test.ts b/src/lib/alerts.test.ts
+new file mode 100644
+index 0000000..3bc5926
+--- /dev/null
++++ b/src/lib/alerts.test.ts
+@@ -0,0 +1,31 @@
++import { describe, expect, it } from "vitest";
++import { beeps, canAcknowledge } from "@/lib/alerts";
++import type { Alert } from "@/lib/mission-store";
++
++const alert = (over: object) =>
++  ({ stage: "sent", acknowledgedAt: null, live: { state: "SOS" }, ...over }) as unknown as Alert;
++
++describe("the beep and the Acknowledge button", () => {
++  it("a live SOS beeps until someone acknowledges it, and can be acknowledged though it is already sent", () => {
++    expect(beeps(alert({}))).toBe(true);
++    expect(canAcknowledge(alert({}))).toBe(true);
++    const acked = alert({ acknowledgedAt: "2026-11-14T06:31:50Z" });
++    expect(beeps(acked)).toBe(false);
++    expect(canAcknowledge(acked)).toBe(false);
++  });
++
++  it("a resolved alert never beeps", () => {
++    expect(beeps(alert({ stage: "resolved" }))).toBe(false);
++    expect(canAcknowledge(alert({ stage: "resolved" }))).toBe(false);
++  });
++
++  it("a raised alert beeps and keeps its own button", () => {
++    const raised = alert({ stage: "raised", live: { state: "ALERT" } });
++    expect(beeps(raised)).toBe(true);
++    expect(canAcknowledge(raised)).toBe(false);
++  });
++
++  it("the built-in demo has no second button", () => {
++    expect(canAcknowledge(alert({ live: undefined }))).toBe(false);
++  });
++});
+diff --git a/src/lib/alerts.ts b/src/lib/alerts.ts
+new file mode 100644
+index 0000000..389b998
+--- /dev/null
++++ b/src/lib/alerts.ts
+@@ -0,0 +1,17 @@
++import type { Alert } from "@/lib/mission-store";
++
++/** True while an alert should beep: raised and waiting, or a live SOS nobody has acknowledged. Never once resolved. */
++export function beeps(a: Alert): boolean {
++  if (a.stage === "resolved") return false;
++  return a.stage === "raised" || (a.live?.state === "SOS" && !a.acknowledgedAt);
++}
++
++/** True when a live alert past the "raised" stage can still be acknowledged. An SOS sends its own report, so it starts at "sent". */
++export function canAcknowledge(a: Alert): boolean {
++  return (
++    a.live != null &&
++    !a.acknowledgedAt &&
++    a.stage !== "raised" &&
++    a.stage !== "resolved"
++  );
++}
+diff --git a/src/lib/format.test.ts b/src/lib/format.test.ts
+new file mode 100644
+index 0000000..377310c
+--- /dev/null
++++ b/src/lib/format.test.ts
+@@ -0,0 +1,19 @@
++import { describe, expect, it } from "vitest";
++import { timeLeft } from "@/lib/format";
++
++describe("the time-left tile", () => {
++  const look = { eta_s: 70, red_line_at: "2026-11-14T06:31:41.701179Z" };
++
++  it("counts down on the ship's clock", () => {
++    expect(timeLeft(look, "2026-11-14T06:31:01.200000Z", "caution")).toEqual({ text: "40 s", urgent: false });
++  });
++
++  it("says when the time is up and when the line is crossed", () => {
++    expect(timeLeft(look, "2026-11-14T06:31:45Z", "caution")).toEqual({ text: "Due now", urgent: true });
++    expect(timeLeft(look, "2026-11-14T06:31:01Z", "emergency")).toEqual({ text: "Red line crossed", urgent: true });
++  });
++
++  it("shows the frozen figure when an older ship sends no deadline", () => {
++    expect(timeLeft({ eta_s: 70 }, undefined, "caution")).toEqual({ text: "1 min 10 s", urgent: false });
++  });
++});
+diff --git a/src/lib/format.ts b/src/lib/format.ts
+index 4e132a8..a26e414 100644
+--- a/src/lib/format.ts
++++ b/src/lib/format.ts
+@@ -1,5 +1,5 @@
+ import type { MetricKey } from "@/lib/schemas";
+-import { LIVE } from "@/lib/ship-api";
++import { LIVE, span } from "@/lib/ship-api";
+ 
+ const LABELS: Record<MetricKey, string> = {
+   hr_rest: "Resting heart rate",
+@@ -45,3 +45,18 @@ export function clock(iso: string): string {
+     timeZone: LIVE ? "UTC" : undefined,
+   });
+ }
++
++/** The time-left tile: counts down to the red line on the ship's clock, and says when it is crossed. */
++export function timeLeft(
++  look: { eta_s: number; red_line_at?: string },
++  now: string | undefined,
++  level: string,
++): { text: string; urgent: boolean } {
++  if (level === "emergency") return { text: "Red line crossed", urgent: true };
++  if (!look.red_line_at || !now)
++    return { text: span(look.eta_s), urgent: false };
++  const left = Math.round((at(look.red_line_at) - at(now)) / 1000);
++  return left <= 0
++    ? { text: "Due now", urgent: true }
++    : { text: span(left), urgent: false };
++}
+diff --git a/src/lib/mission-store.tsx b/src/lib/mission-store.tsx
+index 43de9a2..2ba4835 100644
+--- a/src/lib/mission-store.tsx
++++ b/src/lib/mission-store.tsx
+@@ -325,6 +325,8 @@ export function MissionProvider({ children }: { children: ReactNode }) {
+   } | null>(null);
+   const latest = useRef<MissionState | null>(null);
+   const busy = useRef(false);
++  const misses = useRef(0);
++  const reached = useRef(false);
+   latest.current = state;
+ 
+   const refresh = useCallback(() => {
+@@ -332,6 +334,8 @@ export function MissionProvider({ children }: { children: ReactNode }) {
+     busy.current = true;
+     pull()
+       .then(({ state: fromShip, mission, crew, checkedIn, station }) => {
++        misses.current = 0;
++        reached.current = true;
+         setShipState(fromShip);
+         setBoard({ crew, checkedIn, station });
+         setOnline(true);
+@@ -343,11 +347,20 @@ export function MissionProvider({ children }: { children: ReactNode }) {
+         }));
+       })
+       .catch(() => {
++        misses.current += 1;
++        const first = latest.current === null;
++        // One missed answer is a blip. Three in a row, or a first load with no ship, is an outage.
++        // Once on the built-in demo, later misses change nothing.
++        if (!first && (!reached.current || misses.current < 3)) return;
++        reached.current = false;
+         setOnline(false);
+         setShipState(null);
+         setBoard(null);
+-        // First load with no ship: fall back to the built-in demo so the console is never blank.
+-        setState((s) => s ?? createInitialMission(new Date()));
++        // The whole console becomes the built-in demo, never old ship alerts over built-in crew.
++        setState((s) => ({
++          ...createInitialMission(new Date()),
++          soundOn: s?.soundOn ?? false,
++        }));
+       })
+       .finally(() => {
+         busy.current = false;
+diff --git a/src/lib/ship-api.ts b/src/lib/ship-api.ts
+index 2ae057d..489f1db 100644
+--- a/src/lib/ship-api.ts
++++ b/src/lib/ship-api.ts
+@@ -52,6 +52,8 @@ const timelineSchema = z.object({
+   earth_eta_s: z.number().nullable(),
+   earth_at: z.string().nullable(),
+   earliest_reply_at: z.string().nullable(),
++  earth_after_s: z.number().nullable().optional(),
++  earliest_reply_after_s: z.number().nullable().optional(),
+   reply_at: z.string().nullable(),
+   resolved_at: z.string().nullable(),
+ });
+@@ -62,6 +64,8 @@ const lookaheadSchema = z.object({
+   per_min: z.number(),
+   eta_s: z.number(),
+   red_line: z.number(),
++  at: z.string().optional(),
++  red_line_at: z.string().optional(),
+   reply_s: z.number().nullable(),
+   earth_in_time: z.boolean(),
+ });
+@@ -344,6 +348,8 @@ async function request(path: string, init?: RequestInit): Promise<unknown> {
+     // request when the ship is at another address, which halves what the ship is asked.
+     headers: init?.body ? { "Content-Type": "application/json" } : undefined,
+     cache: "no-store",
++    // A ship that hangs must not freeze the console: give up and count it as a miss.
++    signal: AbortSignal.timeout(4000),
+   });
+   if (!response.ok) throw new Error(`${path}: ${response.status}`);
+   return response.json();

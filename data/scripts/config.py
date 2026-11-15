@@ -66,11 +66,11 @@ def parse_ts(text):
 CREW = [
     {"crew_id": "C1", "backend_id": 1, "name": "Okafor", "role": "Commander", "suit_id": "LT-01",
      "home_habitat_id": "H1", "is_cmo": False, "source": "backend-api-contract.md"},
-    {"crew_id": "C2", "backend_id": 2, "name": "Lindqvist", "role": "Flight Engineer", "suit_id": "LT-02",
+    {"crew_id": "C2", "backend_id": 2, "name": "Linda Rodenburg", "role": "Flight Engineer", "suit_id": "LT-02",
      "home_habitat_id": "H1", "is_cmo": True, "source": "draft"},
     {"crew_id": "C3", "backend_id": 3, "name": "Sato", "role": "Flight Engineer", "suit_id": "LT-03",
      "home_habitat_id": "H2", "is_cmo": False, "source": "draft"},
-    {"crew_id": "C4", "backend_id": 4, "name": "Mensah", "role": "Mission Specialist", "suit_id": "LT-04",
+    {"crew_id": "C4", "backend_id": 4, "name": "Rebecca Qi", "role": "Mission Specialist", "suit_id": "LT-04",
      "home_habitat_id": "H2", "is_cmo": False, "source": "draft"},
 ]
 CREW_IDS = [c["crew_id"] for c in CREW]

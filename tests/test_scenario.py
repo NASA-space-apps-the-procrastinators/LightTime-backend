@@ -43,3 +43,26 @@ def test_treatment_ends_the_collapse():
 
 def test_start_rejects_an_unknown_story(client):
     assert client.post("/api/base/scenario/start", json={"name": "nope"}).status_code == 400
+
+
+def test_a_new_story_closes_the_alert_the_last_one_left_open(client, app):
+    low = {"crew_id": 1, "spo2": 86, "heart_rate": 88, "source": "scenario"}
+    for _ in range(rules.LIMITS["sustain_n"]):
+        client.post("/api/base/readings", json=low)
+    left = client.get("/api/base/alerts?open=1").get_json()
+    assert [a["vital"] for a in left] == ["spo2"]
+    with app.app_context():
+        assert scenario.close_last_run() == 1
+    closed = client.get(f"/api/base/alerts/{left[0]['id']}").get_json()
+    assert closed["cleared_by"] == "auto: a new story started" and closed["stage"] == "resolved"
+    again = []
+    for _ in range(rules.LIMITS["sustain_n"]):
+        again += client.post("/api/base/readings", json=low).get_json()["alerts"]
+    assert len(again) == 1 and again[0]["id"] != left[0]["id"]
+
+
+def test_the_story_with_no_name_is_the_one_with_the_early_warning(client, monkeypatch):
+    started = []
+    monkeypatch.setattr(scenario, "start", lambda app, name, real: started.append(name))
+    assert client.post("/api/base/scenario/start", json={}).get_json()["name"] == "full"
+    assert started == ["full"]

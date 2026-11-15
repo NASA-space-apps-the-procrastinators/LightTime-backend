@@ -4,7 +4,7 @@ STOP = {"stop", "label", "link_up", "delay_s", "mode", "who_decides", "light_tim
 READING = {"id", "crew_id", "at", "source", "signal_ok", "context", "heart_rate", "spo2", "skin_temp",
            "bp_sys", "bp_dia", "glucose", "sleep_hours", "mood"}
 TIMELINE = {"raised_at", "acknowledged_at", "sent_at", "earth_eta_s", "earth_at", "earliest_reply_at",
-            "reply_at", "resolved_at"}
+            "earth_after_s", "earliest_reply_after_s", "reply_at", "resolved_at"}
 ALERT = {"id", "crew_id", "crew", "at", "level", "vital", "value", "unit", "reason", "source", "auto",
          "nasa_risk", "steps", "steps_done", "acknowledged_by", "cleared_at", "cleared_by", "cleared_note",
          "why", "timeline", "lookahead", "speak", "state", "stage", "metric", "rule", "symptoms", "next_step",
