@@ -226,5 +226,5 @@ def test_a_typed_message_joins_its_alerts_thread(morning):
     assert [(m["from"], m["text"], m["kind"]) for m in thread] == [("crew", "Headache is worse.", "message")]
     old = morning.get("/api/base/alerts/A7/thread").get_json()["messages"]
     assert [(m["from"], m["author"], m["kind"]) for m in old] == [            # the blackout alert's history
-        ("crew", "Ship (auto SOS)", "report"), ("crew", "Lindqvist", "message"), ("crew", "Lindqvist", "update"),
+        ("crew", "Ship (auto SOS)", "report"), ("crew", "Linda Rodenburg", "message"), ("crew", "Linda Rodenburg", "update"),
         ("ground", "Dr. Adeyemi", "reply")]
