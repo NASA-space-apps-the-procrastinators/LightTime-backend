@@ -118,6 +118,9 @@ def send_report(alert, look=None):
     state = current_state()
     crew = db.session.get(Crew, alert.crew_id)
     payload = reports.build(alert, crew, state, look, usual.usual_range(crew.id))
+    if alert.metric:                       # a console rule raised it: Earth gets seven days and the check-in
+        from base_station import console   # imported here because console imports this module
+        payload.update(bundle=console.bundle(crew), text=console.BUNDLE_TEXT, asked_ahead=[])
     message = link.send("to_earth", "report", payload, state["delay_s"], state["link_up"], priority=0)
     alert.report_id = message.id
     db.session.commit()

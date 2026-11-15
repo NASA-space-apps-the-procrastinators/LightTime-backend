@@ -8,9 +8,10 @@ from flask import jsonify, request
 
 from base_station import scoring, usual
 from base_station.morning import when
-from base_station.routes import _latest, _level, alert_code, body, bp, crew_or_404
-from common import dataset
-from common.models import Alert, Checkin, Crew, db, iso, utcnow
+from base_station.routes import (_latest, _level, alert_code, alert_dict, alert_or_404, body, bp, crew_or_404,
+                                 person, stage, tell_earth, timeline)
+from common import dataset, link
+from common.models import Alert, Checkin, Crew, LinkMessage, Reminder, db, iso, utcnow
 
 COLUMN = {"hr_rest": "hr_rest_bpm", "bp_sys": "bp_sys_mmhg", "bp_dia": "bp_dia_mmhg", "spo2": "spo2_pct",
           "temp_c": "core_temp_c", "resp": "resp_rpm", "sleep_h": "sleep_h", "mood": "mood", "pvt_ms": "pvt_ms",
@@ -273,3 +274,98 @@ def post_checkin(ref):
     return jsonify(crew_id=crew.code, completed_at=iso(row.completed_at), first_today=first, streak=streak(day),
                    metric_states={metric: states[metric] for metric in ("sleep_h", "mood", "pvt_ms")},
                    open_alert_id=alert_code(open_alert) if open_alert else None), 201
+
+
+BUNDLE = ("hr_rest", "bp_sys", "bp_dia", "temp_c", "sleep_h")
+BUNDLE_TEXT = "Alert bundle: 7 days of heart rate, blood pressure, temperature and sleep, plus today's check-in."
+
+
+def bundle(crew):
+    """What goes to the flight surgeon with a console alert."""
+    day = today()
+    values, symptoms, checkin_day, _ = day_of(crew, day)
+    return {"days": {metric: history(crew, metric, 7)["days"] for metric in BUNDLE},
+            "today": {**values, "symptoms": symptoms, "checkin_from": checkin_day}}
+
+
+def _line(message):
+    """One line of text for a message that carries none of its own."""
+    payload = message.payload
+    if payload.get("text"):
+        return payload["text"]
+    if message.kind == "report":
+        return f"{payload.get('crew', 'Crew')}: {payload.get('reason', 'alert')}. Handoff report attached."
+    event = payload.get("event")
+    if event == "acknowledged":
+        return f"Acknowledged by {payload.get('by', 'crew')}."
+    if event == "step":
+        return f"Step done: {payload.get('step')}."
+    if event == "escalated":
+        return f"Now {payload.get('level')}: {payload.get('reason')}."
+    if event == "resolved":
+        return f"Resolved by {payload.get('by', 'crew')}." + (f" {payload['note']}" if payload.get("note") else "")
+    return message.kind
+
+
+def thread_message(message, alert, now):
+    sent, ours = link.to_dict(message, now), message.direction == "to_earth"
+    payload = message.payload
+    return {"id": f"M{message.id}", "alert_id": alert_code(alert), "from": "crew" if ours else "ground",
+            "author": payload.get("from") or payload.get("crew") or payload.get("by")
+                      or ("Ship" if ours else "Flight surgeon"),
+            "text": _line(message), "kind": message.kind, "sent_at": sent["sent_at"],
+            "arrived_at": sent["deliver_at"] if sent["status"] == "delivered" else None, "status": sent["status"]}
+
+
+@bp.get("/alerts/<alert_id>/thread")
+def alert_thread(alert_id):
+    """Everything the ship sent about one alert, and everything from Earth that has arrived. Oldest first."""
+    alert, now = alert_or_404(alert_id), utcnow()
+    rows = [m for m in LinkMessage.query.order_by(LinkMessage.created_at, LinkMessage.id)
+            if m.payload.get("alert_id") == alert.id
+            and (m.direction == "to_earth" or (m.deliver_at is not None and m.deliver_at <= now))]
+    return jsonify(alert_id=alert_code(alert), messages=[thread_message(m, alert, now) for m in rows])
+
+
+def reminder_dict(reminder):
+    return {"id": f"R{reminder.id}", "crew_id": db.session.get(Crew, reminder.crew_id).code,
+            "text": reminder.text, "due_at": iso(reminder.due_at), "done_at": iso(reminder.done_at)}
+
+
+@bp.post("/alerts/<alert_id>/accept-plan")
+def accept_plan(alert_id):
+    """The crew accepts the flight surgeon's reply. For the demo the plan is always the same four checks."""
+    alert = alert_or_404(alert_id)
+    if stage(alert, timeline(alert)) != "replied":
+        return jsonify(alert=alert_dict(alert), reminders=[])      # a double click changes nothing
+    now = utcnow()
+    alert.cleared_at, alert.cleared_by = now, person(body().get("by"))
+    alert.cleared_note = "Accepted the flight surgeon's plan"
+    made = [Reminder(crew_id=alert.crew_id, alert_id=alert.id, text="Take temperature",
+                     due_at=now + timedelta(hours=4 * n)) for n in (1, 2, 3, 4)]
+    db.session.add_all(made)
+    db.session.commit()
+    tell_earth(alert, {"event": "resolved", "by": alert.cleared_by, "note": alert.cleared_note})
+    return jsonify(alert=alert_dict(alert), reminders=[reminder_dict(r) for r in made])
+
+
+@bp.get("/reminders")
+def reminders():
+    query = Reminder.query
+    if request.args.get("crew"):
+        query = query.filter_by(crew_id=crew_or_404(request.args["crew"]).id)
+    if request.args.get("open") == "1":
+        query = query.filter(Reminder.done_at.is_(None))
+    return jsonify([reminder_dict(r) for r in query.order_by(Reminder.due_at, Reminder.id)])
+
+
+@bp.post("/reminders/<ref>/done")
+def reminder_done(ref):
+    number = str(ref)[1:] if str(ref)[:1] == "R" else str(ref)
+    reminder = db.session.get(Reminder, int(number)) if number.isdigit() else None
+    if reminder is None:
+        return jsonify(error="not found"), 404
+    if reminder.done_at is None:
+        reminder.done_at = utcnow()
+        db.session.commit()
+    return jsonify(reminder_dict(reminder))

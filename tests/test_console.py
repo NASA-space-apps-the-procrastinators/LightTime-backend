@@ -1,3 +1,7 @@
+from datetime import timedelta
+
+from common import models
+
 LOW = {"crew_id": 1, "spo2": 86}
 
 
@@ -139,3 +143,69 @@ def test_a_bad_check_in_names_the_field(morning):
         assert bad.status_code == 400 and bad.get_json()["field"] == field, field
     assert morning.post("/api/base/crew/C9/checkins", json=GOOD).status_code == 404
     assert morning.get("/api/base/checkins/today").get_json()["due"] == ["C1"]
+
+
+def later(seconds):
+    """Let mission time pass: long enough for a message to cross at 60 times speed."""
+    models.set_clock(models.utcnow() + timedelta(seconds=seconds))
+
+
+def reply_and_accept(morning):
+    morning.post("/api/base/alerts/A1/ack", json={"by": "Okafor"})
+    morning.post("/api/base/alerts/A1/send")
+    later(30)
+    report = morning.get("/api/earth/inbox").get_json()["messages"][0]
+    morning.post("/api/earth/reply",
+                 json={"message_id": report["id"], "text": "Temperature every 4 hours.", "from": "Dr. Adeyemi"})
+    later(30)
+    return morning.post("/api/base/alerts/A1/accept-plan", json={"by": "Okafor"}).get_json()
+
+
+def test_sending_an_alert_puts_the_week_in_the_report_and_one_message_in_the_thread(morning):
+    morning.post("/api/base/alerts/A1/ack", json={"by": "Okafor", "symptoms": ["headache"]})
+    assert morning.post("/api/base/alerts/A1/send").get_json()["stage"] == "sent"
+    report = morning.get("/api/base/outbox").get_json()[0]
+    assert report["kind"] == "report" and report["payload"]["text"].startswith("Alert bundle")
+    week = report["payload"]["bundle"]["days"]
+    assert set(week) == {"hr_rest", "bp_sys", "bp_dia", "temp_c", "sleep_h"}
+    assert [day["value"] for day in week["hr_rest"]][-3:] == [80, 82, 84]
+    thread = morning.get("/api/base/alerts/A1/thread").get_json()
+    assert thread["alert_id"] == "A1"
+    assert [(m["from"], m["author"], m["status"]) for m in thread["messages"]] == [("crew", "Okafor", "in_flight")]
+
+
+def test_a_reply_takes_the_light_time_and_only_then_can_the_plan_be_accepted(morning):
+    morning.post("/api/base/alerts/A1/ack", json={"by": "Okafor"})
+    morning.post("/api/base/alerts/A1/send")
+    early = morning.post("/api/base/alerts/A1/accept-plan", json={"by": "Okafor"}).get_json()
+    assert early["alert"]["stage"] == "sent" and early["reminders"] == []           # nothing to accept yet
+    later(30)
+    report = morning.get("/api/earth/inbox").get_json()["messages"][0]
+    morning.post("/api/earth/reply",
+                 json={"message_id": report["id"], "text": "Temperature every 4 hours.", "from": "Dr. Adeyemi"})
+    assert morning.get("/api/base/alerts/A1").get_json()["stage"] == "sent"           # the reply is still on its way
+    later(30)
+    assert morning.get("/api/base/alerts/A1").get_json()["stage"] == "replied"
+    thread = morning.get("/api/base/alerts/A1/thread").get_json()["messages"]
+    assert [(m["from"], m["author"]) for m in thread] == [("crew", "Okafor"), ("ground", "Dr. Adeyemi")]
+
+
+def test_accepting_the_plan_resolves_the_alert_and_sets_four_reminders(morning):
+    done = reply_and_accept(morning)
+    assert done["alert"]["stage"] == "resolved"
+    assert [r["text"] for r in done["reminders"]] == ["Take temperature"] * 4
+    waiting = morning.get("/api/base/reminders?crew=C1&open=1").get_json()
+    assert len(waiting) == 4 and waiting[0]["due_at"] < waiting[1]["due_at"] and waiting[0]["crew_id"] == "C1"
+    ticked = morning.post(f"/api/base/reminders/{waiting[0]['id']}/done").get_json()
+    assert ticked["done_at"] is not None
+    assert len(morning.get("/api/base/reminders?open=1").get_json()) == 3
+    assert morning.post("/api/base/reminders/R999/done").status_code == 404
+    assert morning.get("/api/base/alerts?open=1").get_json() == []
+
+
+def test_a_typed_message_joins_its_alerts_thread(morning):
+    morning.post("/api/base/messages", json={"text": "Headache is worse.", "from": "Okafor", "alert_id": "A1"})
+    thread = morning.get("/api/base/alerts/A1/thread").get_json()["messages"]
+    assert [(m["from"], m["text"], m["kind"]) for m in thread] == [("crew", "Headache is worse.", "message")]
+    old = morning.get("/api/base/alerts/A7/thread").get_json()["messages"]
+    assert old[0]["kind"] == "report" and old[-1]["from"] == "ground"       # the blackout alert's history
