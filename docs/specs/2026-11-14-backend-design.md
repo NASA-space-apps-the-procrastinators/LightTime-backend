@@ -142,7 +142,11 @@ All JSON. The screens poll once a second.
 | `GET /api/base/sources` | base | every outside source the app uses: id, agency, name, kind (live, file, hand), url, used_for, as_of |
 | `POST /api/base/reset` | base | clears readings, alerts, messages, check-ins and reminders for a fresh run. Changed: in morning mode (`LIGHTTIME_MORNING=1`) it loads the demo morning again, 14 November 2026 at 06:30 UTC with `A1` raised |
 | `GET /api/earth/inbox` | earth | link_up, mode, and everything that has arrived |
-| `POST /api/earth/reply` `{message_id, text, from}` | earth | sends advice back, with the same delay |
+| `POST /api/earth/reply` `{message_id or alert_id, text, from}` | earth | sends advice back, with the same delay. `alert_id` replies to that case's report. 400 `{error, field}` for bad input, 404 for a message or case Earth has not received |
+| `GET /api/earth/state` | earth | link_up, delay_s, mode, who_decides, light_time_source, speedup, last_contact_at, last_contact_age_s, arrived, ground_outbox counts (added 14 Nov by Ore) |
+| `GET /api/earth/cases` | earth | one case per alert whose report has reached Earth, open and most serious first (added 14 Nov by Ore) |
+| `GET /api/earth/cases/<alert_id>` | earth | one case, plus the report's SBAR, steps and recent readings; 404 if Earth has not received it (added 14 Nov by Ore) |
+| `GET /api/earth/cases/<alert_id>/thread` | earth | every message about the case Earth can see, oldest first, in the contract's ThreadMessage shape (added 14 Nov by Ore). Ids on `/state`, `/cases` and the thread are the ship's string ids (`alert_id` `"A1"`, `crew_id` `"C1"`, message `id` and `in_reply_to` `"M5"`); `<alert_id>` and the reply's `alert_id` or `message_id` take `A1` or `1` |
 | `GET /api/earth/network` | earth | two NASA figures for the Mars delay side by side: `passes` (dish, craft, round_trip_s from DSN Now), `source`, `url`, `dsn_one_way_s` (median round trip / 2, or null when no antenna is on Mars), `horizons_one_way_s` (for today's real date, the moment DSN Now measures; the dial's `delay_s` is for the mission date, so on the demo morning the two differ by a few seconds), `differ_s` |
 | `GET /api/earth/outbox` | earth | everything Earth has sent, newest first, with status and eta_s, so Earth can watch its reply in flight |
 
