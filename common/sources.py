@@ -7,7 +7,7 @@ SOURCES = [
      "used_for": "Mars light time. It sets the delay on every message and who decides."},
     {"id": "dsn", "agency": "NASA", "name": "Deep Space Network Now", "kind": "live",
      "url": "https://eyes.nasa.gov/dsn/data/dsn.xml",
-     "used_for": "Round-trip light time NASA measures to its Mars spacecraft. A second check on the delay."},
+     "used_for": "Round-trip light time NASA's network reports for its Mars spacecraft. A second check on the delay."},
     {"id": "eda", "agency": "NASA", "name": "Open Science Data Repository, environmental data, mission RR-1 on the ISS",
      "kind": "file", "url": "https://visualization.osdr.nasa.gov/eda/",
      "used_for": "Cabin temperature, humidity, carbon dioxide and radiation dose."},
