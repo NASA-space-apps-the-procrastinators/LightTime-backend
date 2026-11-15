@@ -162,7 +162,7 @@ def reply_and_accept(morning):
     later(30)
     report = morning.get("/api/earth/inbox").get_json()["messages"][0]
     morning.post("/api/earth/reply",
-                 json={"message_id": report["id"], "text": "Temperature every 4 hours.", "from": "Dr. Youssef"})
+                 json={"message_id": report["id"], "text": "Temperature every 4 hours.", "from": "Dr. Damola"})
     later(30)
     return morning.post("/api/base/alerts/A1/accept-plan", json={"by": "TJ"}).get_json()
 
@@ -190,14 +190,14 @@ def test_a_reply_takes_the_light_time_and_only_then_can_the_plan_be_accepted(mor
     later(30)
     report = morning.get("/api/earth/inbox").get_json()["messages"][0]
     morning.post("/api/earth/reply",
-                 json={"message_id": report["id"], "text": "Temperature every 4 hours.", "from": "Dr. Youssef"})
+                 json={"message_id": report["id"], "text": "Temperature every 4 hours.", "from": "Dr. Damola"})
     assert morning.get("/api/base/alerts/A1").get_json()["stage"] == "sent"           # the reply is still on its way
     early_thread = morning.get("/api/base/alerts/A1/thread").get_json()["messages"]
     assert [(m["from"], m["author"]) for m in early_thread] == [("crew", "TJ")]
     later(30)
     assert morning.get("/api/base/alerts/A1").get_json()["stage"] == "replied"
     thread = morning.get("/api/base/alerts/A1/thread").get_json()["messages"]
-    assert [(m["from"], m["author"]) for m in thread] == [("crew", "TJ"), ("ground", "Dr. Youssef")]
+    assert [(m["from"], m["author"]) for m in thread] == [("crew", "TJ"), ("ground", "Dr. Damola")]
 
 
 def test_accepting_the_plan_resolves_the_alert_and_sets_four_reminders(morning):
@@ -227,4 +227,4 @@ def test_a_typed_message_joins_its_alerts_thread(morning):
     old = morning.get("/api/base/alerts/A7/thread").get_json()["messages"]
     assert [(m["from"], m["author"], m["kind"]) for m in old] == [            # the blackout alert's history
         ("crew", "Ship (auto SOS)", "report"), ("crew", "Rebecca", "message"), ("crew", "Rebecca", "update"),
-        ("ground", "Dr. Youssef", "reply")]
+        ("ground", "Dr. Damola", "reply")]

@@ -253,7 +253,8 @@ HZ_WINDOWS = [
 
 SYMPTOMS = ["headache", "short sleep", "congestion", "nausea", "blurred vision", "back pain"]
 
-FLIGHT_SURGEON = "Dr. Youssef"
+FLIGHT_SURGEONS = ["Dr. Damola", "Dr. Youssef"]  # in answer order: Dr. Damola replies first, Dr. Youssef is backup
+FLIGHT_SURGEON = FLIGHT_SURGEONS[0]
 
 
 def near_spike(t, minutes=2):

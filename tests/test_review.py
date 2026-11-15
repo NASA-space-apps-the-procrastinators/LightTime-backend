@@ -105,7 +105,7 @@ def test_reset_clears_check_ins_and_reminders_without_the_morning(client):
     client.post("/api/base/sos", json={"crew_id": "C1"})
     later(2)
     report = client.get("/api/earth/inbox").get_json()["messages"][0]
-    client.post("/api/earth/reply", json={"message_id": report["id"], "text": "Rest.", "from": "Dr. Youssef"})
+    client.post("/api/earth/reply", json={"message_id": report["id"], "text": "Rest.", "from": "Dr. Damola"})
     later(2)
     assert len(client.post("/api/base/alerts/A1/accept-plan", json={"by": "TJ"}).get_json()["reminders"]) == 4
     client.post("/api/base/reset")

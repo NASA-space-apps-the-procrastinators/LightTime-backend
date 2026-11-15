@@ -11,6 +11,7 @@ from common.models import LinkMessage, MissionState, db
 bp = Blueprint("earth", __name__)
 
 MAX_TEXT = 2000
+FLIGHT_SURGEON = "Dr. Damola"  # same name as data/scripts/config.py FLIGHT_SURGEON: he answers first
 
 
 def current_state():
@@ -134,7 +135,7 @@ def reply():
         return bad("text is required", "text")
     if len(text) > MAX_TEXT:
         return bad(f"text is longer than {MAX_TEXT} characters", "text")
-    author = data.get("from", "Flight surgeon")
+    author = data.get("from", FLIGHT_SURGEON)
     if not isinstance(author, str) or not author.strip():
         return bad("from must be a name", "from")
     now = link.utcnow()
