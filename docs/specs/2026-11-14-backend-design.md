@@ -123,11 +123,18 @@ All JSON. The screens poll once a second.
 | `POST /api/base/scenario/start` `{name}` and `/scenario/stop` | base | starts or stops the scripted story ("stage" or "full") |
 | `POST /api/base/reset` | base | clears readings, alerts and messages for a fresh run |
 | `GET /api/earth/inbox` | earth | link_up, mode, and everything that has arrived |
-| `POST /api/earth/reply` `{message_id, text, from}` | earth | sends advice back, with the same delay |
+| `POST /api/earth/reply` `{message_id or alert_id, text, from}` | earth | sends advice back, with the same delay. `alert_id` replies to that case's report. 400 `{error, field}` for bad input, 404 for a message or case Earth has not received |
+| `GET /api/earth/state` | earth | link_up, delay_s, mode, who_decides, light_time_source, speedup, last_contact_at, last_contact_age_s, arrived, ground_outbox counts (added 14 Nov by Ore) |
+| `GET /api/earth/cases` | earth | one case per alert whose report has reached Earth, open and most serious first (added 14 Nov by Ore) |
+| `GET /api/earth/cases/<alert_id>` | earth | one case, plus the report's SBAR, steps and recent readings; 404 if Earth has not received it (added 14 Nov by Ore) |
+| `GET /api/earth/cases/<alert_id>/thread` | earth | every message about the case Earth can see, oldest first, in the contract's ThreadMessage shape (added 14 Nov by Ore) |
+| `GET /api/earth/outbox` | earth | everything the ground has sent, with status and eta_s (added 14 Nov by Ore) |
 
 An alert carries: `id`, `crew_id`, `crew`, `at`, `level`, `vital`, `value`, `unit`, `reason`, `source`, `auto`, `nasa_risk`, `steps`, `steps_done`, `acknowledged_by`, `cleared_at`, `cleared_by`, `speak` (only for an emergency) and `timeline`.
 
 The `timeline` holds `raised_at`, `acknowledged_at`, `sent_at`, `earth_eta_s`, `earth_at`, `reply_at` and `resolved_at`. A time is null until that step has happened. `earth_eta_s` counts down in mission time to the moment Earth hears.
+
+A case (Earth console) carries: `alert_id`, `crew_id`, `crew`, `vital`, `level`, `state` (Decision 2 map: OK, WATCH, ALERT, SOS), `value`, `reason`, `nasa_risk`, `mode_at_send`, `who_decides_at_send`, `raised_at` (the payload's `raised_at` if present, else the report's `created_at`), `status` (reported, acknowledged, in_progress, resolved, as of the updates that have arrived), `acknowledged_by/at`, `resolved_by/at`, `steps_done`, `timeline` (`reported_at`, `sent_at`, `arrived_at`), `last_heard_at`, `replies`, `awaiting_reply`, `reply_status` and `data_age` (`report_age_s`, `queued_s`, `transit_s`, `newest_reading_at`, `newest_reading_age_s`, `last_heard_age_s`). Ages are mission time: the trip counts at its real light time, not the 60x stage time. Ids on the new Earth routes are strings; `/inbox` and `/reply` keep their integer ids. Everything is built from `link_message` in `command_center/cases.py`.
 
 The three times on a sent message are `sent_at`, `arrives_after_s` (the one-way delay) and `earliest_reply_after_s` (twice the delay). Every update, message and reply carries `payload.alert_id`, so the thread for one alert is the outbox and inbox filtered by that id.
 
