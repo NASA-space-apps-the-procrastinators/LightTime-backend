@@ -74,3 +74,12 @@ def test_heart_rate_alone_never_raises_an_alert(app):
     with app.app_context():
         assert feed(1, 4 * N, heart_rate=140, spo2=98) == []
         assert rules.band("heart_rate", 140) == 3
+
+
+def test_an_estimated_blood_pressure_from_the_suit_never_alarms(client):
+    for _ in range(6):
+        raised = client.post("/api/base/readings", json={"crew_id": 1, "bp_sys": 95}).get_json()["alerts"]
+    assert raised == [] and client.get("/api/base/alerts").get_json() == []
+    typed = client.post("/api/base/readings",
+                        json={"crew_id": 1, "source": "typed", "bp_sys": 88}).get_json()["alerts"]
+    assert [alert["level"] for alert in typed] == ["warning"]         # a cuff reading typed by the crew still counts

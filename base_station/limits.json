@@ -92,7 +92,9 @@
           null,
           3
         ]
-      ]
+      ],
+      "typed_only": true,
+      "why_typed_only": "The shirt estimates systolic pressure once a minute. Judged with these hospital bands on 30 healthy days for four crew, it sat in the caution band or worse on 77,647 of 168,600 minutes, mostly asleep (data/processed/clean/vitals_1min.csv; docs/reviews/2026-11-14-dataset-review.md, F2). A cuff reading typed by the crew is still judged."
     }
   }
 }
