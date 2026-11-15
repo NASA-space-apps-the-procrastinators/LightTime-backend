@@ -1,0 +1,1031 @@
+alert_id,crew_id,vital,first_ts,first_level,max_level,label,cleared_ts,false_alarm_class,sample_id,reason
+1,C1,bp_sys,2026-10-16T00:04:00Z,caution,warning,sleep,2026-10-16T06:08:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261016T0004Z,"Systolic blood pressure 100.2 mmHg, out of range for 5 s"
+2,C4,heart_rate,2026-10-16T00:04:00Z,caution,caution,sleep,2026-10-16T06:08:00Z,NC02 sleeping HR/BP (normal night dip),C4-M-20261016T0004Z,"Heart rate 44.6 bpm, out of range for 5 s"
+3,C2,bp_sys,2026-10-16T00:04:59Z,caution,warning,sleep,2026-10-16T06:10:59Z,NC02 sleeping HR/BP (normal night dip),C2-M-20261016T0005Z,"Systolic blood pressure 102.8 mmHg, out of range for 5 s"
+4,C3,bp_sys,2026-10-16T00:05:00Z,caution,warning,sleep,2026-10-16T07:40:00Z,NC02 sleeping HR/BP (normal night dip),C3-M-20261016T0005Z,"Systolic blood pressure 99.2 mmHg, out of range for 5 s"
+5,C4,bp_sys,2026-10-16T00:06:00Z,caution,caution,sleep,2026-10-16T06:01:00Z,NC02 sleeping HR/BP (normal night dip),C4-M-20261016T0006Z,"Systolic blood pressure 105.8 mmHg, out of range for 5 s"
+6,C1,heart_rate,2026-10-16T03:35:00Z,caution,caution,sleep,2026-10-16T04:04:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261016T0335Z,"Heart rate 48.1 bpm, out of range for 5 s"
+7,C4,heart_rate,2026-10-16T07:52:00Z,caution,emergency,exercise_cevis,2026-10-16T09:12:00Z,NC01 exercise HR/BP,C4-M-20261016T0752Z,"Heart rate 125.2 bpm, out of range for 5 s"
+8,C1,heart_rate,2026-10-16T08:10:00Z,caution,warning,exercise_ared,2026-10-16T09:16:00Z,NC01 exercise HR/BP,C1-M-20261016T0810Z,"Heart rate 115 bpm, out of range for 5 s"
+9,C4,signal,2026-10-16T08:19:00Z,advisory,advisory,exercise_cevis,2026-10-16T08:20:00Z,sensor check (signal) outside a fault,C4-M-20261016T0819Z,Check your sensor: no clean signal
+10,C1,signal,2026-10-16T08:22:00Z,advisory,advisory,exercise_ared,2026-10-16T08:23:00Z,sensor check (signal) outside a fault,C1-M-20261016T0822Z,Check your sensor: no clean signal
+11,C4,signal,2026-10-16T08:24:00Z,advisory,advisory,exercise_cevis,2026-10-16T08:25:00Z,sensor check (signal) outside a fault,C4-M-20261016T0824Z,Check your sensor: no clean signal
+12,C3,bp_sys,2026-10-16T08:27:00Z,caution,caution,work,2026-10-16T08:45:00Z,"inside the personal band, outside NEWS2",C3-M-20261016T0827Z,"Systolic blood pressure 108.6 mmHg, out of range for 5 s"
+13,C4,signal,2026-10-16T08:54:00Z,advisory,advisory,exercise_cevis,2026-10-16T08:55:00Z,sensor check (signal) outside a fault,C4-M-20261016T0854Z,Check your sensor: no clean signal
+14,C2,heart_rate,2026-10-16T09:41:59Z,caution,warning,exercise_ared,2026-10-16T10:55:59Z,NC01 exercise HR/BP,C2-M-20261016T0942Z,"Heart rate 116.4 bpm, out of range for 5 s"
+15,C2,signal,2026-10-16T10:08:59Z,advisory,advisory,exercise_ared,2026-10-16T10:09:59Z,sensor check (signal) outside a fault,C2-M-20261016T1009Z,Check your sensor: no clean signal
+16,C3,heart_rate,2026-10-16T10:29:00Z,caution,emergency,exercise_cevis,2026-10-16T11:51:00Z,NC01 exercise HR/BP,C3-M-20261016T1029Z,"Heart rate 138.7 bpm, out of range for 5 s"
+17,C3,signal,2026-10-16T10:52:00Z,advisory,advisory,exercise_cevis,2026-10-16T10:53:00Z,sensor check (signal) outside a fault,C3-M-20261016T1052Z,Check your sensor: no clean signal
+18,C3,signal,2026-10-16T11:18:00Z,advisory,advisory,exercise_cevis,2026-10-16T11:19:00Z,sensor check (signal) outside a fault,C3-M-20261016T1118Z,Check your sensor: no clean signal
+19,C3,bp_sys,2026-10-16T12:47:00Z,caution,caution,meal,2026-10-16T13:57:00Z,"inside the personal band, outside NEWS2",C3-M-20261016T1247Z,"Systolic blood pressure 109.3 mmHg, out of range for 5 s"
+20,C4,heart_rate,2026-10-16T13:42:00Z,caution,warning,exercise_ared,2026-10-16T14:57:00Z,NC01 exercise HR/BP,C4-M-20261016T1342Z,"Heart rate 113.2 bpm, out of range for 5 s"
+21,C4,signal,2026-10-16T14:17:00Z,advisory,advisory,exercise_ared,2026-10-16T14:18:00Z,sensor check (signal) outside a fault,C4-M-20261016T1417Z,Check your sensor: no clean signal
+22,C1,heart_rate,2026-10-16T15:05:00Z,caution,emergency,exercise_cevis,2026-10-16T16:27:00Z,NC01 exercise HR/BP,C1-M-20261016T1505Z,"Heart rate 135.6 bpm, out of range for 5 s"
+23,C3,bp_sys,2026-10-16T15:25:00Z,caution,caution,work,2026-10-16T15:45:00Z,"inside the personal band, outside NEWS2",C3-M-20261016T1525Z,"Systolic blood pressure 109.8 mmHg, out of range for 5 s"
+24,C1,signal,2026-10-16T15:33:00Z,advisory,advisory,exercise_cevis,2026-10-16T15:34:00Z,sensor check (signal) outside a fault,C1-M-20261016T1533Z,Check your sensor: no clean signal
+25,C3,bp_sys,2026-10-16T16:13:00Z,caution,caution,work,2026-10-16T17:21:00Z,"inside the personal band, outside NEWS2",C3-M-20261016T1613Z,"Systolic blood pressure 108.9 mmHg, out of range for 5 s"
+26,C2,heart_rate,2026-10-16T16:33:59Z,caution,emergency,exercise_cevis,2026-10-16T17:53:58Z,NC01 exercise HR/BP,C2-M-20261016T1634Z,"Heart rate 135.1 bpm, out of range for 5 s"
+27,C2,signal,2026-10-16T16:41:58Z,advisory,advisory,exercise_cevis,2026-10-16T16:42:58Z,sensor check (signal) outside a fault,C2-M-20261016T1642Z,Check your sensor: no clean signal
+28,C2,signal,2026-10-16T16:43:58Z,advisory,advisory,exercise_cevis,2026-10-16T16:44:58Z,sensor check (signal) outside a fault,C2-M-20261016T1644Z,Check your sensor: no clean signal
+29,C2,signal,2026-10-16T16:50:58Z,advisory,advisory,exercise_cevis,2026-10-16T16:51:58Z,sensor check (signal) outside a fault,C2-M-20261016T1651Z,Check your sensor: no clean signal
+30,C3,signal,2026-10-16T17:14:00Z,advisory,advisory,exercise_ared,2026-10-16T17:15:00Z,sensor check (signal) outside a fault,C3-M-20261016T1714Z,Check your sensor: no clean signal
+31,C3,signal,2026-10-16T17:18:00Z,advisory,advisory,exercise_ared,2026-10-16T17:19:00Z,sensor check (signal) outside a fault,C3-M-20261016T1718Z,Check your sensor: no clean signal
+32,C2,signal,2026-10-16T17:17:58Z,advisory,advisory,exercise_cevis,2026-10-16T17:18:58Z,sensor check (signal) outside a fault,C2-M-20261016T1718Z,Check your sensor: no clean signal
+33,C3,heart_rate,2026-10-16T17:23:00Z,warning,warning,exercise_ared,2026-10-16T18:39:01Z,NC01 exercise HR/BP,C3-M-20261016T1723Z,"Heart rate 120.9 bpm, out of range for 5 s"
+34,C3,bp_sys,2026-10-16T18:37:01Z,caution,warning,work,2026-10-17T08:16:00Z,"inside the personal band, outside NEWS2",C3-M-20261016T1837Z,"Systolic blood pressure 106.9 mmHg, out of range for 5 s"
+35,C1,bp_sys,2026-10-16T18:55:00Z,caution,warning,work,2026-10-17T06:06:00Z,unexplained,C1-M-20261016T1855Z,"Systolic blood pressure 106.7 mmHg, out of range for 5 s"
+36,C4,bp_sys,2026-10-16T19:28:00Z,caution,warning,meal,2026-10-17T06:10:00Z,unexplained,C4-M-20261016T1928Z,"Systolic blood pressure 107.1 mmHg, out of range for 5 s"
+37,C4,heart_rate,2026-10-16T20:11:00Z,caution,caution,pre_sleep,2026-10-16T20:32:00Z,"inside the personal band, outside NEWS2",C4-M-20261016T2011Z,"Heart rate 49.2 bpm, out of range for 5 s"
+38,C4,heart_rate,2026-10-16T21:27:00Z,caution,caution,pre_sleep,2026-10-17T06:11:00Z,"inside the personal band, outside NEWS2",C4-M-20261016T2127Z,"Heart rate 49.3 bpm, out of range for 5 s"
+39,C2,bp_sys,2026-10-16T21:41:58Z,caution,caution,awake_in_bed,2026-10-17T06:07:59Z,NC02 sleeping HR/BP (normal night dip),C2-M-20261016T2142Z,"Systolic blood pressure 109 mmHg, out of range for 5 s"
+40,C1,heart_rate,2026-10-16T22:50:00Z,caution,caution,sleep,2026-10-16T23:23:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261016T2250Z,"Heart rate 49 bpm, out of range for 5 s"
+41,C1,heart_rate,2026-10-17T00:04:00Z,caution,caution,sleep,2026-10-17T00:15:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261017T0004Z,"Heart rate 48.3 bpm, out of range for 5 s"
+42,C1,heart_rate,2026-10-17T00:44:00Z,caution,caution,sleep,2026-10-17T02:52:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261017T0044Z,"Heart rate 48 bpm, out of range for 5 s"
+43,C1,heart_rate,2026-10-17T03:07:00Z,caution,caution,sleep,2026-10-17T04:06:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261017T0307Z,"Heart rate 46.4 bpm, out of range for 5 s"
+44,C1,bp_sys,2026-10-17T06:28:00Z,caution,caution,typed_checkin,2026-10-17T06:38:00Z,"inside the personal band, outside NEWS2",,"Systolic blood pressure 110 mmHg, out of range"
+45,C1,heart_rate,2026-10-17T07:57:00Z,caution,warning,exercise_ared,2026-10-17T09:14:00Z,NC01 exercise HR/BP,C1-M-20261017T0757Z,"Heart rate 117.1 bpm, out of range for 5 s"
+46,C2,heart_rate,2026-10-17T09:28:59Z,caution,warning,exercise_ared,2026-10-17T10:36:59Z,NC01 exercise HR/BP,C2-M-20261017T0929Z,"Heart rate 115.8 bpm, out of range for 5 s"
+47,C2,signal,2026-10-17T10:12:59Z,advisory,advisory,exercise_ared,2026-10-17T10:13:59Z,sensor check (signal) outside a fault,C2-M-20261017T1013Z,Check your sensor: no clean signal
+48,C3,heart_rate,2026-10-17T10:32:00Z,caution,emergency,exercise_cevis,2026-10-17T11:51:00Z,NC01 exercise HR/BP,C3-M-20261017T1032Z,"Heart rate 139.6 bpm, out of range for 5 s"
+49,C3,signal,2026-10-17T10:34:00Z,advisory,advisory,exercise_cevis,2026-10-17T10:35:00Z,sensor check (signal) outside a fault,C3-M-20261017T1034Z,Check your sensor: no clean signal
+50,C3,signal,2026-10-17T11:33:00Z,advisory,advisory,exercise_cevis,2026-10-17T11:35:00Z,sensor check (signal) outside a fault,C3-M-20261017T1133Z,Check your sensor: no clean signal
+51,C3,bp_sys,2026-10-17T12:35:00Z,caution,caution,meal,2026-10-17T14:00:00Z,"inside the personal band, outside NEWS2",C3-M-20261017T1235Z,"Systolic blood pressure 107.8 mmHg, out of range for 5 s"
+52,C1,bp_sys,2026-10-17T13:13:00Z,caution,caution,meal,2026-10-17T13:26:00Z,"inside the personal band, outside NEWS2",C1-M-20261017T1313Z,"Systolic blood pressure 108.7 mmHg, out of range for 5 s"
+53,C3,bp_sys,2026-10-17T14:38:00Z,caution,caution,work,2026-10-17T15:35:00Z,"inside the personal band, outside NEWS2",C3-M-20261017T1438Z,"Systolic blood pressure 108.8 mmHg, out of range for 5 s"
+54,C1,heart_rate,2026-10-17T14:52:00Z,caution,emergency,exercise_cevis,2026-10-17T16:15:00Z,NC01 exercise HR/BP,C1-M-20261017T1452Z,"Heart rate 135.9 bpm, out of range for 5 s"
+55,C1,signal,2026-10-17T15:04:00Z,advisory,advisory,exercise_cevis,2026-10-17T15:05:00Z,sensor check (signal) outside a fault,C1-M-20261017T1504Z,Check your sensor: no clean signal
+56,C3,bp_sys,2026-10-17T16:10:00Z,caution,caution,work,2026-10-17T17:21:00Z,"inside the personal band, outside NEWS2",C3-M-20261017T1610Z,"Systolic blood pressure 106.3 mmHg, out of range for 5 s"
+57,C1,bp_sys,2026-10-17T16:33:00Z,caution,caution,work,2026-10-17T16:56:00Z,"inside the personal band, outside NEWS2",C1-M-20261017T1633Z,"Systolic blood pressure 109.9 mmHg, out of range for 5 s"
+58,C2,heart_rate,2026-10-17T16:36:59Z,caution,emergency,exercise_cevis,2026-10-17T17:58:58Z,NC01 exercise HR/BP,C2-M-20261017T1637Z,"Heart rate 134.3 bpm, out of range for 5 s"
+59,C2,signal,2026-10-17T16:45:58Z,advisory,advisory,exercise_cevis,2026-10-17T16:46:58Z,sensor check (signal) outside a fault,C2-M-20261017T1646Z,Check your sensor: no clean signal
+60,C2,signal,2026-10-17T16:50:58Z,advisory,advisory,exercise_cevis,2026-10-17T16:51:58Z,sensor check (signal) outside a fault,C2-M-20261017T1651Z,Check your sensor: no clean signal
+61,C2,signal,2026-10-17T17:10:58Z,advisory,advisory,exercise_cevis,2026-10-17T17:11:58Z,sensor check (signal) outside a fault,C2-M-20261017T1711Z,Check your sensor: no clean signal
+62,C2,signal,2026-10-17T17:14:58Z,advisory,advisory,exercise_cevis,2026-10-17T17:15:58Z,sensor check (signal) outside a fault,C2-M-20261017T1715Z,Check your sensor: no clean signal
+63,C3,heart_rate,2026-10-17T17:16:00Z,caution,warning,exercise_ared,2026-10-17T18:33:01Z,NC01 exercise HR/BP,C3-M-20261017T1716Z,"Heart rate 122 bpm, out of range for 5 s"
+64,C3,signal,2026-10-17T17:17:00Z,advisory,advisory,exercise_ared,2026-10-17T17:18:00Z,sensor check (signal) outside a fault,C3-M-20261017T1717Z,Check your sensor: no clean signal
+65,C3,bp_sys,2026-10-17T18:34:01Z,caution,emergency,work,2026-10-18T07:38:00Z,"inside the personal band, outside NEWS2",C3-M-20261017T1834Z,"Systolic blood pressure 107.2 mmHg, out of range for 5 s"
+66,C1,bp_sys,2026-10-17T19:05:00Z,caution,warning,meal,2026-10-18T06:22:00Z,unexplained,C1-M-20261017T1905Z,"Systolic blood pressure 106.6 mmHg, out of range for 5 s"
+67,C4,heart_rate,2026-10-17T19:42:00Z,caution,caution,pre_sleep,2026-10-17T20:37:00Z,"inside the personal band, outside NEWS2",C4-M-20261017T1942Z,"Heart rate 48.4 bpm, out of range for 5 s"
+68,C4,bp_sys,2026-10-17T20:03:00Z,caution,caution,pre_sleep,2026-10-17T20:45:00Z,"inside the personal band, outside NEWS2",C4-M-20261017T2003Z,"Systolic blood pressure 110 mmHg, out of range for 5 s"
+69,C4,heart_rate,2026-10-17T21:09:00Z,caution,caution,pre_sleep,2026-10-18T06:15:00Z,"inside the personal band, outside NEWS2",C4-M-20261017T2109Z,"Heart rate 48.6 bpm, out of range for 5 s"
+70,C4,bp_sys,2026-10-17T21:34:00Z,caution,warning,awake_in_bed,2026-10-18T06:17:00Z,NC02 sleeping HR/BP (normal night dip),C4-M-20261017T2134Z,"Systolic blood pressure 106.9 mmHg, out of range for 5 s"
+71,C2,bp_sys,2026-10-17T22:08:58Z,caution,caution,awake_in_bed,2026-10-18T06:01:59Z,NC02 sleeping HR/BP (normal night dip),C2-M-20261017T2209Z,"Systolic blood pressure 106.8 mmHg, out of range for 5 s"
+72,C1,heart_rate,2026-10-18T00:40:00Z,caution,caution,sleep,2026-10-18T02:29:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261018T0040Z,"Heart rate 48.1 bpm, out of range for 5 s"
+73,C1,heart_rate,2026-10-18T04:12:00Z,caution,caution,sleep,2026-10-18T04:54:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261018T0412Z,"Heart rate 49.2 bpm, out of range for 5 s"
+74,C1,heart_rate,2026-10-18T05:44:00Z,caution,caution,sleep,2026-10-18T06:12:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261018T0544Z,"Heart rate 49.7 bpm, out of range for 5 s"
+75,C4,heart_rate,2026-10-18T07:42:00Z,caution,emergency,exercise_cevis,2026-10-18T08:56:00Z,NC01 exercise HR/BP,C4-M-20261018T0742Z,"Heart rate 135 bpm, out of range for 5 s"
+76,C1,heart_rate,2026-10-18T07:56:00Z,caution,warning,exercise_ared,2026-10-18T09:16:00Z,NC01 exercise HR/BP,C1-M-20261018T0756Z,"Heart rate 114.5 bpm, out of range for 5 s"
+77,C1,signal,2026-10-18T08:07:00Z,advisory,advisory,exercise_ared,2026-10-18T08:08:00Z,sensor check (signal) outside a fault,C1-M-20261018T0807Z,Check your sensor: no clean signal
+78,C1,signal,2026-10-18T08:13:00Z,advisory,advisory,exercise_ared,2026-10-18T08:14:00Z,sensor check (signal) outside a fault,C1-M-20261018T0813Z,Check your sensor: no clean signal
+79,C4,signal,2026-10-18T08:29:00Z,advisory,advisory,exercise_cevis,2026-10-18T08:30:00Z,sensor check (signal) outside a fault,C4-M-20261018T0829Z,Check your sensor: no clean signal
+80,C1,signal,2026-10-18T08:36:00Z,advisory,advisory,exercise_ared,2026-10-18T08:37:00Z,sensor check (signal) outside a fault,C1-M-20261018T0836Z,Check your sensor: no clean signal
+81,C2,heart_rate,2026-10-18T09:31:59Z,caution,warning,exercise_ared,2026-10-18T10:53:59Z,NC01 exercise HR/BP,C2-M-20261018T0932Z,"Heart rate 117.1 bpm, out of range for 5 s"
+82,C3,bp_sys,2026-10-18T09:53:00Z,caution,caution,work,2026-10-18T10:32:00Z,"inside the personal band, outside NEWS2",C3-M-20261018T0953Z,"Systolic blood pressure 110 mmHg, out of range for 5 s"
+83,C2,signal,2026-10-18T10:16:59Z,advisory,advisory,exercise_ared,2026-10-18T10:17:59Z,sensor check (signal) outside a fault,C2-M-20261018T1017Z,Check your sensor: no clean signal
+84,C3,bp_sys,2026-10-18T11:43:00Z,caution,caution,work,2026-10-18T12:06:00Z,"inside the personal band, outside NEWS2",C3-M-20261018T1143Z,"Systolic blood pressure 108.9 mmHg, out of range for 5 s"
+85,C3,bp_sys,2026-10-18T12:24:00Z,caution,caution,work,2026-10-18T13:24:00Z,"inside the personal band, outside NEWS2",C3-M-20261018T1224Z,"Systolic blood pressure 107.7 mmHg, out of range for 5 s"
+86,C4,heart_rate,2026-10-18T13:34:00Z,caution,warning,exercise_ared,2026-10-18T14:52:00Z,NC01 exercise HR/BP,C4-M-20261018T1334Z,"Heart rate 116.9 bpm, out of range for 5 s"
+87,C4,signal,2026-10-18T13:40:00Z,advisory,advisory,exercise_ared,2026-10-18T13:41:00Z,sensor check (signal) outside a fault,C4-M-20261018T1340Z,Check your sensor: no clean signal
+88,C4,signal,2026-10-18T13:50:00Z,advisory,advisory,exercise_ared,2026-10-18T13:51:00Z,sensor check (signal) outside a fault,C4-M-20261018T1350Z,Check your sensor: no clean signal
+89,C4,signal,2026-10-18T14:28:00Z,advisory,advisory,exercise_ared,2026-10-18T14:29:00Z,sensor check (signal) outside a fault,C4-M-20261018T1428Z,Check your sensor: no clean signal
+90,C3,bp_sys,2026-10-18T14:49:00Z,caution,caution,work,2026-10-18T15:48:00Z,"inside the personal band, outside NEWS2",C3-M-20261018T1449Z,"Systolic blood pressure 106.2 mmHg, out of range for 5 s"
+91,C1,heart_rate,2026-10-18T15:12:00Z,caution,emergency,exercise_cevis,2026-10-18T16:23:00Z,NC01 exercise HR/BP,C1-M-20261018T1512Z,"Heart rate 137.3 bpm, out of range for 5 s"
+92,C1,signal,2026-10-18T15:33:00Z,advisory,advisory,exercise_cevis,2026-10-18T15:34:00Z,sensor check (signal) outside a fault,C1-M-20261018T1533Z,Check your sensor: no clean signal
+93,C1,signal,2026-10-18T15:53:00Z,advisory,advisory,exercise_cevis,2026-10-18T15:54:00Z,sensor check (signal) outside a fault,C1-M-20261018T1553Z,Check your sensor: no clean signal
+94,C2,heart_rate,2026-10-18T16:35:59Z,caution,emergency,exercise_cevis,2026-10-18T17:52:58Z,NC01 exercise HR/BP,C2-M-20261018T1636Z,"Heart rate 132.4 bpm, out of range for 5 s"
+95,C2,signal,2026-10-18T16:44:58Z,advisory,advisory,exercise_cevis,2026-10-18T16:45:58Z,sensor check (signal) outside a fault,C2-M-20261018T1645Z,Check your sensor: no clean signal
+96,C3,bp_sys,2026-10-18T17:41:00Z,caution,warning,work,2026-10-19T06:19:00Z,"inside the personal band, outside NEWS2",C3-M-20261018T1741Z,"Systolic blood pressure 108 mmHg, out of range for 5 s"
+97,C1,bp_sys,2026-10-18T18:38:00Z,caution,caution,work,2026-10-18T19:03:00Z,"inside the personal band, outside NEWS2",C1-M-20261018T1838Z,"Systolic blood pressure 108.1 mmHg, out of range for 5 s"
+98,C1,bp_sys,2026-10-18T19:37:00Z,caution,warning,pre_sleep,2026-10-19T06:18:00Z,unexplained,C1-M-20261018T1937Z,"Systolic blood pressure 107.8 mmHg, out of range for 5 s"
+99,C4,heart_rate,2026-10-18T19:38:00Z,caution,caution,pre_sleep,2026-10-18T20:02:00Z,"inside the personal band, outside NEWS2",C4-M-20261018T1938Z,"Heart rate 49.2 bpm, out of range for 5 s"
+100,C4,bp_sys,2026-10-18T19:47:00Z,caution,caution,pre_sleep,2026-10-18T20:31:00Z,unexplained,C4-M-20261018T1947Z,"Systolic blood pressure 109.5 mmHg, out of range for 5 s"
+101,C4,heart_rate,2026-10-18T20:38:00Z,caution,caution,pre_sleep,2026-10-18T21:27:00Z,"inside the personal band, outside NEWS2",C4-M-20261018T2038Z,"Heart rate 48.1 bpm, out of range for 5 s"
+102,C4,bp_sys,2026-10-18T20:42:00Z,caution,warning,pre_sleep,2026-10-19T06:08:00Z,unexplained,C4-M-20261018T2042Z,"Systolic blood pressure 107.1 mmHg, out of range for 5 s"
+103,C4,heart_rate,2026-10-18T21:33:00Z,caution,caution,awake_in_bed,2026-10-19T06:26:00Z,NC02 sleeping HR/BP (normal night dip),C4-M-20261018T2133Z,"Heart rate 49.5 bpm, out of range for 5 s"
+104,C2,bp_sys,2026-10-18T21:34:58Z,caution,caution,awake_in_bed,2026-10-19T06:10:59Z,NC02 sleeping HR/BP (normal night dip),C2-M-20261018T2135Z,"Systolic blood pressure 105.7 mmHg, out of range for 5 s"
+105,C1,heart_rate,2026-10-19T00:53:00Z,caution,caution,sleep,2026-10-19T01:06:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261019T0053Z,"Heart rate 49.7 bpm, out of range for 5 s"
+106,C1,heart_rate,2026-10-19T01:33:00Z,caution,caution,sleep,2026-10-19T02:18:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261019T0133Z,"Heart rate 49.6 bpm, out of range for 5 s"
+107,C1,heart_rate,2026-10-19T02:50:00Z,caution,caution,sleep,2026-10-19T03:04:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261019T0250Z,"Heart rate 49.7 bpm, out of range for 5 s"
+108,C1,heart_rate,2026-10-19T04:28:00Z,caution,caution,sleep,2026-10-19T04:42:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261019T0428Z,"Heart rate 49.2 bpm, out of range for 5 s"
+109,C1,heart_rate,2026-10-19T05:20:00Z,caution,caution,sleep,2026-10-19T05:32:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261019T0520Z,"Heart rate 49 bpm, out of range for 5 s"
+110,C1,heart_rate,2026-10-19T05:40:00Z,caution,caution,sleep,2026-10-19T05:55:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261019T0540Z,"Heart rate 47.8 bpm, out of range for 5 s"
+111,C1,bp_sys,2026-10-19T06:30:00Z,caution,caution,typed_checkin,2026-10-19T06:40:00Z,"inside the personal band, outside NEWS2",,"Systolic blood pressure 108 mmHg, out of range"
+112,C3,bp_sys,2026-10-19T06:44:00Z,caution,caution,post_sleep,2026-10-19T07:37:00Z,"inside the personal band, outside NEWS2",C3-M-20261019T0644Z,"Systolic blood pressure 109.1 mmHg, out of range for 5 s"
+113,C4,signal,2026-10-19T07:39:00Z,advisory,advisory,exercise_cevis,2026-10-19T07:40:00Z,sensor check (signal) outside a fault,C4-M-20261019T0739Z,Check your sensor: no clean signal
+114,C4,heart_rate,2026-10-19T07:44:00Z,emergency,emergency,exercise_cevis,2026-10-19T09:01:00Z,NC01 exercise HR/BP,C4-M-20261019T0744Z,"Heart rate 140.1 bpm, out of range for 5 s"
+115,C1,signal,2026-10-19T08:02:00Z,advisory,advisory,exercise_ared,2026-10-19T08:03:00Z,sensor check (signal) outside a fault,C1-M-20261019T0802Z,Check your sensor: no clean signal
+116,C1,heart_rate,2026-10-19T08:07:00Z,caution,warning,exercise_ared,2026-10-19T09:25:00Z,NC01 exercise HR/BP,C1-M-20261019T0807Z,"Heart rate 113.6 bpm, out of range for 5 s"
+117,C1,signal,2026-10-19T08:25:00Z,advisory,advisory,exercise_ared,2026-10-19T08:26:00Z,sensor check (signal) outside a fault,C1-M-20261019T0825Z,Check your sensor: no clean signal
+118,C3,heart_rate,2026-10-19T10:17:00Z,caution,emergency,exercise_cevis,2026-10-19T11:35:00Z,NC01 exercise HR/BP,C3-M-20261019T1017Z,"Heart rate 140.5 bpm, out of range for 5 s"
+119,C3,signal,2026-10-19T10:25:00Z,advisory,advisory,exercise_cevis,2026-10-19T10:26:00Z,sensor check (signal) outside a fault,C3-M-20261019T1025Z,Check your sensor: no clean signal
+120,C3,signal,2026-10-19T10:47:00Z,advisory,advisory,exercise_cevis,2026-10-19T10:48:00Z,sensor check (signal) outside a fault,C3-M-20261019T1047Z,Check your sensor: no clean signal
+121,C3,signal,2026-10-19T11:03:00Z,advisory,advisory,exercise_cevis,2026-10-19T11:04:00Z,sensor check (signal) outside a fault,C3-M-20261019T1103Z,Check your sensor: no clean signal
+122,C3,signal,2026-10-19T11:09:00Z,advisory,advisory,exercise_cevis,2026-10-19T11:10:00Z,sensor check (signal) outside a fault,C3-M-20261019T1109Z,Check your sensor: no clean signal
+123,C3,bp_sys,2026-10-19T12:17:00Z,caution,caution,work,2026-10-19T12:35:00Z,"inside the personal band, outside NEWS2",C3-M-20261019T1217Z,"Systolic blood pressure 108.5 mmHg, out of range for 5 s"
+124,C3,bp_sys,2026-10-19T12:58:00Z,caution,caution,meal,2026-10-19T13:23:00Z,"inside the personal band, outside NEWS2",C3-M-20261019T1258Z,"Systolic blood pressure 109.1 mmHg, out of range for 5 s"
+125,C4,heart_rate,2026-10-19T13:21:00Z,caution,warning,exercise_ared,2026-10-19T14:28:00Z,NC01 exercise HR/BP,C4-M-20261019T1321Z,"Heart rate 113.4 bpm, out of range for 5 s"
+126,C4,signal,2026-10-19T13:30:00Z,advisory,advisory,exercise_ared,2026-10-19T13:31:00Z,sensor check (signal) outside a fault,C4-M-20261019T1330Z,Check your sensor: no clean signal
+127,C4,signal,2026-10-19T13:38:00Z,advisory,advisory,exercise_ared,2026-10-19T13:39:00Z,sensor check (signal) outside a fault,C4-M-20261019T1338Z,Check your sensor: no clean signal
+128,C4,signal,2026-10-19T14:02:00Z,advisory,advisory,exercise_ared,2026-10-19T14:03:00Z,sensor check (signal) outside a fault,C4-M-20261019T1402Z,Check your sensor: no clean signal
+129,C4,signal,2026-10-19T14:05:00Z,advisory,advisory,exercise_ared,2026-10-19T14:06:00Z,sensor check (signal) outside a fault,C4-M-20261019T1405Z,Check your sensor: no clean signal
+130,C3,bp_sys,2026-10-19T14:12:00Z,caution,caution,work,2026-10-19T15:31:00Z,"inside the personal band, outside NEWS2",C3-M-20261019T1412Z,"Systolic blood pressure 107.3 mmHg, out of range for 5 s"
+131,C4,signal,2026-10-19T14:16:00Z,advisory,advisory,exercise_ared,2026-10-19T14:17:00Z,sensor check (signal) outside a fault,C4-M-20261019T1416Z,Check your sensor: no clean signal
+132,C1,heart_rate,2026-10-19T14:48:00Z,caution,emergency,exercise_cevis,2026-10-19T16:05:00Z,NC01 exercise HR/BP,C1-M-20261019T1448Z,"Heart rate 135.8 bpm, out of range for 5 s"
+133,C1,signal,2026-10-19T15:37:00Z,advisory,advisory,exercise_cevis,2026-10-19T15:38:00Z,sensor check (signal) outside a fault,C1-M-20261019T1537Z,Check your sensor: no clean signal
+134,C3,heart_rate,2026-10-19T17:00:00Z,caution,warning,exercise_ared,2026-10-19T18:09:00Z,NC01 exercise HR/BP,C3-M-20261019T1700Z,"Heart rate 123.4 bpm, out of range for 5 s"
+135,C3,signal,2026-10-19T17:20:00Z,advisory,advisory,exercise_ared,2026-10-19T17:21:00Z,sensor check (signal) outside a fault,C3-M-20261019T1720Z,Check your sensor: no clean signal
+136,C3,signal,2026-10-19T17:29:00Z,advisory,advisory,exercise_ared,2026-10-19T17:30:00Z,sensor check (signal) outside a fault,C3-M-20261019T1729Z,Check your sensor: no clean signal
+137,C3,signal,2026-10-19T17:35:00Z,advisory,advisory,exercise_ared,2026-10-19T17:36:00Z,sensor check (signal) outside a fault,C3-M-20261019T1735Z,Check your sensor: no clean signal
+138,C3,bp_sys,2026-10-19T18:07:00Z,caution,warning,work,2026-10-20T07:40:00Z,"inside the personal band, outside NEWS2",C3-M-20261019T1807Z,"Systolic blood pressure 108.5 mmHg, out of range for 5 s"
+139,C4,bp_sys,2026-10-19T19:03:00Z,caution,caution,meal,2026-10-19T19:42:00Z,unexplained,C4-M-20261019T1903Z,"Systolic blood pressure 109 mmHg, out of range for 5 s"
+140,C1,bp_sys,2026-10-19T19:09:00Z,caution,caution,meal,2026-10-19T19:56:00Z,unexplained,C1-M-20261019T1909Z,"Systolic blood pressure 107.9 mmHg, out of range for 5 s"
+141,C4,bp_sys,2026-10-19T20:03:00Z,caution,caution,pre_sleep,2026-10-19T20:44:00Z,unexplained,C4-M-20261019T2003Z,"Systolic blood pressure 109.5 mmHg, out of range for 5 s"
+142,C1,bp_sys,2026-10-19T20:06:00Z,caution,warning,pre_sleep,2026-10-20T06:12:00Z,"inside the personal band, outside NEWS2",C1-M-20261019T2006Z,"Systolic blood pressure 108 mmHg, out of range for 5 s"
+143,C4,heart_rate,2026-10-19T20:55:00Z,caution,caution,pre_sleep,2026-10-20T06:21:00Z,"inside the personal band, outside NEWS2",C4-M-20261019T2055Z,"Heart rate 49.2 bpm, out of range for 5 s"
+144,C2,bp_sys,2026-10-19T21:03:58Z,caution,caution,pre_sleep,2026-10-19T21:14:58Z,unexplained,C2-M-20261019T2104Z,"Systolic blood pressure 109.6 mmHg, out of range for 5 s"
+145,C4,bp_sys,2026-10-19T21:33:00Z,caution,warning,awake_in_bed,2026-10-20T06:15:00Z,NC02 sleeping HR/BP (normal night dip),C4-M-20261019T2133Z,"Systolic blood pressure 105.3 mmHg, out of range for 5 s"
+146,C2,bp_sys,2026-10-19T21:56:58Z,caution,caution,awake_in_bed,2026-10-20T06:13:59Z,NC02 sleeping HR/BP (normal night dip),C2-M-20261019T2157Z,"Systolic blood pressure 109.7 mmHg, out of range for 5 s"
+147,C1,heart_rate,2026-10-20T00:31:00Z,caution,caution,sleep,2026-10-20T00:56:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261020T0031Z,"Heart rate 48.5 bpm, out of range for 5 s"
+148,C1,heart_rate,2026-10-20T02:24:00Z,caution,caution,sleep,2026-10-20T03:07:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261020T0224Z,"Heart rate 48.8 bpm, out of range for 5 s"
+149,C1,heart_rate,2026-10-20T03:12:00Z,caution,caution,sleep,2026-10-20T04:43:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261020T0312Z,"Heart rate 48.6 bpm, out of range for 5 s"
+150,C1,heart_rate,2026-10-20T05:55:00Z,caution,caution,sleep,2026-10-20T06:12:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261020T0555Z,"Heart rate 49 bpm, out of range for 5 s"
+151,C1,bp_sys,2026-10-20T06:27:00Z,caution,caution,typed_checkin,2026-10-20T06:37:00Z,typed check-in value,,"Systolic blood pressure 106 mmHg, out of range"
+152,C4,heart_rate,2026-10-20T07:43:00Z,caution,emergency,exercise_cevis,2026-10-20T09:02:00Z,NC01 exercise HR/BP,C4-M-20261020T0743Z,"Heart rate 135.6 bpm, out of range for 5 s"
+153,C4,signal,2026-10-20T08:08:00Z,advisory,advisory,exercise_cevis,2026-10-20T08:09:00Z,sensor check (signal) outside a fault,C4-M-20261020T0808Z,Check your sensor: no clean signal
+154,C4,signal,2026-10-20T08:15:00Z,advisory,advisory,exercise_cevis,2026-10-20T08:16:00Z,sensor check (signal) outside a fault,C4-M-20261020T0815Z,Check your sensor: no clean signal
+155,C4,signal,2026-10-20T08:39:00Z,advisory,advisory,exercise_cevis,2026-10-20T08:40:00Z,sensor check (signal) outside a fault,C4-M-20261020T0839Z,Check your sensor: no clean signal
+156,C2,heart_rate,2026-10-20T09:38:59Z,caution,warning,exercise_ared,2026-10-20T10:46:59Z,NC01 exercise HR/BP,C2-M-20261020T0939Z,"Heart rate 116.1 bpm, out of range for 5 s"
+157,C3,heart_rate,2026-10-20T10:40:00Z,caution,emergency,exercise_cevis,2026-10-20T11:51:00Z,NC01 exercise HR/BP,C3-M-20261020T1040Z,"Heart rate 143.3 bpm, out of range for 5 s"
+158,C3,signal,2026-10-20T11:09:00Z,advisory,advisory,exercise_cevis,2026-10-20T11:10:00Z,sensor check (signal) outside a fault,C3-M-20261020T1109Z,Check your sensor: no clean signal
+159,C3,signal,2026-10-20T11:13:00Z,advisory,advisory,exercise_cevis,2026-10-20T11:14:00Z,sensor check (signal) outside a fault,C3-M-20261020T1113Z,Check your sensor: no clean signal
+160,C3,signal,2026-10-20T11:18:00Z,advisory,advisory,exercise_cevis,2026-10-20T11:19:00Z,sensor check (signal) outside a fault,C3-M-20261020T1118Z,Check your sensor: no clean signal
+161,C3,signal,2026-10-20T11:26:00Z,advisory,advisory,exercise_cevis,2026-10-20T11:27:00Z,sensor check (signal) outside a fault,C3-M-20261020T1126Z,Check your sensor: no clean signal
+162,C3,signal,2026-10-20T11:34:00Z,advisory,advisory,exercise_cevis,2026-10-20T11:35:00Z,sensor check (signal) outside a fault,C3-M-20261020T1134Z,Check your sensor: no clean signal
+163,C3,bp_sys,2026-10-20T12:34:00Z,caution,caution,meal,2026-10-20T14:01:00Z,"inside the personal band, outside NEWS2",C3-M-20261020T1234Z,"Systolic blood pressure 109.2 mmHg, out of range for 5 s"
+164,C4,heart_rate,2026-10-20T13:48:00Z,caution,warning,exercise_ared,2026-10-20T15:03:00Z,NC01 exercise HR/BP,C4-M-20261020T1348Z,"Heart rate 115.4 bpm, out of range for 5 s"
+165,C4,signal,2026-10-20T14:10:00Z,advisory,advisory,exercise_ared,2026-10-20T14:11:00Z,sensor check (signal) outside a fault,C4-M-20261020T1410Z,Check your sensor: no clean signal
+166,C4,signal,2026-10-20T14:17:00Z,advisory,advisory,exercise_ared,2026-10-20T14:18:00Z,sensor check (signal) outside a fault,C4-M-20261020T1417Z,Check your sensor: no clean signal
+167,C3,bp_sys,2026-10-20T14:41:00Z,caution,caution,work,2026-10-20T15:23:00Z,"inside the personal band, outside NEWS2",C3-M-20261020T1441Z,"Systolic blood pressure 109.5 mmHg, out of range for 5 s"
+168,C3,bp_sys,2026-10-20T15:38:00Z,caution,caution,work,2026-10-20T17:04:00Z,unexplained,C3-M-20261020T1538Z,"Systolic blood pressure 103.8 mmHg, out of range for 5 s"
+169,C2,heart_rate,2026-10-20T16:30:59Z,caution,emergency,exercise_cevis,2026-10-20T17:43:58Z,NC01 exercise HR/BP,C2-M-20261020T1631Z,"Heart rate 136.3 bpm, out of range for 5 s"
+170,C3,heart_rate,2026-10-20T17:00:00Z,caution,warning,exercise_ared,2026-10-20T18:14:00Z,NC01 exercise HR/BP,C3-M-20261020T1700Z,"Heart rate 121.5 bpm, out of range for 5 s"
+171,C3,bp_sys,2026-10-20T18:15:00Z,caution,emergency,work,2026-10-21T07:43:00Z,"inside the personal band, outside NEWS2",C3-M-20261020T1815Z,"Systolic blood pressure 106.9 mmHg, out of range for 5 s"
+172,C4,bp_sys,2026-10-20T19:09:00Z,caution,caution,meal,2026-10-20T19:20:00Z,unexplained,C4-M-20261020T1909Z,"Systolic blood pressure 108.6 mmHg, out of range for 5 s"
+173,C1,bp_sys,2026-10-20T19:10:00Z,caution,warning,meal,2026-10-21T06:14:00Z,unexplained,C1-M-20261020T1910Z,"Systolic blood pressure 107.4 mmHg, out of range for 5 s"
+174,C4,heart_rate,2026-10-20T20:00:00Z,caution,caution,pre_sleep,2026-10-20T20:56:00Z,"inside the personal band, outside NEWS2",C4-M-20261020T2000Z,"Heart rate 47.9 bpm, out of range for 5 s"
+175,C4,bp_sys,2026-10-20T20:13:00Z,caution,caution,pre_sleep,2026-10-20T21:02:00Z,unexplained,C4-M-20261020T2013Z,"Systolic blood pressure 107.4 mmHg, out of range for 5 s"
+176,C4,bp_sys,2026-10-20T21:24:00Z,caution,warning,pre_sleep,2026-10-21T06:08:00Z,unexplained,C4-M-20261020T2124Z,"Systolic blood pressure 109.9 mmHg, out of range for 5 s"
+177,C4,heart_rate,2026-10-20T21:28:00Z,caution,caution,pre_sleep,2026-10-21T06:25:00Z,"inside the personal band, outside NEWS2",C4-M-20261020T2128Z,"Heart rate 47.5 bpm, out of range for 5 s"
+178,C2,bp_sys,2026-10-20T21:46:58Z,caution,warning,awake_in_bed,2026-10-21T06:11:59Z,NC02 sleeping HR/BP (normal night dip),C2-M-20261020T2147Z,"Systolic blood pressure 106.7 mmHg, out of range for 5 s"
+179,C1,heart_rate,2026-10-20T23:29:00Z,caution,caution,sleep,2026-10-20T23:41:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261020T2329Z,"Heart rate 49.6 bpm, out of range for 5 s"
+180,C1,heart_rate,2026-10-21T02:50:00Z,caution,caution,sleep,2026-10-21T03:33:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261021T0250Z,"Heart rate 48.6 bpm, out of range for 5 s"
+181,C1,heart_rate,2026-10-21T03:46:00Z,caution,caution,sleep,2026-10-21T04:19:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261021T0346Z,"Heart rate 49.9 bpm, out of range for 5 s"
+182,C1,heart_rate,2026-10-21T04:24:00Z,caution,caution,sleep,2026-10-21T04:38:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261021T0424Z,"Heart rate 49.1 bpm, out of range for 5 s"
+183,C1,heart_rate,2026-10-21T05:25:00Z,caution,caution,sleep,2026-10-21T06:08:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261021T0525Z,"Heart rate 49 bpm, out of range for 5 s"
+184,C2,bp_sys,2026-10-21T06:22:00Z,caution,caution,typed_checkin,2026-10-21T06:32:59Z,typed check-in value,,"Systolic blood pressure 107 mmHg, out of range"
+185,C4,bp_sys,2026-10-21T06:38:00Z,caution,caution,typed_checkin,2026-10-21T06:48:00Z,"inside the personal band, outside NEWS2",,"Systolic blood pressure 110 mmHg, out of range"
+186,C4,heart_rate,2026-10-21T07:45:00Z,caution,emergency,exercise_cevis,2026-10-21T08:58:00Z,NC01 exercise HR/BP,C4-M-20261021T0745Z,"Heart rate 135.7 bpm, out of range for 5 s"
+187,C1,heart_rate,2026-10-21T08:04:00Z,caution,warning,exercise_ared,2026-10-21T09:25:00Z,NC01 exercise HR/BP,C1-M-20261021T0804Z,"Heart rate 113.7 bpm, out of range for 5 s"
+188,C2,heart_rate,2026-10-21T09:37:59Z,caution,warning,exercise_ared,2026-10-21T10:57:59Z,NC01 exercise HR/BP,C2-M-20261021T0938Z,"Heart rate 116.5 bpm, out of range for 5 s"
+189,C2,signal,2026-10-21T09:38:59Z,advisory,advisory,exercise_ared,2026-10-21T09:39:59Z,sensor check (signal) outside a fault,C2-M-20261021T0939Z,Check your sensor: no clean signal
+190,C2,signal,2026-10-21T10:17:59Z,advisory,advisory,exercise_ared,2026-10-21T10:18:59Z,sensor check (signal) outside a fault,C2-M-20261021T1018Z,Check your sensor: no clean signal
+191,C3,heart_rate,2026-10-21T10:30:00Z,caution,emergency,exercise_cevis,2026-10-21T11:39:00Z,NC01 exercise HR/BP,C3-M-20261021T1030Z,"Heart rate 139.5 bpm, out of range for 5 s"
+192,C2,signal,2026-10-21T10:34:59Z,advisory,advisory,exercise_ared,2026-10-21T10:35:59Z,sensor check (signal) outside a fault,C2-M-20261021T1035Z,Check your sensor: no clean signal
+193,C3,bp_sys,2026-10-21T11:38:00Z,caution,caution,work,2026-10-21T12:00:00Z,"inside the personal band, outside NEWS2",C3-M-20261021T1138Z,"Systolic blood pressure 108.1 mmHg, out of range for 5 s"
+194,C3,bp_sys,2026-10-21T12:39:00Z,caution,caution,meal,2026-10-21T13:05:00Z,"inside the personal band, outside NEWS2",C3-M-20261021T1239Z,"Systolic blood pressure 106.3 mmHg, out of range for 5 s"
+195,C4,heart_rate,2026-10-21T13:42:00Z,caution,warning,exercise_ared,2026-10-21T14:53:00Z,NC01 exercise HR/BP,C4-M-20261021T1342Z,"Heart rate 114.4 bpm, out of range for 5 s"
+196,C4,signal,2026-10-21T13:56:00Z,advisory,advisory,exercise_ared,2026-10-21T13:57:00Z,sensor check (signal) outside a fault,C4-M-20261021T1356Z,Check your sensor: no clean signal
+197,C3,bp_sys,2026-10-21T14:35:00Z,caution,caution,work,2026-10-21T15:31:00Z,"inside the personal band, outside NEWS2",C3-M-20261021T1435Z,"Systolic blood pressure 108.4 mmHg, out of range for 5 s"
+198,C4,signal,2026-10-21T14:41:00Z,advisory,advisory,exercise_ared,2026-10-21T14:42:00Z,sensor check (signal) outside a fault,C4-M-20261021T1441Z,Check your sensor: no clean signal
+199,C1,heart_rate,2026-10-21T15:18:00Z,caution,emergency,exercise_cevis,2026-10-21T16:30:00Z,NC01 exercise HR/BP,C1-M-20261021T1518Z,"Heart rate 136.4 bpm, out of range for 5 s"
+200,C1,signal,2026-10-21T15:21:00Z,advisory,advisory,exercise_cevis,2026-10-21T15:22:00Z,sensor check (signal) outside a fault,C1-M-20261021T1521Z,Check your sensor: no clean signal
+201,C3,bp_sys,2026-10-21T15:49:00Z,caution,caution,work,2026-10-21T17:13:00Z,"inside the personal band, outside NEWS2",C3-M-20261021T1549Z,"Systolic blood pressure 108.4 mmHg, out of range for 5 s"
+202,C2,heart_rate,2026-10-21T16:41:58Z,caution,emergency,exercise_cevis,2026-10-21T18:01:58Z,NC01 exercise HR/BP,C2-M-20261021T1642Z,"Heart rate 138.2 bpm, out of range for 5 s"
+203,C3,heart_rate,2026-10-21T17:11:00Z,caution,warning,exercise_ared,2026-10-21T18:21:01Z,NC01 exercise HR/BP,C3-M-20261021T1711Z,"Heart rate 120.2 bpm, out of range for 5 s"
+204,C3,signal,2026-10-21T17:19:00Z,advisory,advisory,exercise_ared,2026-10-21T17:20:00Z,sensor check (signal) outside a fault,C3-M-20261021T1719Z,Check your sensor: no clean signal
+205,C2,signal,2026-10-21T17:23:58Z,advisory,advisory,exercise_cevis,2026-10-21T17:24:58Z,sensor check (signal) outside a fault,C2-M-20261021T1724Z,Check your sensor: no clean signal
+206,C3,signal,2026-10-21T17:56:00Z,advisory,advisory,exercise_ared,2026-10-21T17:57:00Z,sensor check (signal) outside a fault,C3-M-20261021T1756Z,Check your sensor: no clean signal
+207,C3,bp_sys,2026-10-21T18:21:01Z,caution,warning,work,2026-10-22T07:37:00Z,"inside the personal band, outside NEWS2",C3-M-20261021T1821Z,"Systolic blood pressure 109.8 mmHg, out of range for 5 s"
+208,C1,bp_sys,2026-10-21T19:16:00Z,caution,caution,meal,2026-10-21T19:55:00Z,"inside the personal band, outside NEWS2",C1-M-20261021T1916Z,"Systolic blood pressure 109.2 mmHg, out of range for 5 s"
+209,C2,bp_sys,2026-10-21T20:38:58Z,caution,caution,pre_sleep,2026-10-21T21:02:58Z,unexplained,C2-M-20261021T2039Z,"Systolic blood pressure 109.5 mmHg, out of range for 5 s"
+210,C4,heart_rate,2026-10-21T20:47:00Z,caution,caution,pre_sleep,2026-10-21T21:03:00Z,"inside the personal band, outside NEWS2",C4-M-20261021T2047Z,"Heart rate 49.4 bpm, out of range for 5 s"
+211,C4,bp_sys,2026-10-21T21:05:00Z,caution,warning,pre_sleep,2026-10-22T06:07:00Z,unexplained,C4-M-20261021T2105Z,"Systolic blood pressure 108.7 mmHg, out of range for 5 s"
+212,C1,bp_sys,2026-10-21T21:12:00Z,caution,warning,pre_sleep,2026-10-22T06:17:00Z,"inside the personal band, outside NEWS2",C1-M-20261021T2112Z,"Systolic blood pressure 108.8 mmHg, out of range for 5 s"
+213,C2,bp_sys,2026-10-21T21:33:58Z,caution,caution,awake_in_bed,2026-10-21T22:48:58Z,NC02 sleeping HR/BP (normal night dip),C2-M-20261021T2134Z,"Systolic blood pressure 108.1 mmHg, out of range for 5 s"
+214,C4,heart_rate,2026-10-21T21:36:00Z,caution,caution,awake_in_bed,2026-10-22T06:08:00Z,NC02 sleeping HR/BP (normal night dip),C4-M-20261021T2136Z,"Heart rate 47 bpm, out of range for 5 s"
+215,C2,bp_sys,2026-10-21T23:20:58Z,caution,caution,awake_in_bed,2026-10-22T06:09:59Z,NC02 sleeping HR/BP (normal night dip),C2-M-20261021T2321Z,"Systolic blood pressure 105.4 mmHg, out of range for 5 s"
+216,C1,heart_rate,2026-10-21T23:42:00Z,caution,caution,sleep,2026-10-22T00:04:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261021T2342Z,"Heart rate 48.6 bpm, out of range for 5 s"
+217,C1,heart_rate,2026-10-22T02:02:00Z,caution,caution,sleep,2026-10-22T02:36:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261022T0202Z,"Heart rate 48.2 bpm, out of range for 5 s"
+218,C1,heart_rate,2026-10-22T02:57:00Z,caution,caution,sleep,2026-10-22T03:12:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261022T0257Z,"Heart rate 48.4 bpm, out of range for 5 s"
+219,C1,heart_rate,2026-10-22T03:57:00Z,caution,caution,sleep,2026-10-22T05:25:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261022T0357Z,"Heart rate 49.7 bpm, out of range for 5 s"
+220,C1,heart_rate,2026-10-22T05:39:00Z,caution,caution,sleep,2026-10-22T06:11:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261022T0539Z,"Heart rate 49.8 bpm, out of range for 5 s"
+221,C4,heart_rate,2026-10-22T07:50:00Z,caution,emergency,exercise_cevis,2026-10-22T09:00:00Z,NC01 exercise HR/BP,C4-M-20261022T0750Z,"Heart rate 133.9 bpm, out of range for 5 s"
+222,C1,heart_rate,2026-10-22T07:53:00Z,caution,warning,exercise_ared,2026-10-22T09:12:00Z,NC01 exercise HR/BP,C1-M-20261022T0753Z,"Heart rate 115 bpm, out of range for 5 s"
+223,C1,signal,2026-10-22T07:56:00Z,advisory,advisory,exercise_ared,2026-10-22T07:57:00Z,sensor check (signal) outside a fault,C1-M-20261022T0756Z,Check your sensor: no clean signal
+224,C4,signal,2026-10-22T08:04:00Z,advisory,advisory,exercise_cevis,2026-10-22T08:05:00Z,sensor check (signal) outside a fault,C4-M-20261022T0804Z,Check your sensor: no clean signal
+225,C1,signal,2026-10-22T09:00:00Z,advisory,advisory,exercise_ared,2026-10-22T09:01:00Z,sensor check (signal) outside a fault,C1-M-20261022T0900Z,Check your sensor: no clean signal
+226,C2,heart_rate,2026-10-22T09:26:59Z,caution,warning,exercise_ared,2026-10-22T10:46:59Z,NC01 exercise HR/BP,C2-M-20261022T0927Z,"Heart rate 114.4 bpm, out of range for 5 s"
+227,C2,signal,2026-10-22T09:44:59Z,advisory,advisory,exercise_ared,2026-10-22T09:45:59Z,sensor check (signal) outside a fault,C2-M-20261022T0945Z,Check your sensor: no clean signal
+228,C2,signal,2026-10-22T10:27:59Z,advisory,advisory,exercise_ared,2026-10-22T10:28:59Z,sensor check (signal) outside a fault,C2-M-20261022T1028Z,Check your sensor: no clean signal
+229,C2,signal,2026-10-22T10:30:59Z,advisory,advisory,exercise_ared,2026-10-22T10:31:59Z,sensor check (signal) outside a fault,C2-M-20261022T1031Z,Check your sensor: no clean signal
+230,C3,heart_rate,2026-10-22T10:53:00Z,caution,emergency,exercise_cevis,2026-10-22T12:15:00Z,NC01 exercise HR/BP,C3-M-20261022T1053Z,"Heart rate 141.5 bpm, out of range for 5 s"
+231,C3,signal,2026-10-22T11:02:00Z,advisory,advisory,exercise_cevis,2026-10-22T11:03:00Z,sensor check (signal) outside a fault,C3-M-20261022T1102Z,Check your sensor: no clean signal
+232,C3,signal,2026-10-22T11:11:00Z,advisory,advisory,exercise_cevis,2026-10-22T11:12:00Z,sensor check (signal) outside a fault,C3-M-20261022T1111Z,Check your sensor: no clean signal
+233,C3,signal,2026-10-22T11:25:00Z,advisory,advisory,exercise_cevis,2026-10-22T11:26:00Z,sensor check (signal) outside a fault,C3-M-20261022T1125Z,Check your sensor: no clean signal
+234,C3,signal,2026-10-22T11:28:00Z,advisory,advisory,exercise_cevis,2026-10-22T11:29:00Z,sensor check (signal) outside a fault,C3-M-20261022T1128Z,Check your sensor: no clean signal
+235,C4,heart_rate,2026-10-22T13:36:00Z,caution,warning,exercise_ared,2026-10-22T14:49:00Z,NC01 exercise HR/BP,C4-M-20261022T1336Z,"Heart rate 112.7 bpm, out of range for 5 s"
+236,C4,signal,2026-10-22T13:37:00Z,advisory,advisory,exercise_ared,2026-10-22T13:38:00Z,sensor check (signal) outside a fault,C4-M-20261022T1337Z,Check your sensor: no clean signal
+237,C3,bp_sys,2026-10-22T14:28:00Z,caution,caution,work,2026-10-22T14:49:00Z,"inside the personal band, outside NEWS2",C3-M-20261022T1428Z,"Systolic blood pressure 108.3 mmHg, out of range for 5 s"
+238,C1,heart_rate,2026-10-22T15:09:00Z,caution,emergency,exercise_cevis,2026-10-22T16:19:00Z,NC01 exercise HR/BP,C1-M-20261022T1509Z,"Heart rate 135.7 bpm, out of range for 5 s"
+239,C1,signal,2026-10-22T15:33:00Z,advisory,advisory,exercise_cevis,2026-10-22T15:34:00Z,sensor check (signal) outside a fault,C1-M-20261022T1533Z,Check your sensor: no clean signal
+240,C2,heart_rate,2026-10-22T16:34:59Z,caution,emergency,exercise_cevis,2026-10-22T17:57:58Z,NC01 exercise HR/BP,C2-M-20261022T1635Z,"Heart rate 134.9 bpm, out of range for 5 s"
+241,C2,signal,2026-10-22T16:36:59Z,advisory,advisory,exercise_cevis,2026-10-22T16:37:59Z,sensor check (signal) outside a fault,C2-M-20261022T1637Z,Check your sensor: no clean signal
+242,C2,signal,2026-10-22T16:51:58Z,advisory,advisory,exercise_cevis,2026-10-22T16:52:58Z,sensor check (signal) outside a fault,C2-M-20261022T1652Z,Check your sensor: no clean signal
+243,C3,bp_sys,2026-10-22T16:55:00Z,caution,caution,work,2026-10-22T17:20:00Z,"inside the personal band, outside NEWS2",C3-M-20261022T1655Z,"Systolic blood pressure 107.2 mmHg, out of range for 5 s"
+244,C3,heart_rate,2026-10-22T17:15:00Z,caution,warning,exercise_ared,2026-10-22T18:34:01Z,NC01 exercise HR/BP,C3-M-20261022T1715Z,"Heart rate 119.1 bpm, out of range for 5 s"
+245,C3,signal,2026-10-22T17:17:00Z,advisory,advisory,exercise_ared,2026-10-22T17:18:00Z,sensor check (signal) outside a fault,C3-M-20261022T1717Z,Check your sensor: no clean signal
+246,C2,signal,2026-10-22T17:34:58Z,advisory,advisory,exercise_cevis,2026-10-22T17:35:58Z,sensor check (signal) outside a fault,C2-M-20261022T1735Z,Check your sensor: no clean signal
+247,C1,bp_sys,2026-10-22T18:11:00Z,caution,caution,work,2026-10-22T18:32:00Z,"inside the personal band, outside NEWS2",C1-M-20261022T1811Z,"Systolic blood pressure 108.7 mmHg, out of range for 5 s"
+248,C3,bp_sys,2026-10-22T18:35:01Z,caution,warning,work,2026-10-23T08:09:00Z,"inside the personal band, outside NEWS2",C3-M-20261022T1835Z,"Systolic blood pressure 107.7 mmHg, out of range for 5 s"
+249,C1,bp_sys,2026-10-22T19:38:00Z,caution,warning,pre_sleep,2026-10-23T06:08:00Z,unexplained,C1-M-20261022T1938Z,"Systolic blood pressure 107 mmHg, out of range for 5 s"
+250,C4,bp_sys,2026-10-22T19:54:00Z,caution,warning,pre_sleep,2026-10-23T06:14:00Z,unexplained,C4-M-20261022T1954Z,"Systolic blood pressure 106 mmHg, out of range for 5 s"
+251,C4,heart_rate,2026-10-22T19:59:00Z,caution,caution,pre_sleep,2026-10-22T20:22:00Z,"inside the personal band, outside NEWS2",C4-M-20261022T1959Z,"Heart rate 47.4 bpm, out of range for 5 s"
+252,C4,heart_rate,2026-10-22T20:33:00Z,caution,caution,pre_sleep,2026-10-23T06:13:00Z,"inside the personal band, outside NEWS2",C4-M-20261022T2033Z,"Heart rate 47.8 bpm, out of range for 5 s"
+253,C2,bp_sys,2026-10-22T21:40:58Z,caution,caution,awake_in_bed,2026-10-22T23:08:58Z,NC02 sleeping HR/BP (normal night dip),C2-M-20261022T2141Z,"Systolic blood pressure 109.8 mmHg, out of range for 5 s"
+254,C2,bp_sys,2026-10-22T23:18:58Z,caution,caution,sleep,2026-10-23T06:09:59Z,NC02 sleeping HR/BP (normal night dip),C2-M-20261022T2319Z,"Systolic blood pressure 107.1 mmHg, out of range for 5 s"
+255,C1,heart_rate,2026-10-23T01:02:00Z,caution,caution,sleep,2026-10-23T02:13:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261023T0102Z,"Heart rate 49.5 bpm, out of range for 5 s"
+256,C1,heart_rate,2026-10-23T02:30:00Z,caution,caution,sleep,2026-10-23T02:53:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261023T0230Z,"Heart rate 48.3 bpm, out of range for 5 s"
+257,C4,signal,2026-10-23T07:48:00Z,advisory,advisory,exercise_cevis,2026-10-23T07:49:00Z,sensor check (signal) outside a fault,C4-M-20261023T0748Z,Check your sensor: no clean signal
+258,C4,heart_rate,2026-10-23T07:53:00Z,emergency,emergency,exercise_cevis,2026-10-23T09:03:00Z,NC01 exercise HR/BP,C4-M-20261023T0753Z,"Heart rate 141.8 bpm, out of range for 5 s"
+259,C1,heart_rate,2026-10-23T08:03:00Z,caution,warning,exercise_ared,2026-10-23T09:19:00Z,NC01 exercise HR/BP,C1-M-20261023T0803Z,"Heart rate 116.7 bpm, out of range for 5 s"
+260,C4,signal,2026-10-23T08:06:00Z,advisory,advisory,exercise_cevis,2026-10-23T08:07:00Z,sensor check (signal) outside a fault,C4-M-20261023T0806Z,Check your sensor: no clean signal
+261,C1,signal,2026-10-23T08:09:00Z,advisory,advisory,exercise_ared,2026-10-23T08:10:00Z,sensor check (signal) outside a fault,C1-M-20261023T0809Z,Check your sensor: no clean signal
+262,C4,signal,2026-10-23T08:50:00Z,advisory,advisory,exercise_cevis,2026-10-23T08:51:00Z,sensor check (signal) outside a fault,C4-M-20261023T0850Z,Check your sensor: no clean signal
+263,C1,signal,2026-10-23T09:05:00Z,advisory,advisory,exercise_ared,2026-10-23T09:06:00Z,sensor check (signal) outside a fault,C1-M-20261023T0905Z,Check your sensor: no clean signal
+264,C2,heart_rate,2026-10-23T09:31:59Z,caution,warning,exercise_ared,2026-10-23T10:45:59Z,NC01 exercise HR/BP,C2-M-20261023T0932Z,"Heart rate 118 bpm, out of range for 5 s"
+265,C3,bp_sys,2026-10-23T09:39:00Z,caution,caution,work,2026-10-23T10:00:00Z,"inside the personal band, outside NEWS2",C3-M-20261023T0939Z,"Systolic blood pressure 106.8 mmHg, out of range for 5 s"
+266,C3,bp_sys,2026-10-23T10:15:00Z,caution,caution,work,2026-10-23T10:36:00Z,"inside the personal band, outside NEWS2",C3-M-20261023T1015Z,"Systolic blood pressure 108.4 mmHg, out of range for 5 s"
+267,C3,heart_rate,2026-10-23T10:34:00Z,caution,emergency,exercise_cevis,2026-10-23T11:57:00Z,NC01 exercise HR/BP,C3-M-20261023T1034Z,"Heart rate 140.6 bpm, out of range for 5 s"
+268,C3,signal,2026-10-23T11:20:00Z,advisory,advisory,exercise_cevis,2026-10-23T11:21:00Z,sensor check (signal) outside a fault,C3-M-20261023T1120Z,Check your sensor: no clean signal
+269,C3,signal,2026-10-23T11:29:00Z,advisory,advisory,exercise_cevis,2026-10-23T11:30:00Z,sensor check (signal) outside a fault,C3-M-20261023T1129Z,Check your sensor: no clean signal
+270,C3,bp_sys,2026-10-23T12:36:00Z,caution,caution,meal,2026-10-23T14:42:00Z,"inside the personal band, outside NEWS2",C3-M-20261023T1236Z,"Systolic blood pressure 109.3 mmHg, out of range for 5 s"
+271,C4,heart_rate,2026-10-23T13:29:00Z,caution,warning,exercise_ared,2026-10-23T14:41:00Z,NC01 exercise HR/BP,C4-M-20261023T1329Z,"Heart rate 113.1 bpm, out of range for 5 s"
+272,C1,signal,2026-10-23T14:54:00Z,advisory,advisory,exercise_cevis,2026-10-23T14:55:00Z,sensor check (signal) outside a fault,C1-M-20261023T1454Z,Check your sensor: no clean signal
+273,C1,heart_rate,2026-10-23T14:59:00Z,warning,emergency,exercise_cevis,2026-10-23T16:20:00Z,NC01 exercise HR/BP,C1-M-20261023T1459Z,"Heart rate 137.4 bpm, out of range for 5 s"
+274,C1,signal,2026-10-23T15:33:00Z,advisory,advisory,exercise_cevis,2026-10-23T15:34:00Z,sensor check (signal) outside a fault,C1-M-20261023T1533Z,Check your sensor: no clean signal
+275,C3,bp_sys,2026-10-23T16:01:00Z,caution,caution,work,2026-10-23T17:21:00Z,"inside the personal band, outside NEWS2",C3-M-20261023T1601Z,"Systolic blood pressure 108.4 mmHg, out of range for 5 s"
+276,C2,heart_rate,2026-10-23T16:26:59Z,caution,emergency,exercise_cevis,2026-10-23T17:38:58Z,NC01 exercise HR/BP,C2-M-20261023T1627Z,"Heart rate 135.4 bpm, out of range for 5 s"
+277,C3,heart_rate,2026-10-23T17:16:00Z,caution,warning,exercise_ared,2026-10-23T18:33:01Z,NC01 exercise HR/BP,C3-M-20261023T1716Z,"Heart rate 121 bpm, out of range for 5 s"
+278,C3,signal,2026-10-23T17:22:00Z,advisory,advisory,exercise_ared,2026-10-23T17:23:00Z,sensor check (signal) outside a fault,C3-M-20261023T1722Z,Check your sensor: no clean signal
+279,C3,bp_sys,2026-10-23T18:30:01Z,caution,warning,work,2026-10-24T06:34:00Z,"inside the personal band, outside NEWS2",C3-M-20261023T1830Z,"Systolic blood pressure 105.5 mmHg, out of range for 5 s"
+280,C1,bp_sys,2026-10-23T18:43:00Z,caution,warning,work,2026-10-24T06:11:00Z,"inside the personal band, outside NEWS2",C1-M-20261023T1843Z,"Systolic blood pressure 109.5 mmHg, out of range for 5 s"
+281,C4,heart_rate,2026-10-23T19:52:00Z,caution,caution,pre_sleep,2026-10-23T20:08:00Z,"inside the personal band, outside NEWS2",C4-M-20261023T1952Z,"Heart rate 47.8 bpm, out of range for 5 s"
+282,C4,heart_rate,2026-10-23T20:25:00Z,caution,caution,pre_sleep,2026-10-24T06:08:00Z,"inside the personal band, outside NEWS2",C4-M-20261023T2025Z,"Heart rate 49.8 bpm, out of range for 5 s"
+283,C4,bp_sys,2026-10-23T21:34:00Z,caution,warning,awake_in_bed,2026-10-24T06:07:00Z,NC02 sleeping HR/BP (normal night dip),C4-M-20261023T2134Z,"Systolic blood pressure 105.9 mmHg, out of range for 5 s"
+284,C2,bp_sys,2026-10-23T21:38:58Z,caution,caution,awake_in_bed,2026-10-24T06:18:59Z,NC02 sleeping HR/BP (normal night dip),C2-M-20261023T2139Z,"Systolic blood pressure 108.6 mmHg, out of range for 5 s"
+285,C1,heart_rate,2026-10-24T00:42:00Z,caution,caution,sleep,2026-10-24T00:57:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261024T0042Z,"Heart rate 50 bpm, out of range for 5 s"
+286,C1,heart_rate,2026-10-24T02:29:00Z,caution,caution,sleep,2026-10-24T04:15:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261024T0229Z,"Heart rate 48.4 bpm, out of range for 5 s"
+287,C1,heart_rate,2026-10-24T04:48:00Z,caution,caution,sleep,2026-10-24T05:08:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261024T0448Z,"Heart rate 49.5 bpm, out of range for 5 s"
+288,C1,heart_rate,2026-10-24T05:44:00Z,caution,caution,sleep,2026-10-24T06:08:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261024T0544Z,"Heart rate 49.1 bpm, out of range for 5 s"
+289,C1,bp_sys,2026-10-24T06:16:00Z,caution,caution,typed_checkin,2026-10-24T06:26:00Z,"inside the personal band, outside NEWS2",,"Systolic blood pressure 108 mmHg, out of range"
+290,C1,heart_rate,2026-10-24T08:05:00Z,caution,warning,exercise_ared,2026-10-24T09:20:00Z,NC01 exercise HR/BP,C1-M-20261024T0805Z,"Heart rate 114.6 bpm, out of range for 5 s"
+291,C1,signal,2026-10-24T08:29:00Z,advisory,advisory,exercise_ared,2026-10-24T08:30:00Z,sensor check (signal) outside a fault,C1-M-20261024T0829Z,Check your sensor: no clean signal
+292,C1,signal,2026-10-24T08:54:00Z,advisory,advisory,exercise_ared,2026-10-24T08:55:00Z,sensor check (signal) outside a fault,C1-M-20261024T0854Z,Check your sensor: no clean signal
+293,C1,signal,2026-10-24T09:04:00Z,advisory,advisory,exercise_ared,2026-10-24T09:05:00Z,sensor check (signal) outside a fault,C1-M-20261024T0904Z,Check your sensor: no clean signal
+294,C2,heart_rate,2026-10-24T09:40:59Z,caution,warning,exercise_ared,2026-10-24T10:57:59Z,NC01 exercise HR/BP,C2-M-20261024T0941Z,"Heart rate 117.6 bpm, out of range for 5 s"
+295,C2,signal,2026-10-24T09:55:59Z,advisory,advisory,exercise_ared,2026-10-24T09:56:59Z,sensor check (signal) outside a fault,C2-M-20261024T0956Z,Check your sensor: no clean signal
+296,C3,heart_rate,2026-10-24T10:36:00Z,caution,emergency,exercise_cevis,2026-10-24T11:45:00Z,NC01 exercise HR/BP,C3-M-20261024T1036Z,"Heart rate 142.6 bpm, out of range for 5 s"
+297,C3,bp_sys,2026-10-24T12:40:00Z,caution,caution,meal,2026-10-24T13:07:00Z,"inside the personal band, outside NEWS2",C3-M-20261024T1240Z,"Systolic blood pressure 107.7 mmHg, out of range for 5 s"
+298,C3,bp_sys,2026-10-24T14:46:00Z,caution,caution,work,2026-10-24T17:03:00Z,"inside the personal band, outside NEWS2",C3-M-20261024T1446Z,"Systolic blood pressure 107.8 mmHg, out of range for 5 s"
+299,C1,heart_rate,2026-10-24T14:58:00Z,caution,emergency,exercise_cevis,2026-10-24T16:05:00Z,NC01 exercise HR/BP,C1-M-20261024T1458Z,"Heart rate 135.8 bpm, out of range for 5 s"
+300,C1,signal,2026-10-24T15:14:00Z,advisory,advisory,exercise_cevis,2026-10-24T15:15:00Z,sensor check (signal) outside a fault,C1-M-20261024T1514Z,Check your sensor: no clean signal
+301,C1,signal,2026-10-24T15:46:00Z,advisory,advisory,exercise_cevis,2026-10-24T15:47:00Z,sensor check (signal) outside a fault,C1-M-20261024T1546Z,Check your sensor: no clean signal
+302,C2,heart_rate,2026-10-24T16:44:58Z,caution,emergency,exercise_cevis,2026-10-24T18:01:58Z,NC01 exercise HR/BP,C2-M-20261024T1645Z,"Heart rate 135.7 bpm, out of range for 5 s"
+303,C1,bp_sys,2026-10-24T16:58:00Z,caution,caution,work,2026-10-24T17:21:00Z,"inside the personal band, outside NEWS2",C1-M-20261024T1658Z,"Systolic blood pressure 108.5 mmHg, out of range for 5 s"
+304,C3,heart_rate,2026-10-24T17:08:00Z,caution,warning,exercise_ared,2026-10-24T18:25:01Z,NC01 exercise HR/BP,C3-M-20261024T1708Z,"Heart rate 122.5 bpm, out of range for 5 s"
+305,C2,signal,2026-10-24T17:21:58Z,advisory,advisory,exercise_cevis,2026-10-24T17:22:58Z,sensor check (signal) outside a fault,C2-M-20261024T1722Z,Check your sensor: no clean signal
+306,C3,signal,2026-10-24T17:51:00Z,advisory,advisory,exercise_ared,2026-10-24T17:52:00Z,sensor check (signal) outside a fault,C3-M-20261024T1751Z,Check your sensor: no clean signal
+307,C3,signal,2026-10-24T17:57:00Z,advisory,advisory,exercise_ared,2026-10-24T17:58:00Z,sensor check (signal) outside a fault,C3-M-20261024T1757Z,Check your sensor: no clean signal
+308,C3,signal,2026-10-24T18:01:00Z,advisory,advisory,exercise_ared,2026-10-24T18:02:00Z,sensor check (signal) outside a fault,C3-M-20261024T1801Z,Check your sensor: no clean signal
+309,C3,bp_sys,2026-10-24T18:26:01Z,caution,warning,work,2026-10-25T07:56:00Z,"inside the personal band, outside NEWS2",C3-M-20261024T1826Z,"Systolic blood pressure 106.3 mmHg, out of range for 5 s"
+310,C1,bp_sys,2026-10-24T18:46:00Z,caution,warning,work,2026-10-25T06:08:00Z,unexplained,C1-M-20261024T1846Z,"Systolic blood pressure 107.6 mmHg, out of range for 5 s"
+311,C4,heart_rate,2026-10-24T19:39:00Z,caution,caution,pre_sleep,2026-10-25T06:17:00Z,"inside the personal band, outside NEWS2",C4-M-20261024T1939Z,"Heart rate 49.3 bpm, out of range for 5 s"
+312,C4,bp_sys,2026-10-24T21:04:00Z,caution,caution,pre_sleep,2026-10-24T21:28:00Z,unexplained,C4-M-20261024T2104Z,"Systolic blood pressure 106.8 mmHg, out of range for 5 s"
+313,C4,bp_sys,2026-10-24T21:35:00Z,caution,warning,awake_in_bed,2026-10-25T06:17:00Z,NC02 sleeping HR/BP (normal night dip),C4-M-20261024T2135Z,"Systolic blood pressure 107.5 mmHg, out of range for 5 s"
+314,C2,bp_sys,2026-10-24T21:44:58Z,caution,caution,awake_in_bed,2026-10-25T05:33:59Z,NC02 sleeping HR/BP (normal night dip),C2-M-20261024T2145Z,"Systolic blood pressure 108 mmHg, out of range for 5 s"
+315,C1,heart_rate,2026-10-24T23:12:00Z,caution,caution,sleep,2026-10-24T23:39:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261024T2312Z,"Heart rate 48.7 bpm, out of range for 5 s"
+316,C1,heart_rate,2026-10-25T00:32:00Z,caution,caution,sleep,2026-10-25T00:46:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261025T0032Z,"Heart rate 48.3 bpm, out of range for 5 s"
+317,C1,heart_rate,2026-10-25T01:23:00Z,caution,caution,sleep,2026-10-25T01:52:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261025T0123Z,"Heart rate 50 bpm, out of range for 5 s"
+318,C1,heart_rate,2026-10-25T02:40:00Z,caution,caution,sleep,2026-10-25T04:19:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261025T0240Z,"Heart rate 48.7 bpm, out of range for 5 s"
+319,C1,heart_rate,2026-10-25T05:03:00Z,caution,caution,sleep,2026-10-25T05:49:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261025T0503Z,"Heart rate 49.8 bpm, out of range for 5 s"
+320,C2,bp_sys,2026-10-25T05:45:59Z,caution,caution,sleep,2026-10-25T06:06:59Z,NC02 sleeping HR/BP (normal night dip),C2-M-20261025T0546Z,"Systolic blood pressure 105.5 mmHg, out of range for 5 s"
+321,C1,bp_sys,2026-10-25T06:25:00Z,caution,caution,post_sleep,2026-10-25T06:57:00Z,"inside the personal band, outside NEWS2",C1-M-20261025T0625Z,"Systolic blood pressure 109.5 mmHg, out of range for 5 s"
+322,C4,heart_rate,2026-10-25T07:48:00Z,caution,emergency,exercise_cevis,2026-10-25T09:11:00Z,NC01 exercise HR/BP,C4-M-20261025T0748Z,"Heart rate 138.5 bpm, out of range for 5 s"
+323,C4,signal,2026-10-25T07:53:00Z,advisory,advisory,exercise_cevis,2026-10-25T07:54:00Z,sensor check (signal) outside a fault,C4-M-20261025T0753Z,Check your sensor: no clean signal
+324,C1,heart_rate,2026-10-25T07:56:00Z,caution,warning,exercise_ared,2026-10-25T09:11:00Z,NC01 exercise HR/BP,C1-M-20261025T0756Z,"Heart rate 114.9 bpm, out of range for 5 s"
+325,C2,heart_rate,2026-10-25T09:24:59Z,caution,warning,exercise_ared,2026-10-25T10:33:59Z,NC01 exercise HR/BP,C2-M-20261025T0925Z,"Heart rate 116.9 bpm, out of range for 5 s"
+326,C3,bp_sys,2026-10-25T12:12:00Z,caution,caution,work,2026-10-25T13:08:00Z,"inside the personal band, outside NEWS2",C3-M-20261025T1212Z,"Systolic blood pressure 108.8 mmHg, out of range for 5 s"
+327,C4,heart_rate,2026-10-25T13:42:00Z,caution,warning,exercise_ared,2026-10-25T14:59:00Z,NC01 exercise HR/BP,C4-M-20261025T1342Z,"Heart rate 114.5 bpm, out of range for 5 s"
+328,C3,bp_sys,2026-10-25T13:45:00Z,caution,caution,work,2026-10-25T13:59:00Z,"inside the personal band, outside NEWS2",C3-M-20261025T1345Z,"Systolic blood pressure 109.9 mmHg, out of range for 5 s"
+329,C4,signal,2026-10-25T13:54:00Z,advisory,advisory,exercise_ared,2026-10-25T13:55:00Z,sensor check (signal) outside a fault,C4-M-20261025T1354Z,Check your sensor: no clean signal
+330,C3,bp_sys,2026-10-25T14:16:00Z,caution,caution,work,2026-10-25T14:41:00Z,"inside the personal band, outside NEWS2",C3-M-20261025T1416Z,"Systolic blood pressure 109.1 mmHg, out of range for 5 s"
+331,C1,heart_rate,2026-10-25T15:09:00Z,caution,emergency,exercise_cevis,2026-10-25T16:21:00Z,NC01 exercise HR/BP,C1-M-20261025T1509Z,"Heart rate 137.7 bpm, out of range for 5 s"
+332,C3,bp_sys,2026-10-25T15:14:00Z,caution,caution,work,2026-10-25T15:36:00Z,"inside the personal band, outside NEWS2",C3-M-20261025T1514Z,"Systolic blood pressure 107.7 mmHg, out of range for 5 s"
+333,C1,signal,2026-10-25T15:26:00Z,advisory,advisory,exercise_cevis,2026-10-25T15:27:00Z,sensor check (signal) outside a fault,C1-M-20261025T1526Z,Check your sensor: no clean signal
+334,C1,signal,2026-10-25T15:28:00Z,advisory,advisory,exercise_cevis,2026-10-25T15:29:00Z,sensor check (signal) outside a fault,C1-M-20261025T1528Z,Check your sensor: no clean signal
+335,C1,signal,2026-10-25T15:47:00Z,advisory,advisory,exercise_cevis,2026-10-25T15:48:00Z,sensor check (signal) outside a fault,C1-M-20261025T1547Z,Check your sensor: no clean signal
+336,C3,bp_sys,2026-10-25T15:55:00Z,caution,caution,work,2026-10-25T18:17:01Z,"inside the personal band, outside NEWS2",C3-M-20261025T1555Z,"Systolic blood pressure 109.1 mmHg, out of range for 5 s"
+337,C1,signal,2026-10-25T16:04:00Z,advisory,advisory,exercise_cevis,2026-10-25T16:05:00Z,sensor check (signal) outside a fault,C1-M-20261025T1604Z,Check your sensor: no clean signal
+338,C1,bp_sys,2026-10-25T16:29:00Z,caution,caution,work,2026-10-25T16:47:00Z,"inside the personal band, outside NEWS2",C1-M-20261025T1629Z,"Systolic blood pressure 109 mmHg, out of range for 5 s"
+339,C2,heart_rate,2026-10-25T16:33:59Z,caution,emergency,exercise_cevis,2026-10-25T17:44:58Z,NC01 exercise HR/BP,C2-M-20261025T1634Z,"Heart rate 134 bpm, out of range for 5 s"
+340,C2,signal,2026-10-25T17:22:58Z,advisory,advisory,exercise_cevis,2026-10-25T17:23:58Z,sensor check (signal) outside a fault,C2-M-20261025T1723Z,Check your sensor: no clean signal
+341,C3,bp_sys,2026-10-25T18:47:01Z,caution,warning,work,2026-10-26T07:45:00Z,"inside the personal band, outside NEWS2",C3-M-20261025T1847Z,"Systolic blood pressure 104.8 mmHg, out of range for 5 s"
+342,C1,bp_sys,2026-10-25T19:10:00Z,caution,caution,meal,2026-10-25T19:37:00Z,unexplained,C1-M-20261025T1910Z,"Systolic blood pressure 107.3 mmHg, out of range for 5 s"
+343,C4,bp_sys,2026-10-25T19:32:00Z,caution,caution,pre_sleep,2026-10-25T20:34:00Z,unexplained,C4-M-20261025T1932Z,"Systolic blood pressure 109.6 mmHg, out of range for 5 s"
+344,C4,heart_rate,2026-10-25T19:51:00Z,caution,caution,pre_sleep,2026-10-25T20:53:00Z,"inside the personal band, outside NEWS2",C4-M-20261025T1951Z,"Heart rate 48.5 bpm, out of range for 5 s"
+345,C1,bp_sys,2026-10-25T19:57:00Z,caution,caution,pre_sleep,2026-10-25T20:21:00Z,unexplained,C1-M-20261025T1957Z,"Systolic blood pressure 106.8 mmHg, out of range for 5 s"
+346,C2,bp_sys,2026-10-25T19:59:58Z,caution,caution,pre_sleep,2026-10-25T20:14:58Z,unexplained,C2-M-20261025T2000Z,"Systolic blood pressure 109 mmHg, out of range for 5 s"
+347,C2,bp_sys,2026-10-25T20:19:58Z,caution,caution,pre_sleep,2026-10-25T20:46:58Z,unexplained,C2-M-20261025T2020Z,"Systolic blood pressure 109.7 mmHg, out of range for 5 s"
+348,C1,bp_sys,2026-10-25T20:30:00Z,caution,warning,pre_sleep,2026-10-26T06:32:00Z,"inside the personal band, outside NEWS2",C1-M-20261025T2030Z,"Systolic blood pressure 109 mmHg, out of range for 5 s"
+349,C4,bp_sys,2026-10-25T21:03:00Z,caution,warning,pre_sleep,2026-10-26T06:17:00Z,unexplained,C4-M-20261025T2103Z,"Systolic blood pressure 107.2 mmHg, out of range for 5 s"
+350,C4,heart_rate,2026-10-25T21:11:00Z,caution,caution,pre_sleep,2026-10-26T06:13:00Z,"inside the personal band, outside NEWS2",C4-M-20261025T2111Z,"Heart rate 49.4 bpm, out of range for 5 s"
+351,C2,bp_sys,2026-10-25T21:35:58Z,caution,caution,awake_in_bed,2026-10-26T06:16:59Z,NC02 sleeping HR/BP (normal night dip),C2-M-20261025T2136Z,"Systolic blood pressure 106.8 mmHg, out of range for 5 s"
+352,C1,heart_rate,2026-10-26T00:12:00Z,caution,caution,sleep,2026-10-26T01:20:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261026T0012Z,"Heart rate 48.9 bpm, out of range for 5 s"
+353,C1,heart_rate,2026-10-26T01:53:00Z,caution,caution,sleep,2026-10-26T02:09:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261026T0153Z,"Heart rate 49.7 bpm, out of range for 5 s"
+354,C1,heart_rate,2026-10-26T02:19:00Z,caution,caution,sleep,2026-10-26T02:56:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261026T0219Z,"Heart rate 48.5 bpm, out of range for 5 s"
+355,C1,heart_rate,2026-10-26T03:07:00Z,caution,caution,sleep,2026-10-26T03:49:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261026T0307Z,"Heart rate 48 bpm, out of range for 5 s"
+356,C1,heart_rate,2026-10-26T04:25:00Z,caution,caution,sleep,2026-10-26T04:40:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261026T0425Z,"Heart rate 49.4 bpm, out of range for 5 s"
+357,C1,bp_sys,2026-10-26T07:29:00Z,caution,caution,meal,2026-10-26T07:39:00Z,"inside the personal band, outside NEWS2",C1-M-20261026T0729Z,"Systolic blood pressure 108.7 mmHg, out of range for 5 s"
+358,C4,heart_rate,2026-10-26T07:49:00Z,caution,emergency,exercise_cevis,2026-10-26T09:08:00Z,NC01 exercise HR/BP,C4-M-20261026T0749Z,"Heart rate 136.4 bpm, out of range for 5 s"
+359,C1,heart_rate,2026-10-26T08:11:00Z,caution,warning,exercise_ared,2026-10-26T09:22:00Z,NC01 exercise HR/BP,C1-M-20261026T0811Z,"Heart rate 116 bpm, out of range for 5 s"
+360,C1,signal,2026-10-26T08:14:00Z,advisory,advisory,exercise_ared,2026-10-26T08:15:00Z,sensor check (signal) outside a fault,C1-M-20261026T0814Z,Check your sensor: no clean signal
+361,C1,signal,2026-10-26T08:43:00Z,advisory,advisory,exercise_ared,2026-10-26T08:45:00Z,sensor check (signal) outside a fault,C1-M-20261026T0843Z,Check your sensor: no clean signal
+362,C3,heart_rate,2026-10-26T10:34:00Z,caution,emergency,exercise_cevis,2026-10-26T11:47:00Z,NC01 exercise HR/BP,C3-M-20261026T1034Z,"Heart rate 140.4 bpm, out of range for 5 s"
+363,C3,signal,2026-10-26T10:48:00Z,advisory,advisory,exercise_cevis,2026-10-26T10:49:00Z,sensor check (signal) outside a fault,C3-M-20261026T1048Z,Check your sensor: no clean signal
+364,C3,bp_sys,2026-10-26T13:07:00Z,caution,caution,meal,2026-10-26T13:40:00Z,"inside the personal band, outside NEWS2",C3-M-20261026T1307Z,"Systolic blood pressure 108.3 mmHg, out of range for 5 s"
+365,C4,heart_rate,2026-10-26T13:27:00Z,caution,warning,exercise_ared,2026-10-26T14:40:00Z,NC01 exercise HR/BP,C4-M-20261026T1327Z,"Heart rate 113.8 bpm, out of range for 5 s"
+366,C4,signal,2026-10-26T14:08:00Z,advisory,advisory,exercise_ared,2026-10-26T14:09:00Z,sensor check (signal) outside a fault,C4-M-20261026T1408Z,Check your sensor: no clean signal
+367,C4,signal,2026-10-26T14:20:00Z,advisory,advisory,exercise_ared,2026-10-26T14:21:00Z,sensor check (signal) outside a fault,C4-M-20261026T1420Z,Check your sensor: no clean signal
+368,C3,bp_sys,2026-10-26T15:06:00Z,caution,caution,work,2026-10-26T15:54:00Z,"inside the personal band, outside NEWS2",C3-M-20261026T1506Z,"Systolic blood pressure 109.4 mmHg, out of range for 5 s"
+369,C1,heart_rate,2026-10-26T15:10:00Z,caution,emergency,exercise_cevis,2026-10-26T16:31:00Z,NC01 exercise HR/BP,C1-M-20261026T1510Z,"Heart rate 134.9 bpm, out of range for 5 s"
+370,C1,signal,2026-10-26T15:23:00Z,advisory,advisory,exercise_cevis,2026-10-26T15:24:00Z,sensor check (signal) outside a fault,C1-M-20261026T1523Z,Check your sensor: no clean signal
+371,C3,bp_sys,2026-10-26T16:45:00Z,caution,caution,work,2026-10-26T17:09:00Z,"inside the personal band, outside NEWS2",C3-M-20261026T1645Z,"Systolic blood pressure 109.7 mmHg, out of range for 5 s"
+372,C3,heart_rate,2026-10-26T17:04:00Z,caution,warning,exercise_ared,2026-10-26T18:25:01Z,NC01 exercise HR/BP,C3-M-20261026T1704Z,"Heart rate 121.9 bpm, out of range for 5 s"
+373,C3,signal,2026-10-26T17:19:00Z,advisory,advisory,exercise_ared,2026-10-26T17:20:00Z,sensor check (signal) outside a fault,C3-M-20261026T1719Z,Check your sensor: no clean signal
+374,C3,signal,2026-10-26T17:22:00Z,advisory,advisory,exercise_ared,2026-10-26T17:23:00Z,sensor check (signal) outside a fault,C3-M-20261026T1722Z,Check your sensor: no clean signal
+375,C3,signal,2026-10-26T17:59:00Z,advisory,advisory,exercise_ared,2026-10-26T18:00:00Z,sensor check (signal) outside a fault,C3-M-20261026T1759Z,Check your sensor: no clean signal
+376,C3,bp_sys,2026-10-26T18:23:01Z,caution,emergency,work,2026-10-27T07:37:00Z,"inside the personal band, outside NEWS2",C3-M-20261026T1823Z,"Systolic blood pressure 108.5 mmHg, out of range for 5 s"
+377,C1,bp_sys,2026-10-26T19:10:00Z,caution,caution,meal,2026-10-26T19:53:00Z,"inside the personal band, outside NEWS2",C1-M-20261026T1910Z,"Systolic blood pressure 109.8 mmHg, out of range for 5 s"
+378,C1,bp_sys,2026-10-26T20:11:00Z,caution,warning,pre_sleep,2026-10-27T06:12:00Z,"inside the personal band, outside NEWS2",C1-M-20261026T2011Z,"Systolic blood pressure 108.1 mmHg, out of range for 5 s"
+379,C4,heart_rate,2026-10-26T20:35:00Z,caution,caution,pre_sleep,2026-10-26T21:21:00Z,"inside the personal band, outside NEWS2",C4-M-20261026T2035Z,"Heart rate 49 bpm, out of range for 5 s"
+380,C4,bp_sys,2026-10-26T21:03:00Z,caution,warning,pre_sleep,2026-10-27T06:17:00Z,unexplained,C4-M-20261026T2103Z,"Systolic blood pressure 108.6 mmHg, out of range for 5 s"
+381,C2,bp_sys,2026-10-26T21:34:58Z,caution,warning,awake_in_bed,2026-10-27T06:05:59Z,NC02 sleeping HR/BP (normal night dip),C2-M-20261026T2135Z,"Systolic blood pressure 105.2 mmHg, out of range for 5 s"
+382,C4,heart_rate,2026-10-26T21:38:00Z,caution,caution,awake_in_bed,2026-10-27T06:41:00Z,NC02 sleeping HR/BP (normal night dip),C4-M-20261026T2138Z,"Heart rate 45.4 bpm, out of range for 5 s"
+383,C1,heart_rate,2026-10-26T23:26:00Z,caution,caution,sleep,2026-10-26T23:54:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261026T2326Z,"Heart rate 49.3 bpm, out of range for 5 s"
+384,C1,heart_rate,2026-10-27T00:33:00Z,caution,caution,sleep,2026-10-27T00:47:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261027T0033Z,"Heart rate 50 bpm, out of range for 5 s"
+385,C1,heart_rate,2026-10-27T04:55:00Z,caution,caution,sleep,2026-10-27T05:17:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261027T0455Z,"Heart rate 49.3 bpm, out of range for 5 s"
+386,C4,heart_rate,2026-10-27T07:35:00Z,caution,emergency,exercise_cevis,2026-10-27T08:47:00Z,NC01 exercise HR/BP,C4-M-20261027T0735Z,"Heart rate 136.4 bpm, out of range for 5 s"
+387,C4,signal,2026-10-27T07:45:00Z,advisory,advisory,exercise_cevis,2026-10-27T07:46:00Z,sensor check (signal) outside a fault,C4-M-20261027T0745Z,Check your sensor: no clean signal
+388,C2,heart_rate,2026-10-27T09:43:59Z,caution,warning,exercise_ared,2026-10-27T11:03:59Z,NC01 exercise HR/BP,C2-M-20261027T0944Z,"Heart rate 117.3 bpm, out of range for 5 s"
+389,C2,signal,2026-10-27T09:55:59Z,advisory,advisory,exercise_ared,2026-10-27T09:56:59Z,sensor check (signal) outside a fault,C2-M-20261027T0956Z,Check your sensor: no clean signal
+390,C3,heart_rate,2026-10-27T10:35:00Z,caution,emergency,exercise_cevis,2026-10-27T11:48:00Z,NC01 exercise HR/BP,C3-M-20261027T1035Z,"Heart rate 140.1 bpm, out of range for 5 s"
+391,C3,signal,2026-10-27T10:41:00Z,advisory,advisory,exercise_cevis,2026-10-27T10:42:00Z,sensor check (signal) outside a fault,C3-M-20261027T1041Z,Check your sensor: no clean signal
+392,C3,signal,2026-10-27T11:03:00Z,advisory,advisory,exercise_cevis,2026-10-27T11:04:00Z,sensor check (signal) outside a fault,C3-M-20261027T1103Z,Check your sensor: no clean signal
+393,C3,signal,2026-10-27T11:26:00Z,advisory,advisory,exercise_cevis,2026-10-27T11:27:00Z,sensor check (signal) outside a fault,C3-M-20261027T1126Z,Check your sensor: no clean signal
+394,C3,bp_sys,2026-10-27T12:41:00Z,caution,caution,meal,2026-10-27T13:28:00Z,"inside the personal band, outside NEWS2",C3-M-20261027T1241Z,"Systolic blood pressure 107.9 mmHg, out of range for 5 s"
+395,C4,signal,2026-10-27T13:40:00Z,advisory,advisory,exercise_ared,2026-10-27T13:41:00Z,sensor check (signal) outside a fault,C4-M-20261027T1340Z,Check your sensor: no clean signal
+396,C4,heart_rate,2026-10-27T13:45:00Z,warning,warning,exercise_ared,2026-10-27T14:50:00Z,NC01 exercise HR/BP,C4-M-20261027T1345Z,"Heart rate 113.3 bpm, out of range for 5 s"
+397,C3,bp_sys,2026-10-27T14:20:00Z,caution,caution,work,2026-10-27T14:48:00Z,"inside the personal band, outside NEWS2",C3-M-20261027T1420Z,"Systolic blood pressure 109.1 mmHg, out of range for 5 s"
+398,C3,bp_sys,2026-10-27T15:52:00Z,caution,caution,work,2026-10-27T16:03:00Z,"inside the personal band, outside NEWS2",C3-M-20261027T1552Z,"Systolic blood pressure 109.2 mmHg, out of range for 5 s"
+399,C3,bp_sys,2026-10-27T16:14:00Z,caution,caution,work,2026-10-27T17:18:00Z,"inside the personal band, outside NEWS2",C3-M-20261027T1614Z,"Systolic blood pressure 108.9 mmHg, out of range for 5 s"
+400,C2,heart_rate,2026-10-27T16:19:59Z,caution,emergency,exercise_cevis,2026-10-27T17:28:58Z,NC01 exercise HR/BP,C2-M-20261027T1620Z,"Heart rate 133.4 bpm, out of range for 5 s"
+401,C2,signal,2026-10-27T16:58:58Z,advisory,advisory,exercise_cevis,2026-10-27T16:59:58Z,sensor check (signal) outside a fault,C2-M-20261027T1659Z,Check your sensor: no clean signal
+402,C2,signal,2026-10-27T17:03:58Z,advisory,advisory,exercise_cevis,2026-10-27T17:04:58Z,sensor check (signal) outside a fault,C2-M-20261027T1704Z,Check your sensor: no clean signal
+403,C3,heart_rate,2026-10-27T17:13:00Z,caution,warning,exercise_ared,2026-10-27T18:33:01Z,NC01 exercise HR/BP,C3-M-20261027T1713Z,"Heart rate 121.6 bpm, out of range for 5 s"
+404,C3,signal,2026-10-27T17:24:00Z,advisory,advisory,exercise_ared,2026-10-27T17:25:00Z,sensor check (signal) outside a fault,C3-M-20261027T1724Z,Check your sensor: no clean signal
+405,C3,signal,2026-10-27T18:00:00Z,advisory,advisory,exercise_ared,2026-10-27T18:01:00Z,sensor check (signal) outside a fault,C3-M-20261027T1800Z,Check your sensor: no clean signal
+406,C3,bp_sys,2026-10-27T18:32:01Z,caution,warning,work,2026-10-28T06:45:00Z,"inside the personal band, outside NEWS2",C3-M-20261027T1832Z,"Systolic blood pressure 108.2 mmHg, out of range for 5 s"
+407,C1,bp_sys,2026-10-27T18:38:00Z,caution,caution,work,2026-10-27T19:02:00Z,unexplained,C1-M-20261027T1838Z,"Systolic blood pressure 107.8 mmHg, out of range for 5 s"
+408,C1,bp_sys,2026-10-27T19:40:00Z,caution,caution,pre_sleep,2026-10-27T20:07:00Z,"inside the personal band, outside NEWS2",C1-M-20261027T1940Z,"Systolic blood pressure 108.7 mmHg, out of range for 5 s"
+409,C4,heart_rate,2026-10-27T19:54:00Z,caution,caution,pre_sleep,2026-10-27T20:30:00Z,unexplained,C4-M-20261027T1954Z,"Heart rate 45.8 bpm, out of range for 5 s"
+410,C1,bp_sys,2026-10-27T20:14:00Z,caution,warning,pre_sleep,2026-10-28T06:27:00Z,unexplained,C1-M-20261027T2014Z,"Systolic blood pressure 105.9 mmHg, out of range for 5 s"
+411,C4,heart_rate,2026-10-27T20:50:00Z,caution,caution,pre_sleep,2026-10-27T21:21:00Z,"inside the personal band, outside NEWS2",C4-M-20261027T2050Z,"Heart rate 49 bpm, out of range for 5 s"
+412,C4,bp_sys,2026-10-27T21:07:00Z,caution,warning,pre_sleep,2026-10-28T06:22:00Z,unexplained,C4-M-20261027T2107Z,"Systolic blood pressure 107.6 mmHg, out of range for 5 s"
+413,C4,heart_rate,2026-10-27T21:31:00Z,caution,caution,awake_in_bed,2026-10-28T06:17:00Z,NC02 sleeping HR/BP (normal night dip),C4-M-20261027T2131Z,"Heart rate 47.3 bpm, out of range for 5 s"
+414,C2,bp_sys,2026-10-27T21:57:58Z,caution,caution,awake_in_bed,2026-10-28T06:09:59Z,NC02 sleeping HR/BP (normal night dip),C2-M-20261027T2158Z,"Systolic blood pressure 109.6 mmHg, out of range for 5 s"
+415,C1,heart_rate,2026-10-27T23:24:00Z,caution,caution,sleep,2026-10-28T00:21:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261027T2324Z,"Heart rate 49.1 bpm, out of range for 5 s"
+416,C1,heart_rate,2026-10-28T02:20:00Z,caution,caution,sleep,2026-10-28T03:18:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261028T0220Z,"Heart rate 48.9 bpm, out of range for 5 s"
+417,C1,heart_rate,2026-10-28T03:58:00Z,caution,caution,sleep,2026-10-28T05:24:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261028T0358Z,"Heart rate 46.8 bpm, out of range for 5 s"
+418,C3,bp_sys,2026-10-28T06:52:00Z,caution,caution,typed_checkin,2026-10-28T07:02:00Z,"inside the personal band, outside NEWS2",,"Systolic blood pressure 107 mmHg, out of range"
+419,C4,heart_rate,2026-10-28T07:43:00Z,caution,emergency,exercise_cevis,2026-10-28T09:00:00Z,NC01 exercise HR/BP,C4-M-20261028T0743Z,"Heart rate 135.2 bpm, out of range for 5 s"
+420,C4,signal,2026-10-28T07:51:00Z,advisory,advisory,exercise_cevis,2026-10-28T07:52:00Z,sensor check (signal) outside a fault,C4-M-20261028T0751Z,Check your sensor: no clean signal
+421,C1,heart_rate,2026-10-28T08:14:00Z,caution,warning,exercise_ared,2026-10-28T09:22:00Z,NC01 exercise HR/BP,C1-M-20261028T0814Z,"Heart rate 116.3 bpm, out of range for 5 s"
+422,C3,bp_sys,2026-10-28T09:22:00Z,caution,caution,work,2026-10-28T10:04:00Z,"inside the personal band, outside NEWS2",C3-M-20261028T0922Z,"Systolic blood pressure 108.8 mmHg, out of range for 5 s"
+423,C2,signal,2026-10-28T09:45:59Z,advisory,advisory,exercise_ared,2026-10-28T09:46:59Z,sensor check (signal) outside a fault,C2-M-20261028T0946Z,Check your sensor: no clean signal
+424,C2,heart_rate,2026-10-28T09:50:59Z,warning,warning,exercise_ared,2026-10-28T11:00:59Z,NC01 exercise HR/BP,C2-M-20261028T0951Z,"Heart rate 117.9 bpm, out of range for 5 s"
+425,C2,signal,2026-10-28T10:20:59Z,advisory,advisory,exercise_ared,2026-10-28T10:21:59Z,sensor check (signal) outside a fault,C2-M-20261028T1021Z,Check your sensor: no clean signal
+426,C2,signal,2026-10-28T10:32:59Z,advisory,advisory,exercise_ared,2026-10-28T10:33:59Z,sensor check (signal) outside a fault,C2-M-20261028T1033Z,Check your sensor: no clean signal
+427,C3,heart_rate,2026-10-28T10:40:00Z,caution,emergency,exercise_cevis,2026-10-28T11:52:00Z,NC01 exercise HR/BP,C3-M-20261028T1040Z,"Heart rate 138.8 bpm, out of range for 5 s"
+428,C3,signal,2026-10-28T10:58:00Z,advisory,advisory,exercise_cevis,2026-10-28T10:59:00Z,sensor check (signal) outside a fault,C3-M-20261028T1058Z,Check your sensor: no clean signal
+429,C3,signal,2026-10-28T11:13:00Z,advisory,advisory,exercise_cevis,2026-10-28T11:14:00Z,sensor check (signal) outside a fault,C3-M-20261028T1113Z,Check your sensor: no clean signal
+430,C3,signal,2026-10-28T11:21:00Z,advisory,advisory,exercise_cevis,2026-10-28T11:22:00Z,sensor check (signal) outside a fault,C3-M-20261028T1121Z,Check your sensor: no clean signal
+431,C3,signal,2026-10-28T11:34:00Z,advisory,advisory,exercise_cevis,2026-10-28T11:35:00Z,sensor check (signal) outside a fault,C3-M-20261028T1134Z,Check your sensor: no clean signal
+432,C3,bp_sys,2026-10-28T12:37:00Z,caution,caution,meal,2026-10-28T12:55:00Z,"inside the personal band, outside NEWS2",C3-M-20261028T1237Z,"Systolic blood pressure 108.1 mmHg, out of range for 5 s"
+433,C3,bp_sys,2026-10-28T13:00:00Z,caution,caution,meal,2026-10-28T13:24:00Z,"inside the personal band, outside NEWS2",C3-M-20261028T1300Z,"Systolic blood pressure 107.3 mmHg, out of range for 5 s"
+434,C4,heart_rate,2026-10-28T13:24:00Z,caution,warning,exercise_ared,2026-10-28T14:32:00Z,NC01 exercise HR/BP,C4-M-20261028T1324Z,"Heart rate 116.6 bpm, out of range for 5 s"
+435,C3,bp_sys,2026-10-28T14:50:00Z,caution,caution,work,2026-10-28T15:42:00Z,"inside the personal band, outside NEWS2",C3-M-20261028T1450Z,"Systolic blood pressure 107.5 mmHg, out of range for 5 s"
+436,C1,heart_rate,2026-10-28T15:08:00Z,caution,emergency,exercise_cevis,2026-10-28T16:19:00Z,NC01 exercise HR/BP,C1-M-20261028T1508Z,"Heart rate 134.5 bpm, out of range for 5 s"
+437,C1,signal,2026-10-28T15:31:00Z,advisory,advisory,exercise_cevis,2026-10-28T15:32:00Z,sensor check (signal) outside a fault,C1-M-20261028T1531Z,Check your sensor: no clean signal
+438,C1,signal,2026-10-28T15:41:00Z,advisory,advisory,exercise_cevis,2026-10-28T15:42:00Z,sensor check (signal) outside a fault,C1-M-20261028T1541Z,Check your sensor: no clean signal
+439,C2,heart_rate,2026-10-28T16:28:59Z,caution,emergency,exercise_cevis,2026-10-28T17:41:58Z,NC01 exercise HR/BP,C2-M-20261028T1629Z,"Heart rate 135.8 bpm, out of range for 5 s"
+440,C3,bp_sys,2026-10-28T16:45:00Z,caution,caution,work,2026-10-28T17:08:00Z,"inside the personal band, outside NEWS2",C3-M-20261028T1645Z,"Systolic blood pressure 108.7 mmHg, out of range for 5 s"
+441,C3,heart_rate,2026-10-28T17:04:00Z,caution,warning,exercise_ared,2026-10-28T18:22:01Z,NC01 exercise HR/BP,C3-M-20261028T1704Z,"Heart rate 120 bpm, out of range for 5 s"
+442,C1,bp_sys,2026-10-28T17:22:00Z,caution,caution,work,2026-10-28T17:32:00Z,unexplained,C1-M-20261028T1722Z,"Systolic blood pressure 107.9 mmHg, out of range for 5 s"
+443,C3,bp_sys,2026-10-28T18:24:01Z,caution,warning,work,2026-10-29T07:43:00Z,"inside the personal band, outside NEWS2",C3-M-20261028T1824Z,"Systolic blood pressure 108.4 mmHg, out of range for 5 s"
+444,C1,bp_sys,2026-10-28T19:03:00Z,caution,caution,meal,2026-10-28T19:28:00Z,unexplained,C1-M-20261028T1903Z,"Systolic blood pressure 107 mmHg, out of range for 5 s"
+445,C4,bp_sys,2026-10-28T19:42:00Z,caution,caution,pre_sleep,2026-10-28T20:16:00Z,unexplained,C4-M-20261028T1942Z,"Systolic blood pressure 108.8 mmHg, out of range for 5 s"
+446,C1,bp_sys,2026-10-28T19:42:00Z,caution,warning,pre_sleep,2026-10-29T06:12:00Z,"inside the personal band, outside NEWS2",C1-M-20261028T1942Z,"Systolic blood pressure 109.3 mmHg, out of range for 5 s"
+447,C4,heart_rate,2026-10-28T20:54:00Z,caution,caution,pre_sleep,2026-10-29T06:16:00Z,"inside the personal band, outside NEWS2",C4-M-20261028T2054Z,"Heart rate 48.9 bpm, out of range for 5 s"
+448,C4,bp_sys,2026-10-28T21:36:00Z,caution,warning,awake_in_bed,2026-10-29T06:09:00Z,NC02 sleeping HR/BP (normal night dip),C4-M-20261028T2136Z,"Systolic blood pressure 108 mmHg, out of range for 5 s"
+449,C2,bp_sys,2026-10-28T21:44:58Z,caution,caution,awake_in_bed,2026-10-29T06:14:59Z,NC02 sleeping HR/BP (normal night dip),C2-M-20261028T2145Z,"Systolic blood pressure 107.5 mmHg, out of range for 5 s"
+450,C1,heart_rate,2026-10-28T23:09:00Z,caution,caution,sleep,2026-10-28T23:33:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261028T2309Z,"Heart rate 48.1 bpm, out of range for 5 s"
+451,C1,heart_rate,2026-10-29T00:06:00Z,caution,caution,sleep,2026-10-29T00:36:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261029T0006Z,"Heart rate 48.4 bpm, out of range for 5 s"
+452,C1,heart_rate,2026-10-29T00:47:00Z,caution,caution,sleep,2026-10-29T02:13:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261029T0047Z,"Heart rate 49.4 bpm, out of range for 5 s"
+453,C1,heart_rate,2026-10-29T03:52:00Z,caution,caution,sleep,2026-10-29T04:08:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261029T0352Z,"Heart rate 47.4 bpm, out of range for 5 s"
+454,C1,heart_rate,2026-10-29T04:32:00Z,caution,caution,sleep,2026-10-29T05:30:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261029T0432Z,"Heart rate 48 bpm, out of range for 5 s"
+455,C4,bp_sys,2026-10-29T06:42:00Z,caution,caution,typed_checkin,2026-10-29T06:52:00Z,typed check-in value,,"Systolic blood pressure 108 mmHg, out of range"
+456,C1,bp_sys,2026-10-29T06:48:00Z,caution,caution,typed_checkin,2026-10-29T07:18:00Z,typed check-in value,,"Systolic blood pressure 103 mmHg, out of range"
+457,C4,heart_rate,2026-10-29T08:00:00Z,caution,emergency,exercise_cevis,2026-10-29T09:18:00Z,NC01 exercise HR/BP,C4-M-20261029T0800Z,"Heart rate 135.6 bpm, out of range for 5 s"
+458,C1,signal,2026-10-29T08:13:00Z,advisory,advisory,exercise_ared,2026-10-29T08:14:00Z,sensor check (signal) outside a fault,C1-M-20261029T0813Z,Check your sensor: no clean signal
+459,C4,signal,2026-10-29T08:15:00Z,advisory,advisory,exercise_cevis,2026-10-29T08:16:00Z,sensor check (signal) outside a fault,C4-M-20261029T0815Z,Check your sensor: no clean signal
+460,C1,heart_rate,2026-10-29T08:18:00Z,caution,warning,exercise_ared,2026-10-29T09:29:00Z,NC01 exercise HR/BP,C1-M-20261029T0818Z,"Heart rate 114.9 bpm, out of range for 5 s"
+461,C1,signal,2026-10-29T08:19:00Z,advisory,advisory,exercise_ared,2026-10-29T08:20:00Z,sensor check (signal) outside a fault,C1-M-20261029T0819Z,Check your sensor: no clean signal
+462,C4,signal,2026-10-29T08:23:00Z,advisory,advisory,exercise_cevis,2026-10-29T08:24:00Z,sensor check (signal) outside a fault,C4-M-20261029T0823Z,Check your sensor: no clean signal
+463,C1,signal,2026-10-29T08:25:00Z,advisory,advisory,exercise_ared,2026-10-29T08:26:00Z,sensor check (signal) outside a fault,C1-M-20261029T0825Z,Check your sensor: no clean signal
+464,C2,heart_rate,2026-10-29T09:37:59Z,caution,warning,exercise_ared,2026-10-29T10:48:59Z,NC01 exercise HR/BP,C2-M-20261029T0938Z,"Heart rate 118.7 bpm, out of range for 5 s"
+465,C2,signal,2026-10-29T10:18:59Z,advisory,advisory,exercise_ared,2026-10-29T10:19:59Z,sensor check (signal) outside a fault,C2-M-20261029T1019Z,Check your sensor: no clean signal
+466,C3,heart_rate,2026-10-29T10:38:00Z,caution,emergency,exercise_cevis,2026-10-29T11:50:00Z,NC01 exercise HR/BP,C3-M-20261029T1038Z,"Heart rate 139.5 bpm, out of range for 5 s"
+467,C3,signal,2026-10-29T10:42:00Z,advisory,advisory,exercise_cevis,2026-10-29T10:43:00Z,sensor check (signal) outside a fault,C3-M-20261029T1042Z,Check your sensor: no clean signal
+468,C3,bp_sys,2026-10-29T12:56:00Z,caution,caution,meal,2026-10-29T13:19:00Z,"inside the personal band, outside NEWS2",C3-M-20261029T1256Z,"Systolic blood pressure 109.7 mmHg, out of range for 5 s"
+469,C4,heart_rate,2026-10-29T13:32:00Z,caution,warning,exercise_ared,2026-10-29T14:39:00Z,NC01 exercise HR/BP,C4-M-20261029T1332Z,"Heart rate 115.2 bpm, out of range for 5 s"
+470,C3,bp_sys,2026-10-29T14:05:00Z,caution,caution,work,2026-10-29T14:23:00Z,"inside the personal band, outside NEWS2",C3-M-20261029T1405Z,"Systolic blood pressure 108.3 mmHg, out of range for 5 s"
+471,C4,signal,2026-10-29T14:27:00Z,advisory,advisory,exercise_ared,2026-10-29T14:28:00Z,sensor check (signal) outside a fault,C4-M-20261029T1427Z,Check your sensor: no clean signal
+472,C1,heart_rate,2026-10-29T15:09:00Z,caution,emergency,exercise_cevis,2026-10-29T16:25:00Z,NC01 exercise HR/BP,C1-M-20261029T1509Z,"Heart rate 132.8 bpm, out of range for 5 s"
+473,C1,signal,2026-10-29T15:33:00Z,advisory,advisory,exercise_cevis,2026-10-29T15:34:00Z,sensor check (signal) outside a fault,C1-M-20261029T1533Z,Check your sensor: no clean signal
+474,C3,bp_sys,2026-10-29T15:39:00Z,caution,caution,work,2026-10-29T17:14:00Z,"inside the personal band, outside NEWS2",C3-M-20261029T1539Z,"Systolic blood pressure 105.2 mmHg, out of range for 5 s"
+475,C2,heart_rate,2026-10-29T16:29:59Z,caution,emergency,exercise_cevis,2026-10-29T17:51:58Z,NC01 exercise HR/BP,C2-M-20261029T1630Z,"Heart rate 136.4 bpm, out of range for 5 s"
+476,C2,signal,2026-10-29T16:30:59Z,advisory,advisory,exercise_cevis,2026-10-29T16:31:59Z,sensor check (signal) outside a fault,C2-M-20261029T1631Z,Check your sensor: no clean signal
+477,C3,heart_rate,2026-10-29T17:09:00Z,caution,warning,exercise_ared,2026-10-29T18:16:01Z,NC01 exercise HR/BP,C3-M-20261029T1709Z,"Heart rate 119 bpm, out of range for 5 s"
+478,C3,bp_sys,2026-10-29T18:31:01Z,caution,warning,work,2026-10-30T08:02:00Z,"inside the personal band, outside NEWS2",C3-M-20261029T1831Z,"Systolic blood pressure 108.6 mmHg, out of range for 5 s"
+479,C4,bp_sys,2026-10-29T19:04:00Z,caution,warning,meal,2026-10-30T06:16:00Z,unexplained,C4-M-20261029T1904Z,"Systolic blood pressure 109 mmHg, out of range for 5 s"
+480,C1,bp_sys,2026-10-29T19:06:00Z,caution,caution,meal,2026-10-29T19:30:00Z,"inside the personal band, outside NEWS2",C1-M-20261029T1906Z,"Systolic blood pressure 109.7 mmHg, out of range for 5 s"
+481,C4,heart_rate,2026-10-29T19:43:00Z,caution,caution,pre_sleep,2026-10-29T21:10:00Z,"inside the personal band, outside NEWS2",C4-M-20261029T1943Z,"Heart rate 48.6 bpm, out of range for 5 s"
+482,C1,bp_sys,2026-10-29T20:09:00Z,caution,warning,pre_sleep,2026-10-30T07:22:00Z,unexplained,C1-M-20261029T2009Z,"Systolic blood pressure 107.2 mmHg, out of range for 5 s"
+483,C4,heart_rate,2026-10-29T21:17:00Z,caution,caution,pre_sleep,2026-10-30T06:15:00Z,"inside the personal band, outside NEWS2",C4-M-20261029T2117Z,"Heart rate 49.7 bpm, out of range for 5 s"
+484,C2,bp_sys,2026-10-29T21:36:58Z,caution,caution,awake_in_bed,2026-10-30T06:11:59Z,NC02 sleeping HR/BP (normal night dip),C2-M-20261029T2137Z,"Systolic blood pressure 107.2 mmHg, out of range for 5 s"
+485,C1,heart_rate,2026-10-30T00:02:00Z,caution,caution,sleep,2026-10-30T03:10:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261030T0002Z,"Heart rate 48.4 bpm, out of range for 5 s"
+486,C1,heart_rate,2026-10-30T03:47:00Z,caution,caution,sleep,2026-10-30T04:21:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261030T0347Z,"Heart rate 48.3 bpm, out of range for 5 s"
+487,C1,heart_rate,2026-10-30T05:32:00Z,caution,caution,sleep,2026-10-30T05:59:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261030T0532Z,"Heart rate 48.8 bpm, out of range for 5 s"
+488,C4,heart_rate,2026-10-30T07:53:00Z,caution,emergency,exercise_cevis,2026-10-30T09:09:00Z,NC01 exercise HR/BP,C4-M-20261030T0753Z,"Heart rate 139.2 bpm, out of range for 5 s"
+489,C1,heart_rate,2026-10-30T08:18:00Z,caution,warning,exercise_ared,2026-10-30T09:33:00Z,NC01 exercise HR/BP,C1-M-20261030T0818Z,"Heart rate 112.2 bpm, out of range for 5 s"
+490,C4,signal,2026-10-30T08:20:00Z,advisory,advisory,exercise_cevis,2026-10-30T08:21:00Z,sensor check (signal) outside a fault,C4-M-20261030T0820Z,Check your sensor: no clean signal
+491,C1,signal,2026-10-30T08:43:00Z,advisory,advisory,exercise_ared,2026-10-30T08:44:00Z,sensor check (signal) outside a fault,C1-M-20261030T0843Z,Check your sensor: no clean signal
+492,C1,signal,2026-10-30T08:46:00Z,advisory,advisory,exercise_ared,2026-10-30T08:47:00Z,sensor check (signal) outside a fault,C1-M-20261030T0846Z,Check your sensor: no clean signal
+493,C1,signal,2026-10-30T09:19:00Z,advisory,advisory,exercise_ared,2026-10-30T09:20:00Z,sensor check (signal) outside a fault,C1-M-20261030T0919Z,Check your sensor: no clean signal
+494,C2,heart_rate,2026-10-30T09:41:59Z,caution,warning,exercise_ared,2026-10-30T11:04:59Z,NC01 exercise HR/BP,C2-M-20261030T0942Z,"Heart rate 116.7 bpm, out of range for 5 s"
+495,C2,signal,2026-10-30T09:50:59Z,advisory,advisory,exercise_ared,2026-10-30T09:51:59Z,sensor check (signal) outside a fault,C2-M-20261030T0951Z,Check your sensor: no clean signal
+496,C2,signal,2026-10-30T10:21:59Z,advisory,advisory,exercise_ared,2026-10-30T10:22:59Z,sensor check (signal) outside a fault,C2-M-20261030T1022Z,Check your sensor: no clean signal
+497,C3,heart_rate,2026-10-30T10:32:00Z,caution,emergency,exercise_cevis,2026-10-30T11:50:00Z,NC01 exercise HR/BP,C3-M-20261030T1032Z,"Heart rate 136.9 bpm, out of range for 5 s"
+498,C2,signal,2026-10-30T10:44:59Z,advisory,advisory,exercise_ared,2026-10-30T10:45:59Z,sensor check (signal) outside a fault,C2-M-20261030T1045Z,Check your sensor: no clean signal
+499,C3,signal,2026-10-30T11:00:00Z,advisory,advisory,exercise_cevis,2026-10-30T11:01:00Z,sensor check (signal) outside a fault,C3-M-20261030T1100Z,Check your sensor: no clean signal
+500,C3,signal,2026-10-30T11:05:00Z,advisory,advisory,exercise_cevis,2026-10-30T11:06:00Z,sensor check (signal) outside a fault,C3-M-20261030T1105Z,Check your sensor: no clean signal
+501,C3,signal,2026-10-30T11:28:00Z,advisory,advisory,exercise_cevis,2026-10-30T11:29:00Z,sensor check (signal) outside a fault,C3-M-20261030T1128Z,Check your sensor: no clean signal
+502,C4,heart_rate,2026-10-30T13:49:00Z,caution,warning,exercise_ared,2026-10-30T15:08:00Z,NC01 exercise HR/BP,C4-M-20261030T1349Z,"Heart rate 112.3 bpm, out of range for 5 s"
+503,C4,signal,2026-10-30T13:56:00Z,advisory,advisory,exercise_ared,2026-10-30T13:57:00Z,sensor check (signal) outside a fault,C4-M-20261030T1356Z,Check your sensor: no clean signal
+504,C4,signal,2026-10-30T14:06:00Z,advisory,advisory,exercise_ared,2026-10-30T14:07:00Z,sensor check (signal) outside a fault,C4-M-20261030T1406Z,Check your sensor: no clean signal
+505,C4,signal,2026-10-30T14:10:00Z,advisory,advisory,exercise_ared,2026-10-30T14:11:00Z,sensor check (signal) outside a fault,C4-M-20261030T1410Z,Check your sensor: no clean signal
+506,C3,bp_sys,2026-10-30T14:15:00Z,caution,caution,work,2026-10-30T14:54:00Z,"inside the personal band, outside NEWS2",C3-M-20261030T1415Z,"Systolic blood pressure 110 mmHg, out of range for 5 s"
+507,C1,signal,2026-10-30T15:02:00Z,advisory,advisory,exercise_cevis,2026-10-30T15:03:00Z,sensor check (signal) outside a fault,C1-M-20261030T1502Z,Check your sensor: no clean signal
+508,C1,heart_rate,2026-10-30T15:07:00Z,emergency,emergency,exercise_cevis,2026-10-30T16:16:00Z,NC01 exercise HR/BP,C1-M-20261030T1507Z,"Heart rate 138.8 bpm, out of range for 5 s"
+509,C1,signal,2026-10-30T15:19:00Z,advisory,advisory,exercise_cevis,2026-10-30T15:20:00Z,sensor check (signal) outside a fault,C1-M-20261030T1519Z,Check your sensor: no clean signal
+510,C3,bp_sys,2026-10-30T16:11:00Z,caution,caution,work,2026-10-30T17:13:00Z,"inside the personal band, outside NEWS2",C3-M-20261030T1611Z,"Systolic blood pressure 107.2 mmHg, out of range for 5 s"
+511,C2,signal,2026-10-30T16:33:59Z,advisory,advisory,exercise_cevis,2026-10-30T16:34:59Z,sensor check (signal) outside a fault,C2-M-20261030T1634Z,Check your sensor: no clean signal
+512,C2,heart_rate,2026-10-30T16:38:59Z,emergency,emergency,exercise_cevis,2026-10-30T17:54:58Z,NC01 exercise HR/BP,C2-M-20261030T1639Z,"Heart rate 141.4 bpm, out of range for 5 s"
+513,C2,signal,2026-10-30T16:59:58Z,advisory,advisory,exercise_cevis,2026-10-30T17:00:58Z,sensor check (signal) outside a fault,C2-M-20261030T1700Z,Check your sensor: no clean signal
+514,C3,heart_rate,2026-10-30T17:08:00Z,caution,warning,exercise_ared,2026-10-30T18:21:01Z,NC01 exercise HR/BP,C3-M-20261030T1708Z,"Heart rate 121.3 bpm, out of range for 5 s"
+515,C3,signal,2026-10-30T17:27:00Z,advisory,advisory,exercise_ared,2026-10-30T17:28:00Z,sensor check (signal) outside a fault,C3-M-20261030T1727Z,Check your sensor: no clean signal
+516,C3,signal,2026-10-30T17:42:00Z,advisory,advisory,exercise_ared,2026-10-30T17:43:00Z,sensor check (signal) outside a fault,C3-M-20261030T1742Z,Check your sensor: no clean signal
+517,C3,bp_sys,2026-10-30T18:39:01Z,caution,warning,work,2026-10-31T07:39:00Z,"inside the personal band, outside NEWS2",C3-M-20261030T1839Z,"Systolic blood pressure 108.6 mmHg, out of range for 5 s"
+518,C4,bp_sys,2026-10-30T19:24:00Z,caution,caution,meal,2026-10-30T20:12:00Z,unexplained,C4-M-20261030T1924Z,"Systolic blood pressure 108.2 mmHg, out of range for 5 s"
+519,C1,bp_sys,2026-10-30T19:36:00Z,caution,warning,pre_sleep,2026-10-31T06:15:00Z,unexplained,C1-M-20261030T1936Z,"Systolic blood pressure 107.9 mmHg, out of range for 5 s"
+520,C4,heart_rate,2026-10-30T19:59:00Z,caution,caution,pre_sleep,2026-10-30T20:19:00Z,"inside the personal band, outside NEWS2",C4-M-20261030T1959Z,"Heart rate 49.4 bpm, out of range for 5 s"
+521,C4,heart_rate,2026-10-30T20:28:00Z,caution,caution,pre_sleep,2026-10-31T06:16:00Z,"inside the personal band, outside NEWS2",C4-M-20261030T2028Z,"Heart rate 48.1 bpm, out of range for 5 s"
+522,C4,bp_sys,2026-10-30T21:12:00Z,caution,warning,pre_sleep,2026-10-31T06:09:00Z,unexplained,C4-M-20261030T2112Z,"Systolic blood pressure 108.5 mmHg, out of range for 5 s"
+523,C2,bp_sys,2026-10-30T21:34:58Z,caution,caution,awake_in_bed,2026-10-31T06:13:59Z,NC02 sleeping HR/BP (normal night dip),C2-M-20261030T2135Z,"Systolic blood pressure 106.5 mmHg, out of range for 5 s"
+524,C1,heart_rate,2026-10-30T23:51:00Z,caution,caution,sleep,2026-10-31T01:49:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261030T2351Z,"Heart rate 49.5 bpm, out of range for 5 s"
+525,C1,heart_rate,2026-10-31T03:51:00Z,caution,caution,sleep,2026-10-31T04:06:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261031T0351Z,"Heart rate 48.8 bpm, out of range for 5 s"
+526,C1,heart_rate,2026-10-31T04:31:00Z,caution,caution,sleep,2026-10-31T05:58:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261031T0431Z,"Heart rate 48.2 bpm, out of range for 5 s"
+527,C1,signal,2026-10-31T08:03:00Z,advisory,advisory,exercise_ared,2026-10-31T08:04:00Z,sensor check (signal) outside a fault,C1-M-20261031T0803Z,Check your sensor: no clean signal
+528,C1,heart_rate,2026-10-31T08:08:00Z,caution,warning,exercise_ared,2026-10-31T09:27:00Z,NC01 exercise HR/BP,C1-M-20261031T0808Z,"Heart rate 112 bpm, out of range for 5 s"
+529,C2,heart_rate,2026-10-31T09:35:59Z,caution,warning,exercise_ared,2026-10-31T10:52:59Z,NC01 exercise HR/BP,C2-M-20261031T0936Z,"Heart rate 114.9 bpm, out of range for 5 s"
+530,C2,signal,2026-10-31T09:42:59Z,advisory,advisory,exercise_ared,2026-10-31T09:43:59Z,sensor check (signal) outside a fault,C2-M-20261031T0943Z,Check your sensor: no clean signal
+531,C3,heart_rate,2026-10-31T10:32:00Z,caution,emergency,exercise_cevis,2026-10-31T11:56:00Z,NC01 exercise HR/BP,C3-M-20261031T1032Z,"Heart rate 139.8 bpm, out of range for 5 s"
+532,C3,bp_sys,2026-10-31T12:21:00Z,caution,caution,work,2026-10-31T13:47:00Z,"inside the personal band, outside NEWS2",C3-M-20261031T1221Z,"Systolic blood pressure 108.2 mmHg, out of range for 5 s"
+533,C3,bp_sys,2026-10-31T14:50:00Z,caution,caution,work,2026-10-31T15:03:00Z,"inside the personal band, outside NEWS2",C3-M-20261031T1450Z,"Systolic blood pressure 108.9 mmHg, out of range for 5 s"
+534,C1,signal,2026-10-31T14:52:00Z,advisory,advisory,exercise_cevis,2026-10-31T14:53:00Z,sensor check (signal) outside a fault,C1-M-20261031T1452Z,Check your sensor: no clean signal
+535,C1,heart_rate,2026-10-31T14:57:00Z,emergency,emergency,exercise_cevis,2026-10-31T16:08:00Z,NC01 exercise HR/BP,C1-M-20261031T1457Z,"Heart rate 134 bpm, out of range for 5 s"
+536,C1,signal,2026-10-31T15:04:00Z,advisory,advisory,exercise_cevis,2026-10-31T15:05:00Z,sensor check (signal) outside a fault,C1-M-20261031T1504Z,Check your sensor: no clean signal
+537,C1,signal,2026-10-31T15:28:00Z,advisory,advisory,exercise_cevis,2026-10-31T15:31:00Z,sensor check (signal) outside a fault,C1-M-20261031T1528Z,Check your sensor: no clean signal
+538,C3,bp_sys,2026-10-31T15:38:00Z,caution,caution,work,2026-10-31T17:21:00Z,"inside the personal band, outside NEWS2",C3-M-20261031T1538Z,"Systolic blood pressure 106.8 mmHg, out of range for 5 s"
+539,C2,heart_rate,2026-10-31T16:40:58Z,caution,emergency,exercise_cevis,2026-10-31T18:02:58Z,NC01 exercise HR/BP,C2-M-20261031T1641Z,"Heart rate 135.2 bpm, out of range for 5 s"
+540,C2,signal,2026-10-31T17:15:58Z,advisory,advisory,exercise_cevis,2026-10-31T17:16:58Z,sensor check (signal) outside a fault,C2-M-20261031T1716Z,Check your sensor: no clean signal
+541,C3,heart_rate,2026-10-31T17:17:00Z,caution,warning,exercise_ared,2026-10-31T18:32:01Z,NC01 exercise HR/BP,C3-M-20261031T1717Z,"Heart rate 119.7 bpm, out of range for 5 s"
+542,C2,signal,2026-10-31T17:47:58Z,advisory,advisory,exercise_cevis,2026-10-31T17:48:58Z,sensor check (signal) outside a fault,C2-M-20261031T1748Z,Check your sensor: no clean signal
+543,C1,bp_sys,2026-10-31T18:29:00Z,caution,caution,work,2026-10-31T18:50:00Z,"inside the personal band, outside NEWS2",C1-M-20261031T1829Z,"Systolic blood pressure 109.6 mmHg, out of range for 5 s"
+544,C3,bp_sys,2026-10-31T18:34:01Z,caution,warning,work,2026-11-01T07:36:00Z,"inside the personal band, outside NEWS2",C3-M-20261031T1834Z,"Systolic blood pressure 109 mmHg, out of range for 5 s"
+545,C4,bp_sys,2026-10-31T19:06:00Z,caution,warning,meal,2026-11-01T06:18:00Z,unexplained,C4-M-20261031T1906Z,"Systolic blood pressure 107 mmHg, out of range for 5 s"
+546,C1,bp_sys,2026-10-31T19:09:00Z,caution,caution,meal,2026-10-31T19:53:00Z,"inside the personal band, outside NEWS2",C1-M-20261031T1909Z,"Systolic blood pressure 109.6 mmHg, out of range for 5 s"
+547,C4,heart_rate,2026-10-31T19:53:00Z,caution,caution,pre_sleep,2026-11-01T06:14:00Z,"inside the personal band, outside NEWS2",C4-M-20261031T1953Z,"Heart rate 48 bpm, out of range for 5 s"
+548,C1,bp_sys,2026-10-31T20:15:00Z,caution,warning,pre_sleep,2026-11-01T06:17:00Z,"inside the personal band, outside NEWS2",C1-M-20261031T2015Z,"Systolic blood pressure 109.7 mmHg, out of range for 5 s"
+549,C2,bp_sys,2026-10-31T21:33:58Z,caution,caution,awake_in_bed,2026-11-01T06:05:59Z,NC02 sleeping HR/BP (normal night dip),C2-M-20261031T2134Z,"Systolic blood pressure 107.9 mmHg, out of range for 5 s"
+550,C1,heart_rate,2026-10-31T23:29:00Z,caution,caution,sleep,2026-10-31T23:40:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261031T2329Z,"Heart rate 49.1 bpm, out of range for 5 s"
+551,C1,heart_rate,2026-10-31T23:46:00Z,caution,caution,sleep,2026-11-01T00:08:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261031T2346Z,"Heart rate 49.9 bpm, out of range for 5 s"
+552,C1,heart_rate,2026-11-01T01:21:00Z,caution,caution,sleep,2026-11-01T01:37:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261101T0121Z,"Heart rate 49.5 bpm, out of range for 5 s"
+553,C1,heart_rate,2026-11-01T02:22:00Z,caution,caution,sleep,2026-11-01T03:36:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261101T0222Z,"Heart rate 49.5 bpm, out of range for 5 s"
+554,C1,heart_rate,2026-11-01T04:07:00Z,caution,caution,sleep,2026-11-01T05:03:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261101T0407Z,"Heart rate 48.9 bpm, out of range for 5 s"
+555,C1,heart_rate,2026-11-01T05:56:00Z,caution,caution,sleep,2026-11-01T06:10:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261101T0556Z,"Heart rate 49.2 bpm, out of range for 5 s"
+556,C1,bp_sys,2026-11-01T06:56:00Z,caution,caution,typed_checkin,2026-11-01T07:06:00Z,"inside the personal band, outside NEWS2",,"Systolic blood pressure 108 mmHg, out of range"
+557,C4,heart_rate,2026-11-01T07:53:00Z,caution,emergency,exercise_cevis,2026-11-01T09:05:00Z,NC01 exercise HR/BP,C4-M-20261101T0753Z,"Heart rate 136.3 bpm, out of range for 5 s"
+558,C4,signal,2026-11-01T07:56:00Z,advisory,advisory,exercise_cevis,2026-11-01T07:57:00Z,sensor check (signal) outside a fault,C4-M-20261101T0756Z,Check your sensor: no clean signal
+559,C4,signal,2026-11-01T08:11:00Z,advisory,advisory,exercise_cevis,2026-11-01T08:12:00Z,sensor check (signal) outside a fault,C4-M-20261101T0811Z,Check your sensor: no clean signal
+560,C1,heart_rate,2026-11-01T08:15:00Z,caution,warning,exercise_ared,2026-11-01T09:24:00Z,NC01 exercise HR/BP,C1-M-20261101T0815Z,"Heart rate 112.8 bpm, out of range for 5 s"
+561,C2,heart_rate,2026-11-01T09:32:59Z,caution,warning,exercise_ared,2026-11-01T10:45:59Z,NC01 exercise HR/BP,C2-M-20261101T0933Z,"Heart rate 114.9 bpm, out of range for 5 s"
+562,C3,bp_sys,2026-11-01T12:12:00Z,caution,caution,work,2026-11-01T13:19:00Z,"inside the personal band, outside NEWS2",C3-M-20261101T1212Z,"Systolic blood pressure 108.4 mmHg, out of range for 5 s"
+563,C4,heart_rate,2026-11-01T13:28:00Z,caution,warning,exercise_ared,2026-11-01T14:44:00Z,NC01 exercise HR/BP,C4-M-20261101T1328Z,"Heart rate 113.4 bpm, out of range for 5 s"
+564,C3,bp_sys,2026-11-01T14:25:00Z,caution,caution,work,2026-11-01T14:56:00Z,"inside the personal band, outside NEWS2",C3-M-20261101T1425Z,"Systolic blood pressure 107.8 mmHg, out of range for 5 s"
+565,C1,heart_rate,2026-11-01T15:06:00Z,caution,emergency,exercise_cevis,2026-11-01T16:27:00Z,NC01 exercise HR/BP,C1-M-20261101T1506Z,"Heart rate 138.3 bpm, out of range for 5 s"
+566,C3,bp_sys,2026-11-01T15:07:00Z,caution,caution,work,2026-11-01T15:24:00Z,"inside the personal band, outside NEWS2",C3-M-20261101T1507Z,"Systolic blood pressure 107.7 mmHg, out of range for 5 s"
+567,C1,signal,2026-11-01T15:09:00Z,advisory,advisory,exercise_cevis,2026-11-01T15:10:00Z,sensor check (signal) outside a fault,C1-M-20261101T1509Z,Check your sensor: no clean signal
+568,C1,signal,2026-11-01T15:58:00Z,advisory,advisory,exercise_cevis,2026-11-01T15:59:00Z,sensor check (signal) outside a fault,C1-M-20261101T1558Z,Check your sensor: no clean signal
+569,C3,bp_sys,2026-11-01T16:16:00Z,caution,warning,work,2026-11-02T07:02:00Z,"inside the personal band, outside NEWS2",C3-M-20261101T1616Z,"Systolic blood pressure 106.3 mmHg, out of range for 5 s"
+570,C2,heart_rate,2026-11-01T16:33:59Z,caution,emergency,exercise_cevis,2026-11-01T17:43:58Z,NC01 exercise HR/BP,C2-M-20261101T1634Z,"Heart rate 134 bpm, out of range for 5 s"
+571,C1,bp_sys,2026-11-01T19:09:00Z,caution,warning,meal,2026-11-02T06:25:00Z,unexplained,C1-M-20261101T1909Z,"Systolic blood pressure 107.4 mmHg, out of range for 5 s"
+572,C4,bp_sys,2026-11-01T19:33:00Z,caution,caution,pre_sleep,2026-11-01T20:38:00Z,unexplained,C4-M-20261101T1933Z,"Systolic blood pressure 108.8 mmHg, out of range for 5 s"
+573,C4,heart_rate,2026-11-01T20:52:00Z,caution,caution,pre_sleep,2026-11-01T21:25:00Z,"inside the personal band, outside NEWS2",C4-M-20261101T2052Z,"Heart rate 48.6 bpm, out of range for 5 s"
+574,C4,bp_sys,2026-11-01T20:52:00Z,caution,warning,pre_sleep,2026-11-02T06:12:00Z,"inside the personal band, outside NEWS2",C4-M-20261101T2052Z,"Systolic blood pressure 110 mmHg, out of range for 5 s"
+575,C2,bp_sys,2026-11-01T20:57:58Z,caution,caution,pre_sleep,2026-11-01T21:17:58Z,unexplained,C2-M-20261101T2058Z,"Systolic blood pressure 109.7 mmHg, out of range for 5 s"
+576,C2,bp_sys,2026-11-01T21:38:58Z,caution,caution,awake_in_bed,2026-11-02T06:06:59Z,NC02 sleeping HR/BP (normal night dip),C2-M-20261101T2139Z,"Systolic blood pressure 104.3 mmHg, out of range for 5 s"
+577,C4,heart_rate,2026-11-01T21:45:00Z,caution,emergency,awake_in_bed,2026-11-02T06:12:00Z,NC02 sleeping HR/BP (normal night dip),C4-M-20261101T2145Z,"Heart rate 47.3 bpm, out of range for 5 s"
+578,C1,heart_rate,2026-11-01T23:25:00Z,caution,caution,sleep,2026-11-01T23:56:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261101T2325Z,"Heart rate 47.9 bpm, out of range for 5 s"
+579,C1,heart_rate,2026-11-02T00:15:00Z,caution,caution,sleep,2026-11-02T00:42:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261102T0015Z,"Heart rate 48.9 bpm, out of range for 5 s"
+580,C1,heart_rate,2026-11-02T02:08:00Z,caution,caution,sleep,2026-11-02T03:15:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261102T0208Z,"Heart rate 46.5 bpm, out of range for 5 s"
+581,C1,heart_rate,2026-11-02T03:26:00Z,caution,caution,sleep,2026-11-02T03:38:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261102T0326Z,"Heart rate 49.2 bpm, out of range for 5 s"
+582,C1,heart_rate,2026-11-02T03:50:00Z,caution,caution,sleep,2026-11-02T04:06:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261102T0350Z,"Heart rate 49.9 bpm, out of range for 5 s"
+583,C1,heart_rate,2026-11-02T05:07:00Z,caution,caution,sleep,2026-11-02T06:10:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261102T0507Z,"Heart rate 47.4 bpm, out of range for 5 s"
+584,C4,bp_sys,2026-11-02T06:34:00Z,caution,caution,typed_checkin,2026-11-02T06:44:00Z,"inside the personal band, outside NEWS2",,"Systolic blood pressure 110 mmHg, out of range"
+585,C4,heart_rate,2026-11-02T07:42:00Z,caution,emergency,exercise_cevis,2026-11-02T09:01:00Z,NC01 exercise HR/BP,C4-M-20261102T0742Z,"Heart rate 137.8 bpm, out of range for 5 s"
+586,C1,heart_rate,2026-11-02T08:03:00Z,caution,warning,exercise_ared,2026-11-02T09:19:00Z,NC01 exercise HR/BP,C1-M-20261102T0803Z,"Heart rate 112.8 bpm, out of range for 5 s"
+587,C3,bp_sys,2026-11-02T08:15:00Z,caution,caution,work,2026-11-02T08:35:00Z,"inside the personal band, outside NEWS2",C3-M-20261102T0815Z,"Systolic blood pressure 107.2 mmHg, out of range for 5 s"
+588,C4,signal,2026-11-02T08:43:00Z,advisory,advisory,exercise_cevis,2026-11-02T08:44:00Z,sensor check (signal) outside a fault,C4-M-20261102T0843Z,Check your sensor: no clean signal
+589,C1,signal,2026-11-02T08:57:00Z,advisory,advisory,exercise_ared,2026-11-02T08:58:00Z,sensor check (signal) outside a fault,C1-M-20261102T0857Z,Check your sensor: no clean signal
+590,C3,heart_rate,2026-11-02T10:43:00Z,caution,emergency,exercise_cevis,2026-11-02T11:55:00Z,NC01 exercise HR/BP,C3-M-20261102T1043Z,"Heart rate 139.6 bpm, out of range for 5 s"
+591,C3,signal,2026-11-02T11:04:00Z,advisory,advisory,exercise_cevis,2026-11-02T11:05:00Z,sensor check (signal) outside a fault,C3-M-20261102T1104Z,Check your sensor: no clean signal
+592,C4,heart_rate,2026-11-02T13:32:00Z,caution,warning,exercise_ared,2026-11-02T14:48:00Z,NC01 exercise HR/BP,C4-M-20261102T1332Z,"Heart rate 117.5 bpm, out of range for 5 s"
+593,C4,signal,2026-11-02T13:40:00Z,advisory,advisory,exercise_ared,2026-11-02T13:41:00Z,sensor check (signal) outside a fault,C4-M-20261102T1340Z,Check your sensor: no clean signal
+594,C1,heart_rate,2026-11-02T15:05:00Z,caution,emergency,exercise_cevis,2026-11-02T16:14:00Z,NC01 exercise HR/BP,C1-M-20261102T1505Z,"Heart rate 135.4 bpm, out of range for 5 s"
+595,C1,signal,2026-11-02T15:10:00Z,advisory,advisory,exercise_cevis,2026-11-02T15:11:00Z,sensor check (signal) outside a fault,C1-M-20261102T1510Z,Check your sensor: no clean signal
+596,C1,signal,2026-11-02T15:25:00Z,advisory,advisory,exercise_cevis,2026-11-02T15:27:00Z,sensor check (signal) outside a fault,C1-M-20261102T1525Z,Check your sensor: no clean signal
+597,C3,bp_sys,2026-11-02T15:58:00Z,caution,caution,work,2026-11-02T16:50:00Z,"inside the personal band, outside NEWS2",C3-M-20261102T1558Z,"Systolic blood pressure 106.1 mmHg, out of range for 5 s"
+598,C3,heart_rate,2026-11-02T16:50:00Z,caution,warning,exercise_ared,2026-11-02T18:09:00Z,NC01 exercise HR/BP,C3-M-20261102T1650Z,"Heart rate 119.7 bpm, out of range for 5 s"
+599,C3,signal,2026-11-02T16:53:00Z,advisory,advisory,exercise_ared,2026-11-02T16:54:00Z,sensor check (signal) outside a fault,C3-M-20261102T1653Z,Check your sensor: no clean signal
+600,C3,signal,2026-11-02T17:04:00Z,advisory,advisory,exercise_ared,2026-11-02T17:05:00Z,sensor check (signal) outside a fault,C3-M-20261102T1704Z,Check your sensor: no clean signal
+601,C3,bp_sys,2026-11-02T18:18:01Z,caution,warning,work,2026-11-03T06:48:00Z,"inside the personal band, outside NEWS2",C3-M-20261102T1818Z,"Systolic blood pressure 108.4 mmHg, out of range for 5 s"
+602,C1,bp_sys,2026-11-02T19:21:00Z,caution,caution,meal,2026-11-02T21:05:00Z,"inside the personal band, outside NEWS2",C1-M-20261102T1921Z,"Systolic blood pressure 108.1 mmHg, out of range for 5 s"
+603,C4,bp_sys,2026-11-02T19:22:00Z,caution,caution,meal,2026-11-02T19:55:00Z,unexplained,C4-M-20261102T1922Z,"Systolic blood pressure 107.4 mmHg, out of range for 5 s"
+604,C2,bp_sys,2026-11-02T19:41:58Z,caution,caution,pre_sleep,2026-11-02T20:01:58Z,unexplained,C2-M-20261102T1942Z,"Systolic blood pressure 109.9 mmHg, out of range for 5 s"
+605,C4,heart_rate,2026-11-02T19:54:00Z,caution,caution,pre_sleep,2026-11-02T20:45:00Z,"inside the personal band, outside NEWS2",C4-M-20261102T1954Z,"Heart rate 49.7 bpm, out of range for 5 s"
+606,C4,bp_sys,2026-11-02T20:26:00Z,caution,caution,pre_sleep,2026-11-02T21:17:00Z,unexplained,C4-M-20261102T2026Z,"Systolic blood pressure 108.6 mmHg, out of range for 5 s"
+607,C4,heart_rate,2026-11-02T21:10:00Z,caution,caution,pre_sleep,2026-11-03T06:05:00Z,"inside the personal band, outside NEWS2",C4-M-20261102T2110Z,"Heart rate 49.2 bpm, out of range for 5 s"
+608,C1,bp_sys,2026-11-02T21:25:00Z,caution,warning,pre_sleep,2026-11-03T06:26:00Z,unexplained,C1-M-20261102T2125Z,"Systolic blood pressure 104.7 mmHg, out of range for 5 s"
+609,C4,bp_sys,2026-11-02T21:31:00Z,caution,warning,awake_in_bed,2026-11-03T06:05:00Z,NC02 sleeping HR/BP (normal night dip),C4-M-20261102T2131Z,"Systolic blood pressure 105.6 mmHg, out of range for 5 s"
+610,C2,bp_sys,2026-11-02T21:39:58Z,caution,caution,awake_in_bed,2026-11-03T06:11:59Z,NC02 sleeping HR/BP (normal night dip),C2-M-20261102T2140Z,"Systolic blood pressure 108.1 mmHg, out of range for 5 s"
+611,C1,heart_rate,2026-11-02T23:37:00Z,caution,caution,sleep,2026-11-02T23:57:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261102T2337Z,"Heart rate 48.2 bpm, out of range for 5 s"
+612,C1,heart_rate,2026-11-03T00:37:00Z,caution,caution,sleep,2026-11-03T01:03:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261103T0037Z,"Heart rate 48 bpm, out of range for 5 s"
+613,C1,heart_rate,2026-11-03T02:55:00Z,caution,caution,sleep,2026-11-03T04:52:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261103T0255Z,"Heart rate 49 bpm, out of range for 5 s"
+614,C1,heart_rate,2026-11-03T05:26:00Z,caution,caution,sleep,2026-11-03T06:14:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261103T0526Z,"Heart rate 47.9 bpm, out of range for 5 s"
+615,C3,bp_sys,2026-11-03T06:53:00Z,caution,caution,post_sleep,2026-11-03T07:43:00Z,"inside the personal band, outside NEWS2",C3-M-20261103T0653Z,"Systolic blood pressure 108 mmHg, out of range for 5 s"
+616,C4,bp_sys,2026-11-03T07:14:00Z,caution,caution,meal,2026-11-03T07:34:00Z,unexplained,C4-M-20261103T0714Z,"Systolic blood pressure 108.8 mmHg, out of range for 5 s"
+617,C4,signal,2026-11-03T07:49:00Z,advisory,advisory,exercise_cevis,2026-11-03T07:50:00Z,sensor check (signal) outside a fault,C4-M-20261103T0749Z,Check your sensor: no clean signal
+618,C4,heart_rate,2026-11-03T07:54:00Z,warning,emergency,exercise_cevis,2026-11-03T09:00:00Z,NC01 exercise HR/BP,C4-M-20261103T0754Z,"Heart rate 137.4 bpm, out of range for 5 s"
+619,C3,bp_sys,2026-11-03T07:58:00Z,caution,caution,work,2026-11-03T08:21:00Z,"inside the personal band, outside NEWS2",C3-M-20261103T0758Z,"Systolic blood pressure 108.2 mmHg, out of range for 5 s"
+620,C4,signal,2026-11-03T08:27:00Z,advisory,advisory,exercise_cevis,2026-11-03T08:28:00Z,sensor check (signal) outside a fault,C4-M-20261103T0827Z,Check your sensor: no clean signal
+621,C3,bp_sys,2026-11-03T08:38:00Z,caution,caution,work,2026-11-03T09:16:00Z,"inside the personal band, outside NEWS2",C3-M-20261103T0838Z,"Systolic blood pressure 108.1 mmHg, out of range for 5 s"
+622,C2,heart_rate,2026-11-03T09:35:59Z,caution,warning,exercise_ared,2026-11-03T10:56:59Z,NC01 exercise HR/BP,C2-M-20261103T0936Z,"Heart rate 116.6 bpm, out of range for 5 s"
+623,C2,signal,2026-11-03T09:58:59Z,advisory,advisory,exercise_ared,2026-11-03T09:59:59Z,sensor check (signal) outside a fault,C2-M-20261103T0959Z,Check your sensor: no clean signal
+624,C3,heart_rate,2026-11-03T10:39:00Z,caution,emergency,exercise_cevis,2026-11-03T11:59:00Z,NC01 exercise HR/BP,C3-M-20261103T1039Z,"Heart rate 136.3 bpm, out of range for 5 s"
+625,C3,signal,2026-11-03T10:42:00Z,advisory,advisory,exercise_cevis,2026-11-03T10:43:00Z,sensor check (signal) outside a fault,C3-M-20261103T1042Z,Check your sensor: no clean signal
+626,C3,signal,2026-11-03T11:22:00Z,advisory,advisory,exercise_cevis,2026-11-03T11:23:00Z,sensor check (signal) outside a fault,C3-M-20261103T1122Z,Check your sensor: no clean signal
+627,C3,signal,2026-11-03T11:25:00Z,advisory,advisory,exercise_cevis,2026-11-03T11:26:00Z,sensor check (signal) outside a fault,C3-M-20261103T1125Z,Check your sensor: no clean signal
+628,C3,signal,2026-11-03T11:31:00Z,advisory,advisory,exercise_cevis,2026-11-03T11:32:00Z,sensor check (signal) outside a fault,C3-M-20261103T1131Z,Check your sensor: no clean signal
+629,C3,signal,2026-11-03T11:33:00Z,advisory,advisory,exercise_cevis,2026-11-03T11:34:00Z,sensor check (signal) outside a fault,C3-M-20261103T1133Z,Check your sensor: no clean signal
+630,C3,bp_sys,2026-11-03T12:34:00Z,caution,caution,meal,2026-11-03T13:22:00Z,"inside the personal band, outside NEWS2",C3-M-20261103T1234Z,"Systolic blood pressure 108.2 mmHg, out of range for 5 s"
+631,C4,heart_rate,2026-11-03T13:49:00Z,caution,warning,exercise_ared,2026-11-03T15:09:00Z,NC01 exercise HR/BP,C4-M-20261103T1349Z,"Heart rate 113.2 bpm, out of range for 5 s"
+632,C4,signal,2026-11-03T14:17:00Z,advisory,advisory,exercise_ared,2026-11-03T14:18:00Z,sensor check (signal) outside a fault,C4-M-20261103T1417Z,Check your sensor: no clean signal
+633,C4,signal,2026-11-03T14:30:00Z,advisory,advisory,exercise_ared,2026-11-03T14:31:00Z,sensor check (signal) outside a fault,C4-M-20261103T1430Z,Check your sensor: no clean signal
+634,C4,signal,2026-11-03T14:40:00Z,advisory,advisory,exercise_ared,2026-11-03T14:41:00Z,sensor check (signal) outside a fault,C4-M-20261103T1440Z,Check your sensor: no clean signal
+635,C3,bp_sys,2026-11-03T14:43:00Z,caution,caution,work,2026-11-03T15:03:00Z,"inside the personal band, outside NEWS2",C3-M-20261103T1443Z,"Systolic blood pressure 109.6 mmHg, out of range for 5 s"
+636,C4,signal,2026-11-03T14:52:00Z,advisory,advisory,exercise_ared,2026-11-03T14:53:00Z,sensor check (signal) outside a fault,C4-M-20261103T1452Z,Check your sensor: no clean signal
+637,C3,bp_sys,2026-11-03T15:20:00Z,caution,caution,work,2026-11-03T15:51:00Z,"inside the personal band, outside NEWS2",C3-M-20261103T1520Z,"Systolic blood pressure 106.8 mmHg, out of range for 5 s"
+638,C2,heart_rate,2026-11-03T16:11:59Z,caution,emergency,exercise_cevis,2026-11-03T17:26:58Z,NC01 exercise HR/BP,C2-M-20261103T1612Z,"Heart rate 132.6 bpm, out of range for 5 s"
+639,C3,bp_sys,2026-11-03T16:33:00Z,caution,caution,work,2026-11-03T17:13:00Z,"inside the personal band, outside NEWS2",C3-M-20261103T1633Z,"Systolic blood pressure 108.4 mmHg, out of range for 5 s"
+640,C2,signal,2026-11-03T17:03:58Z,advisory,advisory,exercise_cevis,2026-11-03T17:04:58Z,sensor check (signal) outside a fault,C2-M-20261103T1704Z,Check your sensor: no clean signal
+641,C3,heart_rate,2026-11-03T17:08:00Z,caution,warning,exercise_ared,2026-11-03T18:22:01Z,NC01 exercise HR/BP,C3-M-20261103T1708Z,"Heart rate 119.9 bpm, out of range for 5 s"
+642,C3,signal,2026-11-03T17:52:00Z,advisory,advisory,exercise_ared,2026-11-03T17:53:00Z,sensor check (signal) outside a fault,C3-M-20261103T1752Z,Check your sensor: no clean signal
+643,C3,signal,2026-11-03T17:55:00Z,advisory,advisory,exercise_ared,2026-11-03T17:56:00Z,sensor check (signal) outside a fault,C3-M-20261103T1755Z,Check your sensor: no clean signal
+644,C3,bp_sys,2026-11-03T18:31:01Z,caution,caution,work,2026-11-03T18:41:01Z,"inside the personal band, outside NEWS2",C3-M-20261103T1831Z,"Systolic blood pressure 108.9 mmHg, out of range for 5 s"
+645,C3,bp_sys,2026-11-03T18:52:01Z,caution,warning,work,2026-11-04T08:06:00Z,"inside the personal band, outside NEWS2",C3-M-20261103T1852Z,"Systolic blood pressure 109.5 mmHg, out of range for 5 s"
+646,C4,bp_sys,2026-11-03T19:04:00Z,caution,caution,meal,2026-11-03T20:04:00Z,unexplained,C4-M-20261103T1904Z,"Systolic blood pressure 109.5 mmHg, out of range for 5 s"
+647,C1,bp_sys,2026-11-03T19:24:00Z,caution,warning,meal,2026-11-04T06:16:00Z,unexplained,C1-M-20261103T1924Z,"Systolic blood pressure 106.4 mmHg, out of range for 5 s"
+648,C4,heart_rate,2026-11-03T20:02:00Z,caution,caution,pre_sleep,2026-11-04T06:13:00Z,"inside the personal band, outside NEWS2",C4-M-20261103T2002Z,"Heart rate 47.8 bpm, out of range for 5 s"
+649,C4,bp_sys,2026-11-03T21:29:00Z,caution,warning,pre_sleep,2026-11-04T06:14:00Z,unexplained,C4-M-20261103T2129Z,"Systolic blood pressure 109.8 mmHg, out of range for 5 s"
+650,C2,bp_sys,2026-11-03T21:35:58Z,caution,caution,awake_in_bed,2026-11-04T02:33:59Z,NC02 sleeping HR/BP (normal night dip),C2-M-20261103T2136Z,"Systolic blood pressure 108.4 mmHg, out of range for 5 s"
+651,C1,heart_rate,2026-11-03T22:59:00Z,caution,caution,sleep,2026-11-03T23:13:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261103T2259Z,"Heart rate 47.7 bpm, out of range for 5 s"
+652,C1,heart_rate,2026-11-04T00:09:00Z,caution,caution,sleep,2026-11-04T00:24:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261104T0009Z,"Heart rate 48.1 bpm, out of range for 5 s"
+653,C1,heart_rate,2026-11-04T02:09:00Z,caution,caution,sleep,2026-11-04T02:32:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261104T0209Z,"Heart rate 47.7 bpm, out of range for 5 s"
+654,C2,bp_sys,2026-11-04T02:38:59Z,caution,caution,sleep,2026-11-04T06:12:59Z,NC02 sleeping HR/BP (normal night dip),C2-M-20261104T0239Z,"Systolic blood pressure 108.5 mmHg, out of range for 5 s"
+655,C1,heart_rate,2026-11-04T03:57:00Z,caution,caution,sleep,2026-11-04T04:17:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261104T0357Z,"Heart rate 47.9 bpm, out of range for 5 s"
+656,C1,heart_rate,2026-11-04T04:56:00Z,caution,caution,sleep,2026-11-04T06:12:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261104T0456Z,"Heart rate 47.6 bpm, out of range for 5 s"
+657,C4,heart_rate,2026-11-04T07:51:00Z,caution,emergency,exercise_cevis,2026-11-04T09:00:00Z,NC01 exercise HR/BP,C4-M-20261104T0751Z,"Heart rate 138.1 bpm, out of range for 5 s"
+658,C1,heart_rate,2026-11-04T08:20:00Z,caution,warning,exercise_ared,2026-11-04T09:36:00Z,NC01 exercise HR/BP,C1-M-20261104T0820Z,"Heart rate 117.1 bpm, out of range for 5 s"
+659,C3,bp_sys,2026-11-04T09:13:00Z,caution,caution,work,2026-11-04T09:26:00Z,"inside the personal band, outside NEWS2",C3-M-20261104T0913Z,"Systolic blood pressure 108.3 mmHg, out of range for 5 s"
+660,C2,heart_rate,2026-11-04T09:31:59Z,caution,warning,exercise_ared,2026-11-04T10:45:59Z,NC01 exercise HR/BP,C2-M-20261104T0932Z,"Heart rate 116.6 bpm, out of range for 5 s"
+661,C2,signal,2026-11-04T10:13:59Z,advisory,advisory,exercise_ared,2026-11-04T10:14:59Z,sensor check (signal) outside a fault,C2-M-20261104T1014Z,Check your sensor: no clean signal
+662,C3,bp_sys,2026-11-04T12:56:00Z,caution,caution,meal,2026-11-04T13:23:00Z,"inside the personal band, outside NEWS2",C3-M-20261104T1256Z,"Systolic blood pressure 108.1 mmHg, out of range for 5 s"
+663,C4,heart_rate,2026-11-04T13:52:00Z,caution,warning,exercise_ared,2026-11-04T15:11:00Z,NC01 exercise HR/BP,C4-M-20261104T1352Z,"Heart rate 114.7 bpm, out of range for 5 s"
+664,C3,heart_rate,2026-11-04T14:04:00Z,caution,emergency,exercise_cevis,2026-11-04T15:23:00Z,NC01 exercise HR/BP,C3-M-20261104T1404Z,"Heart rate 138.2 bpm, out of range for 5 s"
+665,C3,signal,2026-11-04T14:11:00Z,advisory,advisory,exercise_cevis,2026-11-04T14:12:00Z,sensor check (signal) outside a fault,C3-M-20261104T1411Z,Check your sensor: no clean signal
+666,C3,signal,2026-11-04T14:34:00Z,advisory,advisory,exercise_cevis,2026-11-04T14:35:00Z,sensor check (signal) outside a fault,C3-M-20261104T1434Z,Check your sensor: no clean signal
+667,C3,signal,2026-11-04T14:41:00Z,advisory,advisory,exercise_cevis,2026-11-04T14:42:00Z,sensor check (signal) outside a fault,C3-M-20261104T1441Z,Check your sensor: no clean signal
+668,C1,heart_rate,2026-11-04T14:56:00Z,caution,emergency,exercise_cevis,2026-11-04T16:10:00Z,NC01 exercise HR/BP,C1-M-20261104T1456Z,"Heart rate 135.8 bpm, out of range for 5 s"
+669,C3,signal,2026-11-04T15:03:00Z,advisory,advisory,exercise_cevis,2026-11-04T15:04:00Z,sensor check (signal) outside a fault,C3-M-20261104T1503Z,Check your sensor: no clean signal
+670,C1,signal,2026-11-04T15:11:00Z,advisory,advisory,exercise_cevis,2026-11-04T15:12:00Z,sensor check (signal) outside a fault,C1-M-20261104T1511Z,Check your sensor: no clean signal
+671,C1,signal,2026-11-04T15:20:00Z,advisory,advisory,exercise_cevis,2026-11-04T15:21:00Z,sensor check (signal) outside a fault,C1-M-20261104T1520Z,Check your sensor: no clean signal
+672,C3,bp_sys,2026-11-04T15:25:00Z,caution,caution,work,2026-11-04T16:16:00Z,"inside the personal band, outside NEWS2",C3-M-20261104T1525Z,"Systolic blood pressure 108.2 mmHg, out of range for 5 s"
+673,C3,bp_sys,2026-11-04T16:26:00Z,caution,caution,work,2026-11-04T16:51:00Z,"inside the personal band, outside NEWS2",C3-M-20261104T1626Z,"Systolic blood pressure 108.1 mmHg, out of range for 5 s"
+674,C2,heart_rate,2026-11-04T16:33:59Z,caution,emergency,exercise_cevis,2026-11-04T17:57:58Z,NC01 exercise HR/BP,C2-M-20261104T1634Z,"Heart rate 137 bpm, out of range for 5 s"
+675,C2,signal,2026-11-04T16:44:58Z,advisory,advisory,exercise_cevis,2026-11-04T16:45:58Z,sensor check (signal) outside a fault,C2-M-20261104T1645Z,Check your sensor: no clean signal
+676,C2,signal,2026-11-04T16:49:58Z,advisory,advisory,exercise_cevis,2026-11-04T16:50:58Z,sensor check (signal) outside a fault,C2-M-20261104T1650Z,Check your sensor: no clean signal
+677,C3,heart_rate,2026-11-04T17:04:00Z,caution,warning,exercise_ared,2026-11-04T18:22:01Z,NC01 exercise HR/BP,C3-M-20261104T1704Z,"Heart rate 122 bpm, out of range for 5 s"
+678,C2,signal,2026-11-04T17:17:58Z,advisory,advisory,exercise_cevis,2026-11-04T17:18:58Z,sensor check (signal) outside a fault,C2-M-20261104T1718Z,Check your sensor: no clean signal
+679,C3,signal,2026-11-04T17:24:00Z,advisory,advisory,exercise_ared,2026-11-04T17:25:00Z,sensor check (signal) outside a fault,C3-M-20261104T1724Z,Check your sensor: no clean signal
+680,C3,signal,2026-11-04T17:40:00Z,advisory,advisory,exercise_ared,2026-11-04T17:41:00Z,sensor check (signal) outside a fault,C3-M-20261104T1740Z,Check your sensor: no clean signal
+681,C3,signal,2026-11-04T17:46:00Z,advisory,advisory,exercise_ared,2026-11-04T17:47:00Z,sensor check (signal) outside a fault,C3-M-20261104T1746Z,Check your sensor: no clean signal
+682,C3,signal,2026-11-04T17:56:00Z,advisory,advisory,exercise_ared,2026-11-04T17:57:00Z,sensor check (signal) outside a fault,C3-M-20261104T1756Z,Check your sensor: no clean signal
+683,C3,bp_sys,2026-11-04T18:39:01Z,caution,warning,work,2026-11-05T07:39:00Z,"inside the personal band, outside NEWS2",C3-M-20261104T1839Z,"Systolic blood pressure 109.7 mmHg, out of range for 5 s"
+684,C1,bp_sys,2026-11-04T19:08:00Z,caution,warning,meal,2026-11-05T06:09:00Z,"inside the personal band, outside NEWS2",C1-M-20261104T1908Z,"Systolic blood pressure 108.8 mmHg, out of range for 5 s"
+685,C4,bp_sys,2026-11-04T19:14:00Z,caution,caution,meal,2026-11-04T20:34:00Z,"inside the personal band, outside NEWS2",C4-M-20261104T1914Z,"Systolic blood pressure 110 mmHg, out of range for 5 s"
+686,C4,heart_rate,2026-11-04T19:46:00Z,caution,caution,pre_sleep,2026-11-04T20:29:00Z,"inside the personal band, outside NEWS2",C4-M-20261104T1946Z,"Heart rate 49.6 bpm, out of range for 5 s"
+687,C4,heart_rate,2026-11-04T21:26:00Z,caution,caution,pre_sleep,2026-11-05T06:08:00Z,"inside the personal band, outside NEWS2",C4-M-20261104T2126Z,"Heart rate 49.1 bpm, out of range for 5 s"
+688,C4,bp_sys,2026-11-04T21:36:00Z,caution,warning,awake_in_bed,2026-11-05T06:08:00Z,NC02 sleeping HR/BP (normal night dip),C4-M-20261104T2136Z,"Systolic blood pressure 104.4 mmHg, out of range for 5 s"
+689,C2,bp_sys,2026-11-04T21:37:58Z,caution,warning,awake_in_bed,2026-11-05T06:07:59Z,NC02 sleeping HR/BP (normal night dip),C2-M-20261104T2138Z,"Systolic blood pressure 109.8 mmHg, out of range for 5 s"
+690,C1,heart_rate,2026-11-04T23:48:00Z,caution,caution,sleep,2026-11-05T00:54:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261104T2348Z,"Heart rate 48.6 bpm, out of range for 5 s"
+691,C1,heart_rate,2026-11-05T02:00:00Z,caution,caution,sleep,2026-11-05T03:30:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261105T0200Z,"Heart rate 47.7 bpm, out of range for 5 s"
+692,C1,heart_rate,2026-11-05T03:47:00Z,caution,caution,sleep,2026-11-05T04:26:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261105T0347Z,"Heart rate 47.9 bpm, out of range for 5 s"
+693,C1,heart_rate,2026-11-05T05:35:00Z,caution,caution,sleep,2026-11-05T06:00:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261105T0535Z,"Heart rate 47.4 bpm, out of range for 5 s"
+694,C4,bp_sys,2026-11-05T06:14:00Z,caution,caution,typed_checkin,2026-11-05T06:24:00Z,"inside the personal band, outside NEWS2",,"Systolic blood pressure 110 mmHg, out of range"
+695,C1,bp_sys,2026-11-05T06:42:00Z,caution,caution,typed_checkin,2026-11-05T06:52:00Z,typed check-in value,,"Systolic blood pressure 104 mmHg, out of range"
+696,C4,heart_rate,2026-11-05T07:52:00Z,caution,emergency,exercise_cevis,2026-11-05T09:09:00Z,NC01 exercise HR/BP,C4-M-20261105T0752Z,"Heart rate 136 bpm, out of range for 5 s"
+697,C1,signal,2026-11-05T08:01:00Z,advisory,advisory,exercise_ared,2026-11-05T08:02:00Z,sensor check (signal) outside a fault,C1-M-20261105T0801Z,Check your sensor: no clean signal
+698,C1,heart_rate,2026-11-05T08:06:00Z,caution,warning,exercise_ared,2026-11-05T09:13:00Z,NC01 exercise HR/BP,C1-M-20261105T0806Z,"Heart rate 114.6 bpm, out of range for 5 s"
+699,C1,signal,2026-11-05T08:27:00Z,advisory,advisory,exercise_ared,2026-11-05T08:28:00Z,sensor check (signal) outside a fault,C1-M-20261105T0827Z,Check your sensor: no clean signal
+700,C2,heart_rate,2026-11-05T09:23:59Z,caution,warning,exercise_ared,2026-11-05T10:37:59Z,NC01 exercise HR/BP,C2-M-20261105T0924Z,"Heart rate 117.3 bpm, out of range for 5 s"
+701,C3,signal,2026-11-05T10:24:00Z,advisory,advisory,exercise_cevis,2026-11-05T10:25:00Z,sensor check (signal) outside a fault,C3-M-20261105T1024Z,Check your sensor: no clean signal
+702,C3,signal,2026-11-05T10:26:00Z,advisory,advisory,exercise_cevis,2026-11-05T10:27:00Z,sensor check (signal) outside a fault,C3-M-20261105T1026Z,Check your sensor: no clean signal
+703,C3,heart_rate,2026-11-05T10:31:00Z,emergency,emergency,exercise_cevis,2026-11-05T11:47:00Z,NC01 exercise HR/BP,C3-M-20261105T1031Z,"Heart rate 142.7 bpm, out of range for 5 s"
+704,C3,bp_sys,2026-11-05T12:48:00Z,caution,caution,meal,2026-11-05T13:29:00Z,"inside the personal band, outside NEWS2",C3-M-20261105T1248Z,"Systolic blood pressure 107.4 mmHg, out of range for 5 s"
+705,C4,heart_rate,2026-11-05T13:34:00Z,caution,warning,exercise_ared,2026-11-05T14:50:00Z,NC01 exercise HR/BP,C4-M-20261105T1334Z,"Heart rate 115.6 bpm, out of range for 5 s"
+706,C4,signal,2026-11-05T14:27:00Z,advisory,advisory,exercise_ared,2026-11-05T14:28:00Z,sensor check (signal) outside a fault,C4-M-20261105T1427Z,Check your sensor: no clean signal
+707,C1,heart_rate,2026-11-05T15:03:00Z,caution,emergency,exercise_cevis,2026-11-05T16:22:00Z,NC01 exercise HR/BP,C1-M-20261105T1503Z,"Heart rate 135 bpm, out of range for 5 s"
+708,C2,heart_rate,2026-11-05T16:30:59Z,caution,emergency,exercise_cevis,2026-11-05T17:45:58Z,NC01 exercise HR/BP,C2-M-20261105T1631Z,"Heart rate 134.9 bpm, out of range for 5 s"
+709,C3,heart_rate,2026-11-05T16:44:00Z,caution,warning,exercise_ared,2026-11-05T17:59:00Z,NC01 exercise HR/BP,C3-M-20261105T1644Z,"Heart rate 120.7 bpm, out of range for 5 s"
+710,C2,signal,2026-11-05T16:43:58Z,advisory,advisory,exercise_cevis,2026-11-05T16:44:58Z,sensor check (signal) outside a fault,C2-M-20261105T1644Z,Check your sensor: no clean signal
+711,C3,signal,2026-11-05T16:54:00Z,advisory,advisory,exercise_ared,2026-11-05T16:55:00Z,sensor check (signal) outside a fault,C3-M-20261105T1654Z,Check your sensor: no clean signal
+712,C3,signal,2026-11-05T17:11:00Z,advisory,advisory,exercise_ared,2026-11-05T17:12:00Z,sensor check (signal) outside a fault,C3-M-20261105T1711Z,Check your sensor: no clean signal
+713,C3,bp_sys,2026-11-05T18:05:00Z,caution,warning,work,2026-11-06T07:56:00Z,"inside the personal band, outside NEWS2",C3-M-20261105T1805Z,"Systolic blood pressure 109 mmHg, out of range for 5 s"
+714,C1,bp_sys,2026-11-05T19:24:00Z,caution,caution,meal,2026-11-05T20:27:00Z,"inside the personal band, outside NEWS2",C1-M-20261105T1924Z,"Systolic blood pressure 108.8 mmHg, out of range for 5 s"
+715,C4,heart_rate,2026-11-05T19:57:00Z,caution,caution,pre_sleep,2026-11-06T06:11:00Z,"inside the personal band, outside NEWS2",C4-M-20261105T1957Z,"Heart rate 47.6 bpm, out of range for 5 s"
+716,C4,bp_sys,2026-11-05T20:26:00Z,caution,warning,pre_sleep,2026-11-06T06:11:00Z,unexplained,C4-M-20261105T2026Z,"Systolic blood pressure 109.6 mmHg, out of range for 5 s"
+717,C1,bp_sys,2026-11-05T20:35:00Z,caution,warning,pre_sleep,2026-11-06T06:09:00Z,"inside the personal band, outside NEWS2",C1-M-20261105T2035Z,"Systolic blood pressure 108.8 mmHg, out of range for 5 s"
+718,C2,bp_sys,2026-11-05T21:42:58Z,caution,caution,awake_in_bed,2026-11-06T06:08:59Z,NC02 sleeping HR/BP (normal night dip),C2-M-20261105T2143Z,"Systolic blood pressure 107.2 mmHg, out of range for 5 s"
+719,C1,heart_rate,2026-11-06T00:45:00Z,caution,caution,sleep,2026-11-06T00:57:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261106T0045Z,"Heart rate 49.8 bpm, out of range for 5 s"
+720,C1,heart_rate,2026-11-06T01:30:00Z,caution,caution,sleep,2026-11-06T02:22:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261106T0130Z,"Heart rate 49.9 bpm, out of range for 5 s"
+721,C1,heart_rate,2026-11-06T03:28:00Z,caution,caution,sleep,2026-11-06T03:48:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261106T0328Z,"Heart rate 47.4 bpm, out of range for 5 s"
+722,C1,heart_rate,2026-11-06T05:44:00Z,caution,caution,sleep,2026-11-06T05:58:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261106T0544Z,"Heart rate 49.4 bpm, out of range for 5 s"
+723,C1,bp_sys,2026-11-06T07:06:00Z,caution,caution,meal,2026-11-06T07:26:00Z,"inside the personal band, outside NEWS2",C1-M-20261106T0706Z,"Systolic blood pressure 108.5 mmHg, out of range for 5 s"
+724,C4,heart_rate,2026-11-06T07:48:00Z,caution,emergency,exercise_cevis,2026-11-06T09:11:00Z,NC01 exercise HR/BP,C4-M-20261106T0748Z,"Heart rate 138.3 bpm, out of range for 5 s"
+725,C4,signal,2026-11-06T08:00:00Z,advisory,advisory,exercise_cevis,2026-11-06T08:01:00Z,sensor check (signal) outside a fault,C4-M-20261106T0800Z,Check your sensor: no clean signal
+726,C4,signal,2026-11-06T08:02:00Z,advisory,advisory,exercise_cevis,2026-11-06T08:03:00Z,sensor check (signal) outside a fault,C4-M-20261106T0802Z,Check your sensor: no clean signal
+727,C1,heart_rate,2026-11-06T08:02:00Z,caution,warning,exercise_ared,2026-11-06T09:15:00Z,NC01 exercise HR/BP,C1-M-20261106T0802Z,"Heart rate 114.4 bpm, out of range for 5 s"
+728,C1,signal,2026-11-06T08:35:00Z,advisory,advisory,exercise_ared,2026-11-06T08:36:00Z,sensor check (signal) outside a fault,C1-M-20261106T0835Z,Check your sensor: no clean signal
+729,C4,signal,2026-11-06T08:58:00Z,advisory,advisory,exercise_cevis,2026-11-06T08:59:00Z,sensor check (signal) outside a fault,C4-M-20261106T0858Z,Check your sensor: no clean signal
+730,C1,signal,2026-11-06T08:58:00Z,advisory,advisory,exercise_ared,2026-11-06T08:59:00Z,sensor check (signal) outside a fault,C1-M-20261106T0858Z,Check your sensor: no clean signal
+731,C2,heart_rate,2026-11-06T09:31:59Z,caution,warning,exercise_ared,2026-11-06T10:49:59Z,NC01 exercise HR/BP,C2-M-20261106T0932Z,"Heart rate 115.7 bpm, out of range for 5 s"
+732,C3,heart_rate,2026-11-06T10:18:00Z,caution,emergency,exercise_cevis,2026-11-06T11:31:00Z,NC01 exercise HR/BP,C3-M-20261106T1018Z,"Heart rate 138 bpm, out of range for 5 s"
+733,C2,signal,2026-11-06T10:23:59Z,advisory,advisory,exercise_ared,2026-11-06T10:24:59Z,sensor check (signal) outside a fault,C2-M-20261106T1024Z,Check your sensor: no clean signal
+734,C3,signal,2026-11-06T10:27:00Z,advisory,advisory,exercise_cevis,2026-11-06T10:28:00Z,sensor check (signal) outside a fault,C3-M-20261106T1027Z,Check your sensor: no clean signal
+735,C3,signal,2026-11-06T10:57:00Z,advisory,advisory,exercise_cevis,2026-11-06T10:58:00Z,sensor check (signal) outside a fault,C3-M-20261106T1057Z,Check your sensor: no clean signal
+736,C3,signal,2026-11-06T11:02:00Z,advisory,advisory,exercise_cevis,2026-11-06T11:04:00Z,sensor check (signal) outside a fault,C3-M-20261106T1102Z,Check your sensor: no clean signal
+737,C3,signal,2026-11-06T11:08:00Z,advisory,advisory,exercise_cevis,2026-11-06T11:09:00Z,sensor check (signal) outside a fault,C3-M-20261106T1108Z,Check your sensor: no clean signal
+738,C3,bp_sys,2026-11-06T12:36:00Z,caution,caution,meal,2026-11-06T16:36:00Z,"inside the personal band, outside NEWS2",C3-M-20261106T1236Z,"Systolic blood pressure 109.6 mmHg, out of range for 5 s"
+739,C4,heart_rate,2026-11-06T13:45:00Z,caution,warning,exercise_ared,2026-11-06T14:56:00Z,NC01 exercise HR/BP,C4-M-20261106T1345Z,"Heart rate 114.2 bpm, out of range for 5 s"
+740,C1,heart_rate,2026-11-06T15:09:00Z,caution,emergency,exercise_cevis,2026-11-06T16:20:00Z,NC01 exercise HR/BP,C1-M-20261106T1509Z,"Heart rate 137.5 bpm, out of range for 5 s"
+741,C1,signal,2026-11-06T15:18:00Z,advisory,advisory,exercise_cevis,2026-11-06T15:19:00Z,sensor check (signal) outside a fault,C1-M-20261106T1518Z,Check your sensor: no clean signal
+742,C1,signal,2026-11-06T15:22:00Z,advisory,advisory,exercise_cevis,2026-11-06T15:23:00Z,sensor check (signal) outside a fault,C1-M-20261106T1522Z,Check your sensor: no clean signal
+743,C1,signal,2026-11-06T15:41:00Z,advisory,advisory,exercise_cevis,2026-11-06T15:42:00Z,sensor check (signal) outside a fault,C1-M-20261106T1541Z,Check your sensor: no clean signal
+744,C1,signal,2026-11-06T15:50:00Z,advisory,advisory,exercise_cevis,2026-11-06T15:51:00Z,sensor check (signal) outside a fault,C1-M-20261106T1550Z,Check your sensor: no clean signal
+745,C1,signal,2026-11-06T16:06:00Z,advisory,advisory,exercise_cevis,2026-11-06T16:07:00Z,sensor check (signal) outside a fault,C1-M-20261106T1606Z,Check your sensor: no clean signal
+746,C2,heart_rate,2026-11-06T16:40:58Z,caution,emergency,exercise_cevis,2026-11-06T18:03:58Z,NC01 exercise HR/BP,C2-M-20261106T1641Z,"Heart rate 132.6 bpm, out of range for 5 s"
+747,C2,signal,2026-11-06T16:46:58Z,advisory,advisory,exercise_cevis,2026-11-06T16:47:58Z,sensor check (signal) outside a fault,C2-M-20261106T1647Z,Check your sensor: no clean signal
+748,C3,bp_sys,2026-11-06T17:04:00Z,caution,caution,work,2026-11-06T17:30:00Z,"inside the personal band, outside NEWS2",C3-M-20261106T1704Z,"Systolic blood pressure 107.2 mmHg, out of range for 5 s"
+749,C3,heart_rate,2026-11-06T17:26:00Z,caution,warning,exercise_ared,2026-11-06T18:35:01Z,NC01 exercise HR/BP,C3-M-20261106T1726Z,"Heart rate 118.6 bpm, out of range for 5 s"
+750,C3,bp_sys,2026-11-06T18:45:01Z,caution,warning,work,2026-11-07T06:32:00Z,"inside the personal band, outside NEWS2",C3-M-20261106T1845Z,"Systolic blood pressure 109.2 mmHg, out of range for 5 s"
+751,C4,bp_sys,2026-11-06T19:13:00Z,caution,warning,meal,2026-11-07T06:12:00Z,unexplained,C4-M-20261106T1913Z,"Systolic blood pressure 108 mmHg, out of range for 5 s"
+752,C1,bp_sys,2026-11-06T19:20:00Z,caution,warning,meal,2026-11-07T06:19:00Z,unexplained,C1-M-20261106T1920Z,"Systolic blood pressure 106.6 mmHg, out of range for 5 s"
+753,C4,heart_rate,2026-11-06T20:25:00Z,caution,caution,pre_sleep,2026-11-07T06:13:00Z,"inside the personal band, outside NEWS2",C4-M-20261106T2025Z,"Heart rate 46.7 bpm, out of range for 5 s"
+754,C2,bp_sys,2026-11-06T21:32:58Z,caution,caution,awake_in_bed,2026-11-07T06:03:59Z,NC02 sleeping HR/BP (normal night dip),C2-M-20261106T2133Z,"Systolic blood pressure 102.8 mmHg, out of range for 5 s"
+755,C1,heart_rate,2026-11-06T22:53:00Z,caution,caution,sleep,2026-11-06T23:25:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261106T2253Z,"Heart rate 50 bpm, out of range for 5 s"
+756,C1,heart_rate,2026-11-06T23:42:00Z,caution,caution,sleep,2026-11-07T00:21:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261106T2342Z,"Heart rate 49.1 bpm, out of range for 5 s"
+757,C1,heart_rate,2026-11-07T00:29:00Z,caution,caution,sleep,2026-11-07T00:40:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261107T0029Z,"Heart rate 47.4 bpm, out of range for 5 s"
+758,C1,heart_rate,2026-11-07T00:59:00Z,caution,caution,sleep,2026-11-07T01:13:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261107T0059Z,"Heart rate 49.4 bpm, out of range for 5 s"
+759,C1,heart_rate,2026-11-07T01:40:00Z,caution,caution,sleep,2026-11-07T02:58:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261107T0140Z,"Heart rate 49.4 bpm, out of range for 5 s"
+760,C1,heart_rate,2026-11-07T03:26:00Z,caution,caution,sleep,2026-11-07T03:40:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261107T0326Z,"Heart rate 47.6 bpm, out of range for 5 s"
+761,C1,heart_rate,2026-11-07T05:07:00Z,caution,caution,sleep,2026-11-07T05:37:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261107T0507Z,"Heart rate 49.8 bpm, out of range for 5 s"
+762,C4,bp_sys,2026-11-07T06:39:00Z,caution,caution,typed_checkin,2026-11-07T06:49:00Z,"inside the personal band, outside NEWS2",,"Systolic blood pressure 110 mmHg, out of range"
+763,C4,heart_rate,2026-11-07T06:40:00Z,caution,caution,post_sleep,2026-11-07T07:08:00Z,"inside the personal band, outside NEWS2",C4-M-20261107T0640Z,"Heart rate 48 bpm, out of range for 5 s"
+764,C3,bp_sys,2026-11-07T06:49:00Z,caution,caution,post_sleep,2026-11-07T07:51:00Z,"inside the personal band, outside NEWS2",C3-M-20261107T0649Z,"Systolic blood pressure 107.9 mmHg, out of range for 5 s"
+765,C1,heart_rate,2026-11-07T08:07:00Z,caution,warning,exercise_ared,2026-11-07T09:25:00Z,NC01 exercise HR/BP,C1-M-20261107T0807Z,"Heart rate 116.2 bpm, out of range for 5 s"
+766,C1,signal,2026-11-07T08:20:00Z,advisory,advisory,exercise_ared,2026-11-07T08:21:00Z,sensor check (signal) outside a fault,C1-M-20261107T0820Z,Check your sensor: no clean signal
+767,C1,signal,2026-11-07T08:50:00Z,advisory,advisory,exercise_ared,2026-11-07T08:51:00Z,sensor check (signal) outside a fault,C1-M-20261107T0850Z,Check your sensor: no clean signal
+768,C2,heart_rate,2026-11-07T09:22:59Z,caution,warning,exercise_ared,2026-11-07T10:31:59Z,NC01 exercise HR/BP,C2-M-20261107T0923Z,"Heart rate 113.8 bpm, out of range for 5 s"
+769,C2,signal,2026-11-07T09:37:59Z,advisory,advisory,exercise_ared,2026-11-07T09:38:59Z,sensor check (signal) outside a fault,C2-M-20261107T0938Z,Check your sensor: no clean signal
+770,C3,bp_sys,2026-11-07T10:00:11Z,caution,caution,work,2026-11-07T10:26:55Z,"inside the personal band, outside NEWS2",C3-S-20261107T100011Z,"Systolic blood pressure 109.3 mmHg, out of range for 5 s"
+771,C2,signal,2026-11-07T10:11:59Z,advisory,advisory,exercise_ared,2026-11-07T10:12:59Z,sensor check (signal) outside a fault,C2-M-20261107T1012Z,Check your sensor: no clean signal
+772,C3,heart_rate,2026-11-07T11:04:00Z,caution,emergency,exercise_cevis,2026-11-07T12:23:00Z,NC01 exercise HR/BP,C3-M-20261107T1104Z,"Heart rate 141 bpm, out of range for 5 s"
+773,C3,signal,2026-11-07T11:17:00Z,advisory,advisory,exercise_cevis,2026-11-07T11:18:00Z,sensor check (signal) outside a fault,C3-M-20261107T1117Z,Check your sensor: no clean signal
+774,C3,signal,2026-11-07T11:47:00Z,advisory,advisory,exercise_cevis,2026-11-07T11:48:00Z,sensor check (signal) outside a fault,C3-M-20261107T1147Z,Check your sensor: no clean signal
+775,C3,signal,2026-11-07T11:49:00Z,advisory,advisory,exercise_cevis,2026-11-07T11:50:00Z,sensor check (signal) outside a fault,C3-M-20261107T1149Z,Check your sensor: no clean signal
+776,C3,signal,2026-11-07T11:54:00Z,advisory,advisory,exercise_cevis,2026-11-07T11:55:00Z,sensor check (signal) outside a fault,C3-M-20261107T1154Z,Check your sensor: no clean signal
+777,C3,bp_sys,2026-11-07T12:33:00Z,caution,caution,meal,2026-11-07T13:24:00Z,"inside the personal band, outside NEWS2",C3-M-20261107T1233Z,"Systolic blood pressure 109.6 mmHg, out of range for 5 s"
+778,C3,bp_sys,2026-11-07T14:35:00Z,caution,caution,work,2026-11-07T14:48:00Z,"inside the personal band, outside NEWS2",C3-M-20261107T1435Z,"Systolic blood pressure 106.9 mmHg, out of range for 5 s"
+779,C1,heart_rate,2026-11-07T15:05:00Z,caution,emergency,exercise_cevis,2026-11-07T16:27:00Z,NC01 exercise HR/BP,C1-M-20261107T1505Z,"Heart rate 135.5 bpm, out of range for 5 s"
+780,C1,signal,2026-11-07T15:55:00Z,advisory,advisory,exercise_cevis,2026-11-07T15:56:00Z,sensor check (signal) outside a fault,C1-M-20261107T1555Z,Check your sensor: no clean signal
+781,C3,bp_sys,2026-11-07T16:02:00Z,caution,caution,work,2026-11-07T17:09:00Z,"inside the personal band, outside NEWS2",C3-M-20261107T1602Z,"Systolic blood pressure 107.8 mmHg, out of range for 5 s"
+782,C2,heart_rate,2026-11-07T16:14:59Z,caution,emergency,exercise_cevis,2026-11-07T17:34:58Z,NC01 exercise HR/BP,C2-M-20261107T1615Z,"Heart rate 134.9 bpm, out of range for 5 s"
+783,C2,signal,2026-11-07T16:39:59Z,advisory,advisory,exercise_cevis,2026-11-07T16:40:58Z,sensor check (signal) outside a fault,C2-M-20261107T1640Z,Check your sensor: no clean signal
+784,C2,signal,2026-11-07T16:51:58Z,advisory,advisory,exercise_cevis,2026-11-07T16:53:58Z,sensor check (signal) outside a fault,C2-M-20261107T1652Z,Check your sensor: no clean signal
+785,C3,heart_rate,2026-11-07T17:04:00Z,caution,warning,exercise_ared,2026-11-07T18:22:01Z,NC01 exercise HR/BP,C3-M-20261107T1704Z,"Heart rate 118.5 bpm, out of range for 5 s"
+786,C1,bp_sys,2026-11-07T17:59:00Z,caution,caution,work,2026-11-07T18:36:00Z,"inside the personal band, outside NEWS2",C1-M-20261107T1759Z,"Systolic blood pressure 108.9 mmHg, out of range for 5 s"
+787,C3,bp_sys,2026-11-07T18:30:01Z,caution,warning,work,2026-11-08T06:16:00Z,"inside the personal band, outside NEWS2",C3-M-20261107T1830Z,"Systolic blood pressure 108.4 mmHg, out of range for 5 s"
+788,C1,bp_sys,2026-11-07T19:09:00Z,caution,warning,meal,2026-11-08T06:19:00Z,"inside the personal band, outside NEWS2",C1-M-20261107T1909Z,"Systolic blood pressure 108.8 mmHg, out of range for 5 s"
+789,C4,bp_sys,2026-11-07T19:14:00Z,caution,caution,meal,2026-11-07T20:26:00Z,unexplained,C4-M-20261107T1914Z,"Systolic blood pressure 107.5 mmHg, out of range for 5 s"
+790,C2,bp_sys,2026-11-07T19:47:58Z,caution,caution,pre_sleep,2026-11-07T19:58:58Z,unexplained,C2-M-20261107T1948Z,"Systolic blood pressure 109.1 mmHg, out of range for 5 s"
+791,C4,heart_rate,2026-11-07T20:32:00Z,caution,caution,pre_sleep,2026-11-08T06:39:00Z,"inside the personal band, outside NEWS2",C4-M-20261107T2032Z,"Heart rate 49.5 bpm, out of range for 5 s"
+792,C4,bp_sys,2026-11-07T21:36:00Z,caution,warning,awake_in_bed,2026-11-08T06:16:00Z,NC02 sleeping HR/BP (normal night dip),C4-M-20261107T2136Z,"Systolic blood pressure 102.8 mmHg, out of range for 5 s"
+793,C2,bp_sys,2026-11-07T21:39:58Z,caution,caution,awake_in_bed,2026-11-08T06:07:59Z,NC02 sleeping HR/BP (normal night dip),C2-M-20261107T2140Z,"Systolic blood pressure 106.5 mmHg, out of range for 5 s"
+794,C1,heart_rate,2026-11-07T23:36:00Z,caution,caution,sleep,2026-11-08T00:12:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261107T2336Z,"Heart rate 48.1 bpm, out of range for 5 s"
+795,C1,heart_rate,2026-11-08T00:52:00Z,caution,caution,sleep,2026-11-08T01:10:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261108T0052Z,"Heart rate 49.9 bpm, out of range for 5 s"
+796,C1,heart_rate,2026-11-08T01:53:00Z,caution,caution,sleep,2026-11-08T02:16:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261108T0153Z,"Heart rate 48.7 bpm, out of range for 5 s"
+797,C1,heart_rate,2026-11-08T04:10:00Z,caution,caution,sleep,2026-11-08T04:21:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261108T0410Z,"Heart rate 48.9 bpm, out of range for 5 s"
+798,C1,heart_rate,2026-11-08T05:16:00Z,caution,caution,sleep,2026-11-08T05:26:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261108T0516Z,"Heart rate 50 bpm, out of range for 5 s"
+799,C3,bp_sys,2026-11-08T06:49:00Z,caution,caution,typed_checkin,2026-11-08T07:41:00Z,"inside the personal band, outside NEWS2",,"Systolic blood pressure 105 mmHg, out of range"
+800,C4,heart_rate,2026-11-08T07:47:00Z,caution,emergency,exercise_cevis,2026-11-08T09:06:00Z,NC01 exercise HR/BP,C4-M-20261108T0747Z,"Heart rate 135.9 bpm, out of range for 5 s"
+801,C4,signal,2026-11-08T07:58:00Z,advisory,advisory,exercise_cevis,2026-11-08T07:59:00Z,sensor check (signal) outside a fault,C4-M-20261108T0758Z,Check your sensor: no clean signal
+802,C1,heart_rate,2026-11-08T08:12:00Z,caution,warning,exercise_ared,2026-11-08T09:28:00Z,NC01 exercise HR/BP,C1-M-20261108T0812Z,"Heart rate 115.3 bpm, out of range for 5 s"
+803,C3,bp_sys,2026-11-08T08:18:00Z,caution,caution,work,2026-11-08T08:38:00Z,"inside the personal band, outside NEWS2",C3-M-20261108T0818Z,"Systolic blood pressure 108.1 mmHg, out of range for 5 s"
+804,C1,signal,2026-11-08T08:19:00Z,advisory,advisory,exercise_ared,2026-11-08T08:20:00Z,sensor check (signal) outside a fault,C1-M-20261108T0819Z,Check your sensor: no clean signal
+805,C4,signal,2026-11-08T08:30:00Z,advisory,advisory,exercise_cevis,2026-11-08T08:31:00Z,sensor check (signal) outside a fault,C4-M-20261108T0830Z,Check your sensor: no clean signal
+806,C2,heart_rate,2026-11-08T08:33:59Z,caution,emergency,exercise_cevis,2026-11-08T09:53:59Z,NC01 exercise HR/BP,C2-M-20261108T0834Z,"Heart rate 136.5 bpm, out of range for 5 s"
+807,C1,signal,2026-11-08T08:37:00Z,advisory,advisory,exercise_ared,2026-11-08T08:38:00Z,sensor check (signal) outside a fault,C1-M-20261108T0837Z,Check your sensor: no clean signal
+808,C4,signal,2026-11-08T08:53:00Z,advisory,advisory,exercise_cevis,2026-11-08T08:54:00Z,sensor check (signal) outside a fault,C4-M-20261108T0853Z,Check your sensor: no clean signal
+809,C2,signal,2026-11-08T09:22:59Z,advisory,advisory,exercise_cevis,2026-11-08T09:23:59Z,sensor check (signal) outside a fault,C2-M-20261108T0923Z,Check your sensor: no clean signal
+810,C3,bp_sys,2026-11-08T10:08:00Z,caution,caution,work,2026-11-08T10:39:00Z,"inside the personal band, outside NEWS2",C3-M-20261108T1008Z,"Systolic blood pressure 108.8 mmHg, out of range for 5 s"
+811,C3,signal,2026-11-08T10:31:00Z,advisory,advisory,exercise_cevis,2026-11-08T10:32:00Z,sensor check (signal) outside a fault,C3-M-20261108T1031Z,Check your sensor: no clean signal
+812,C3,heart_rate,2026-11-08T10:36:00Z,emergency,emergency,exercise_cevis,2026-11-08T11:52:00Z,NC01 exercise HR/BP,C3-M-20261108T1036Z,"Heart rate 142.9 bpm, out of range for 5 s"
+813,C3,signal,2026-11-08T11:06:00Z,advisory,advisory,exercise_cevis,2026-11-08T11:07:00Z,sensor check (signal) outside a fault,C3-M-20261108T1106Z,Check your sensor: no clean signal
+814,C3,signal,2026-11-08T11:26:00Z,advisory,advisory,exercise_cevis,2026-11-08T11:27:00Z,sensor check (signal) outside a fault,C3-M-20261108T1126Z,Check your sensor: no clean signal
+815,C3,signal,2026-11-08T11:33:00Z,advisory,advisory,exercise_cevis,2026-11-08T11:34:00Z,sensor check (signal) outside a fault,C3-M-20261108T1133Z,Check your sensor: no clean signal
+816,C3,bp_sys,2026-11-08T12:06:00Z,caution,caution,work,2026-11-08T12:23:00Z,"inside the personal band, outside NEWS2",C3-M-20261108T1206Z,"Systolic blood pressure 109.2 mmHg, out of range for 5 s"
+817,C4,heart_rate,2026-11-08T13:26:00Z,caution,warning,exercise_ared,2026-11-08T14:46:00Z,NC01 exercise HR/BP,C4-M-20261108T1326Z,"Heart rate 113.6 bpm, out of range for 5 s"
+818,C3,bp_sys,2026-11-08T13:40:00Z,caution,caution,work,2026-11-08T14:15:00Z,"inside the personal band, outside NEWS2",C3-M-20261108T1340Z,"Systolic blood pressure 106.8 mmHg, out of range for 5 s"
+819,C4,signal,2026-11-08T13:42:00Z,advisory,advisory,exercise_ared,2026-11-08T13:43:00Z,sensor check (signal) outside a fault,C4-M-20261108T1342Z,Check your sensor: no clean signal
+820,C4,signal,2026-11-08T14:19:00Z,advisory,advisory,exercise_ared,2026-11-08T14:20:00Z,sensor check (signal) outside a fault,C4-M-20261108T1419Z,Check your sensor: no clean signal
+821,C3,bp_sys,2026-11-08T14:22:00Z,caution,caution,work,2026-11-08T14:32:00Z,"inside the personal band, outside NEWS2",C3-M-20261108T1422Z,"Systolic blood pressure 109.9 mmHg, out of range for 5 s"
+822,C4,signal,2026-11-08T14:23:00Z,advisory,advisory,exercise_ared,2026-11-08T14:24:00Z,sensor check (signal) outside a fault,C4-M-20261108T1423Z,Check your sensor: no clean signal
+823,C1,heart_rate,2026-11-08T15:08:00Z,caution,emergency,exercise_cevis,2026-11-08T16:22:00Z,NC01 exercise HR/BP,C1-M-20261108T1508Z,"Heart rate 137.8 bpm, out of range for 5 s"
+824,C1,signal,2026-11-08T15:12:00Z,advisory,advisory,exercise_cevis,2026-11-08T15:13:00Z,sensor check (signal) outside a fault,C1-M-20261108T1512Z,Check your sensor: no clean signal
+825,C3,bp_sys,2026-11-08T15:20:00Z,caution,caution,work,2026-11-08T16:16:00Z,"inside the personal band, outside NEWS2",C3-M-20261108T1520Z,"Systolic blood pressure 108.9 mmHg, out of range for 5 s"
+826,C2,heart_rate,2026-11-08T16:33:59Z,caution,warning,exercise_ared,2026-11-08T17:51:58Z,NC01 exercise HR/BP,C2-M-20261108T1634Z,"Heart rate 115.5 bpm, out of range for 5 s"
+827,C3,bp_sys,2026-11-08T16:35:00Z,caution,caution,work,2026-11-08T16:52:00Z,"inside the personal band, outside NEWS2",C3-M-20261108T1635Z,"Systolic blood pressure 107.1 mmHg, out of range for 5 s"
+828,C3,bp_sys,2026-11-08T16:59:00Z,caution,caution,work,2026-11-08T17:09:00Z,"inside the personal band, outside NEWS2",C3-M-20261108T1659Z,"Systolic blood pressure 106.1 mmHg, out of range for 5 s"
+829,C3,heart_rate,2026-11-08T17:04:00Z,caution,warning,exercise_ared,2026-11-08T18:22:01Z,NC01 exercise HR/BP,C3-M-20261108T1704Z,"Heart rate 124.3 bpm, out of range for 5 s"
+830,C1,bp_sys,2026-11-08T17:15:00Z,caution,caution,work,2026-11-08T18:25:00Z,unexplained,C1-M-20261108T1715Z,"Systolic blood pressure 107.6 mmHg, out of range for 5 s"
+831,C3,signal,2026-11-08T17:35:00Z,advisory,advisory,exercise_ared,2026-11-08T17:36:00Z,sensor check (signal) outside a fault,C3-M-20261108T1735Z,Check your sensor: no clean signal
+832,C2,signal,2026-11-08T17:38:58Z,advisory,advisory,exercise_ared,2026-11-08T17:39:58Z,sensor check (signal) outside a fault,C2-M-20261108T1739Z,Check your sensor: no clean signal
+833,C1,bp_sys,2026-11-08T18:35:00Z,caution,warning,work,2026-11-09T06:17:00Z,unexplained,C1-M-20261108T1835Z,"Systolic blood pressure 106.9 mmHg, out of range for 5 s"
+834,C3,bp_sys,2026-11-08T18:53:01Z,caution,warning,work,2026-11-09T06:20:00Z,"inside the personal band, outside NEWS2",C3-M-20261108T1853Z,"Systolic blood pressure 109.8 mmHg, out of range for 5 s"
+835,C4,bp_sys,2026-11-08T19:14:00Z,caution,caution,meal,2026-11-08T19:30:00Z,unexplained,C4-M-20261108T1914Z,"Systolic blood pressure 107.5 mmHg, out of range for 5 s"
+836,C4,bp_sys,2026-11-08T19:51:00Z,caution,caution,pre_sleep,2026-11-08T20:16:00Z,unexplained,C4-M-20261108T1951Z,"Systolic blood pressure 109.9 mmHg, out of range for 5 s"
+837,C2,bp_sys,2026-11-08T20:24:58Z,caution,caution,pre_sleep,2026-11-08T20:39:58Z,unexplained,C2-M-20261108T2025Z,"Systolic blood pressure 109.1 mmHg, out of range for 5 s"
+838,C4,heart_rate,2026-11-08T20:44:00Z,caution,caution,pre_sleep,2026-11-08T21:20:00Z,"inside the personal band, outside NEWS2",C4-M-20261108T2044Z,"Heart rate 48.2 bpm, out of range for 5 s"
+839,C4,heart_rate,2026-11-08T21:34:00Z,caution,caution,awake_in_bed,2026-11-09T06:10:00Z,NC02 sleeping HR/BP (normal night dip),C4-M-20261108T2134Z,"Heart rate 46.4 bpm, out of range for 5 s"
+840,C4,bp_sys,2026-11-08T21:34:00Z,caution,warning,awake_in_bed,2026-11-09T06:01:00Z,NC02 sleeping HR/BP (normal night dip),C4-M-20261108T2134Z,"Systolic blood pressure 102.7 mmHg, out of range for 5 s"
+841,C2,bp_sys,2026-11-08T21:38:58Z,caution,caution,awake_in_bed,2026-11-09T06:14:59Z,NC02 sleeping HR/BP (normal night dip),C2-M-20261108T2139Z,"Systolic blood pressure 107.3 mmHg, out of range for 5 s"
+842,C1,heart_rate,2026-11-09T01:17:00Z,caution,caution,sleep,2026-11-09T01:57:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261109T0117Z,"Heart rate 48.5 bpm, out of range for 5 s"
+843,C1,heart_rate,2026-11-09T02:26:00Z,caution,caution,sleep,2026-11-09T02:56:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261109T0226Z,"Heart rate 48 bpm, out of range for 5 s"
+844,C1,heart_rate,2026-11-09T03:04:00Z,caution,caution,sleep,2026-11-09T04:34:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261109T0304Z,"Heart rate 49.6 bpm, out of range for 5 s"
+845,C1,heart_rate,2026-11-09T05:07:00Z,caution,caution,sleep,2026-11-09T05:34:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261109T0507Z,"Heart rate 49.3 bpm, out of range for 5 s"
+846,C3,bp_sys,2026-11-09T06:44:00Z,caution,caution,post_sleep,2026-11-09T06:54:00Z,"inside the personal band, outside NEWS2",C3-M-20261109T0644Z,"Systolic blood pressure 109.4 mmHg, out of range for 5 s"
+847,C3,bp_sys,2026-11-09T07:20:00Z,caution,caution,typed_checkin,2026-11-09T07:32:00Z,"inside the personal band, outside NEWS2",,"Systolic blood pressure 109 mmHg, out of range"
+848,C4,bp_sys,2026-11-09T07:28:00Z,caution,caution,meal,2026-11-09T07:40:00Z,unexplained,C4-M-20261109T0728Z,"Systolic blood pressure 109.5 mmHg, out of range for 5 s"
+849,C4,heart_rate,2026-11-09T08:02:00Z,caution,emergency,exercise_cevis,2026-11-09T09:21:00Z,NC01 exercise HR/BP,C4-M-20261109T0802Z,"Heart rate 136.8 bpm, out of range for 5 s"
+850,C3,bp_sys,2026-11-09T08:03:00Z,caution,caution,work,2026-11-09T08:32:00Z,"inside the personal band, outside NEWS2",C3-M-20261109T0803Z,"Systolic blood pressure 108.1 mmHg, out of range for 5 s"
+851,C1,heart_rate,2026-11-09T08:04:00Z,caution,warning,exercise_ared,2026-11-09T09:20:00Z,NC01 exercise HR/BP,C1-M-20261109T0804Z,"Heart rate 112.2 bpm, out of range for 5 s"
+852,C4,signal,2026-11-09T08:24:00Z,advisory,advisory,exercise_cevis,2026-11-09T08:25:00Z,sensor check (signal) outside a fault,C4-M-20261109T0824Z,Check your sensor: no clean signal
+853,C1,signal,2026-11-09T08:49:00Z,advisory,advisory,exercise_ared,2026-11-09T08:50:00Z,sensor check (signal) outside a fault,C1-M-20261109T0849Z,Check your sensor: no clean signal
+854,C3,bp_sys,2026-11-09T09:22:00Z,caution,caution,work,2026-11-09T09:32:00Z,"inside the personal band, outside NEWS2",C3-M-20261109T0922Z,"Systolic blood pressure 109.7 mmHg, out of range for 5 s"
+855,C3,bp_sys,2026-11-09T09:58:00Z,caution,caution,work,2026-11-09T10:24:00Z,"inside the personal band, outside NEWS2",C3-M-20261109T0958Z,"Systolic blood pressure 107.8 mmHg, out of range for 5 s"
+856,C3,heart_rate,2026-11-09T10:19:00Z,caution,emergency,exercise_cevis,2026-11-09T11:30:00Z,NC01 exercise HR/BP,C3-M-20261109T1019Z,"Heart rate 139.8 bpm, out of range for 5 s"
+857,C3,signal,2026-11-09T10:36:00Z,advisory,advisory,exercise_cevis,2026-11-09T10:37:00Z,sensor check (signal) outside a fault,C3-M-20261109T1036Z,Check your sensor: no clean signal
+858,C3,signal,2026-11-09T10:45:00Z,advisory,advisory,exercise_cevis,2026-11-09T10:46:00Z,sensor check (signal) outside a fault,C3-M-20261109T1045Z,Check your sensor: no clean signal
+859,C3,signal,2026-11-09T11:07:00Z,advisory,advisory,exercise_cevis,2026-11-09T11:08:00Z,sensor check (signal) outside a fault,C3-M-20261109T1107Z,Check your sensor: no clean signal
+860,C3,bp_sys,2026-11-09T12:24:00Z,caution,caution,work,2026-11-09T13:50:00Z,"inside the personal band, outside NEWS2",C3-M-20261109T1224Z,"Systolic blood pressure 108.4 mmHg, out of range for 5 s"
+861,C4,heart_rate,2026-11-09T13:28:00Z,caution,warning,exercise_ared,2026-11-09T14:44:00Z,NC01 exercise HR/BP,C4-M-20261109T1328Z,"Heart rate 112.9 bpm, out of range for 5 s"
+862,C4,signal,2026-11-09T13:43:00Z,advisory,advisory,exercise_ared,2026-11-09T13:44:00Z,sensor check (signal) outside a fault,C4-M-20261109T1343Z,Check your sensor: no clean signal
+863,C4,signal,2026-11-09T14:05:00Z,advisory,advisory,exercise_ared,2026-11-09T14:06:00Z,sensor check (signal) outside a fault,C4-M-20261109T1405Z,Check your sensor: no clean signal
+864,C3,bp_sys,2026-11-09T14:25:00Z,caution,caution,work,2026-11-09T15:27:00Z,"inside the personal band, outside NEWS2",C3-M-20261109T1425Z,"Systolic blood pressure 109 mmHg, out of range for 5 s"
+865,C4,signal,2026-11-09T14:25:00Z,advisory,advisory,exercise_ared,2026-11-09T14:26:00Z,sensor check (signal) outside a fault,C4-M-20261109T1425Z,Check your sensor: no clean signal
+866,C1,signal,2026-11-09T15:00:00Z,advisory,advisory,exercise_cevis,2026-11-09T15:01:00Z,sensor check (signal) outside a fault,C1-M-20261109T1500Z,Check your sensor: no clean signal
+867,C1,heart_rate,2026-11-09T15:05:00Z,warning,emergency,exercise_cevis,2026-11-09T16:23:00Z,NC01 exercise HR/BP,C1-M-20261109T1505Z,"Heart rate 135.2 bpm, out of range for 5 s"
+868,C3,heart_rate,2026-11-09T17:13:00Z,caution,warning,exercise_ared,2026-11-09T18:21:01Z,NC01 exercise HR/BP,C3-M-20261109T1713Z,"Heart rate 119 bpm, out of range for 5 s"
+869,C3,bp_sys,2026-11-09T18:21:01Z,caution,warning,work,2026-11-10T06:22:00Z,"inside the personal band, outside NEWS2",C3-M-20261109T1821Z,"Systolic blood pressure 108.9 mmHg, out of range for 5 s"
+870,C1,bp_sys,2026-11-09T19:04:00Z,caution,caution,meal,2026-11-09T19:45:00Z,unexplained,C1-M-20261109T1904Z,"Systolic blood pressure 107.9 mmHg, out of range for 5 s"
+871,C4,bp_sys,2026-11-09T19:34:00Z,caution,caution,pre_sleep,2026-11-09T21:21:00Z,unexplained,C4-M-20261109T1934Z,"Systolic blood pressure 108.9 mmHg, out of range for 5 s"
+872,C4,heart_rate,2026-11-09T19:40:00Z,caution,caution,pre_sleep,2026-11-09T20:41:00Z,"inside the personal band, outside NEWS2",C4-M-20261109T1940Z,"Heart rate 48.1 bpm, out of range for 5 s"
+873,C1,bp_sys,2026-11-09T20:02:00Z,caution,warning,pre_sleep,2026-11-10T06:05:00Z,"inside the personal band, outside NEWS2",C1-M-20261109T2002Z,"Systolic blood pressure 109.1 mmHg, out of range for 5 s"
+874,C4,heart_rate,2026-11-09T20:55:00Z,caution,emergency,pre_sleep,2026-11-10T06:25:00Z,"inside the personal band, outside NEWS2",C4-M-20261109T2055Z,"Heart rate 49.9 bpm, out of range for 5 s"
+875,C4,bp_sys,2026-11-09T21:33:00Z,caution,warning,awake_in_bed,2026-11-10T06:13:00Z,NC02 sleeping HR/BP (normal night dip),C4-M-20261109T2133Z,"Systolic blood pressure 104.6 mmHg, out of range for 5 s"
+876,C2,bp_sys,2026-11-09T21:53:58Z,caution,caution,awake_in_bed,2026-11-10T06:09:59Z,NC02 sleeping HR/BP (normal night dip),C2-M-20261109T2154Z,"Systolic blood pressure 106.2 mmHg, out of range for 5 s"
+877,C1,heart_rate,2026-11-10T00:54:00Z,caution,caution,sleep,2026-11-10T01:23:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261110T0054Z,"Heart rate 48.5 bpm, out of range for 5 s"
+878,C1,heart_rate,2026-11-10T01:56:00Z,caution,caution,sleep,2026-11-10T02:14:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261110T0156Z,"Heart rate 48.1 bpm, out of range for 5 s"
+879,C1,heart_rate,2026-11-10T02:36:00Z,caution,caution,sleep,2026-11-10T02:49:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261110T0236Z,"Heart rate 48.5 bpm, out of range for 5 s"
+880,C1,heart_rate,2026-11-10T04:29:00Z,caution,caution,sleep,2026-11-10T04:48:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261110T0429Z,"Heart rate 49.1 bpm, out of range for 5 s"
+881,C1,heart_rate,2026-11-10T05:34:00Z,caution,caution,sleep,2026-11-10T06:03:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261110T0534Z,"Heart rate 47.8 bpm, out of range for 5 s"
+882,C3,bp_sys,2026-11-10T07:03:00Z,caution,caution,typed_checkin,2026-11-10T07:13:00Z,"inside the personal band, outside NEWS2",,"Systolic blood pressure 110 mmHg, out of range"
+883,C3,bp_sys,2026-11-10T07:21:00Z,caution,caution,meal,2026-11-10T08:00:00Z,"inside the personal band, outside NEWS2",C3-M-20261110T0721Z,"Systolic blood pressure 109.5 mmHg, out of range for 5 s"
+884,C4,heart_rate,2026-11-10T07:50:00Z,caution,emergency,exercise_cevis,2026-11-10T09:07:00Z,NC01 exercise HR/BP,C4-M-20261110T0750Z,"Heart rate 135.8 bpm, out of range for 5 s"
+885,C3,bp_sys,2026-11-10T08:19:00Z,caution,caution,work,2026-11-10T08:32:00Z,"inside the personal band, outside NEWS2",C3-M-20261110T0819Z,"Systolic blood pressure 108.1 mmHg, out of range for 5 s"
+886,C3,bp_sys,2026-11-10T08:53:00Z,caution,caution,work,2026-11-10T09:06:00Z,"inside the personal band, outside NEWS2",C3-M-20261110T0853Z,"Systolic blood pressure 107.6 mmHg, out of range for 5 s"
+887,C3,bp_sys,2026-11-10T09:33:00Z,caution,caution,work,2026-11-10T09:48:00Z,"inside the personal band, outside NEWS2",C3-M-20261110T0933Z,"Systolic blood pressure 109.6 mmHg, out of range for 5 s"
+888,C2,heart_rate,2026-11-10T09:45:59Z,caution,warning,exercise_ared,2026-11-10T10:55:59Z,NC01 exercise HR/BP,C2-M-20261110T0946Z,"Heart rate 114.8 bpm, out of range for 5 s"
+889,C3,heart_rate,2026-11-10T10:30:00Z,caution,emergency,exercise_cevis,2026-11-10T11:45:00Z,NC01 exercise HR/BP,C3-M-20261110T1030Z,"Heart rate 140.8 bpm, out of range for 5 s"
+890,C2,signal,2026-11-10T10:40:59Z,advisory,advisory,exercise_ared,2026-11-10T10:41:59Z,sensor check (signal) outside a fault,C2-M-20261110T1041Z,Check your sensor: no clean signal
+891,C3,signal,2026-11-10T11:07:00Z,advisory,advisory,exercise_cevis,2026-11-10T11:08:00Z,sensor check (signal) outside a fault,C3-M-20261110T1107Z,Check your sensor: no clean signal
+892,C3,bp_sys,2026-11-10T12:41:00Z,caution,caution,meal,2026-11-10T13:24:00Z,"inside the personal band, outside NEWS2",C3-M-20261110T1241Z,"Systolic blood pressure 108.5 mmHg, out of range for 5 s"
+893,C4,heart_rate,2026-11-10T13:42:00Z,caution,warning,exercise_ared,2026-11-10T15:03:00Z,NC01 exercise HR/BP,C4-M-20261110T1342Z,"Heart rate 113.8 bpm, out of range for 5 s"
+894,C3,bp_sys,2026-11-10T13:59:00Z,caution,caution,work,2026-11-10T14:26:00Z,"inside the personal band, outside NEWS2",C3-M-20261110T1359Z,"Systolic blood pressure 109.3 mmHg, out of range for 5 s"
+895,C4,signal,2026-11-10T14:05:00Z,advisory,advisory,exercise_ared,2026-11-10T14:06:00Z,sensor check (signal) outside a fault,C4-M-20261110T1405Z,Check your sensor: no clean signal
+896,C3,bp_sys,2026-11-10T14:43:00Z,caution,caution,work,2026-11-10T14:56:00Z,"inside the personal band, outside NEWS2",C3-M-20261110T1443Z,"Systolic blood pressure 108.5 mmHg, out of range for 5 s"
+897,C3,bp_sys,2026-11-10T15:16:00Z,caution,caution,work,2026-11-10T15:49:00Z,"inside the personal band, outside NEWS2",C3-M-20261110T1516Z,"Systolic blood pressure 109 mmHg, out of range for 5 s"
+898,C3,bp_sys,2026-11-10T15:57:00Z,caution,caution,work,2026-11-10T16:57:00Z,"inside the personal band, outside NEWS2",C3-M-20261110T1557Z,"Systolic blood pressure 109.7 mmHg, out of range for 5 s"
+899,C2,heart_rate,2026-11-10T16:20:59Z,caution,emergency,exercise_cevis,2026-11-10T17:40:58Z,NC01 exercise HR/BP,C2-M-20261110T1621Z,"Heart rate 135.7 bpm, out of range for 5 s"
+900,C2,signal,2026-11-10T16:32:59Z,advisory,advisory,exercise_cevis,2026-11-10T16:33:59Z,sensor check (signal) outside a fault,C2-M-20261110T1633Z,Check your sensor: no clean signal
+901,C3,heart_rate,2026-11-10T16:57:00Z,caution,warning,exercise_ared,2026-11-10T18:14:00Z,NC01 exercise HR/BP,C3-M-20261110T1657Z,"Heart rate 122.5 bpm, out of range for 5 s"
+902,C2,signal,2026-11-10T17:04:58Z,advisory,advisory,exercise_cevis,2026-11-10T17:05:58Z,sensor check (signal) outside a fault,C2-M-20261110T1705Z,Check your sensor: no clean signal
+903,C3,bp_sys,2026-11-10T18:27:01Z,caution,warning,work,2026-11-11T07:55:00Z,"inside the personal band, outside NEWS2",C3-M-20261110T1827Z,"Systolic blood pressure 108.5 mmHg, out of range for 5 s"
+904,C1,bp_sys,2026-11-10T18:44:00Z,caution,caution,work,2026-11-10T19:37:00Z,unexplained,C1-M-20261110T1844Z,"Systolic blood pressure 107.9 mmHg, out of range for 5 s"
+905,C1,bp_sys,2026-11-10T19:42:00Z,caution,warning,pre_sleep,2026-11-11T06:15:00Z,"inside the personal band, outside NEWS2",C1-M-20261110T1942Z,"Systolic blood pressure 108.8 mmHg, out of range for 5 s"
+906,C4,heart_rate,2026-11-10T20:11:00Z,caution,caution,pre_sleep,2026-11-10T20:46:00Z,"inside the personal band, outside NEWS2",C4-M-20261110T2011Z,"Heart rate 48.8 bpm, out of range for 5 s"
+907,C4,heart_rate,2026-11-10T21:20:00Z,caution,caution,pre_sleep,2026-11-11T06:11:00Z,"inside the personal band, outside NEWS2",C4-M-20261110T2120Z,"Heart rate 49.3 bpm, out of range for 5 s"
+908,C4,bp_sys,2026-11-10T21:35:00Z,caution,warning,awake_in_bed,2026-11-11T06:09:00Z,NC02 sleeping HR/BP (normal night dip),C4-M-20261110T2135Z,"Systolic blood pressure 106.5 mmHg, out of range for 5 s"
+909,C2,bp_sys,2026-11-10T21:34:58Z,caution,caution,awake_in_bed,2026-11-11T06:11:59Z,NC02 sleeping HR/BP (normal night dip),C2-M-20261110T2135Z,"Systolic blood pressure 109.9 mmHg, out of range for 5 s"
+910,C1,heart_rate,2026-11-10T22:42:00Z,caution,caution,sleep,2026-11-10T23:42:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261110T2242Z,"Heart rate 48.9 bpm, out of range for 5 s"
+911,C1,heart_rate,2026-11-10T23:47:00Z,caution,caution,sleep,2026-11-10T23:58:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261110T2347Z,"Heart rate 49.7 bpm, out of range for 5 s"
+912,C1,heart_rate,2026-11-11T01:49:00Z,caution,caution,sleep,2026-11-11T02:13:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261111T0149Z,"Heart rate 46.6 bpm, out of range for 5 s"
+913,C1,heart_rate,2026-11-11T02:44:00Z,caution,caution,sleep,2026-11-11T03:50:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261111T0244Z,"Heart rate 47.2 bpm, out of range for 5 s"
+914,C1,heart_rate,2026-11-11T04:03:00Z,caution,caution,sleep,2026-11-11T04:19:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261111T0403Z,"Heart rate 47.5 bpm, out of range for 5 s"
+915,C1,heart_rate,2026-11-11T04:58:00Z,caution,caution,sleep,2026-11-11T06:02:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261111T0458Z,"Heart rate 47.4 bpm, out of range for 5 s"
+916,C4,bp_sys,2026-11-11T06:47:00Z,caution,caution,typed_checkin,2026-11-11T06:57:00Z,typed check-in value,,"Systolic blood pressure 109 mmHg, out of range"
+917,C4,signal,2026-11-11T07:49:00Z,advisory,advisory,exercise_cevis,2026-11-11T07:50:00Z,sensor check (signal) outside a fault,C4-M-20261111T0749Z,Check your sensor: no clean signal
+918,C4,signal,2026-11-11T07:52:00Z,advisory,advisory,exercise_cevis,2026-11-11T07:53:00Z,sensor check (signal) outside a fault,C4-M-20261111T0752Z,Check your sensor: no clean signal
+919,C4,heart_rate,2026-11-11T07:57:00Z,emergency,emergency,exercise_cevis,2026-11-11T08:58:00Z,NC01 exercise HR/BP,C4-M-20261111T0757Z,"Heart rate 138.2 bpm, out of range for 5 s"
+920,C1,heart_rate,2026-11-11T08:12:00Z,caution,warning,exercise_ared,2026-11-11T09:18:00Z,NC01 exercise HR/BP,C1-M-20261111T0812Z,"Heart rate 114.9 bpm, out of range for 5 s"
+921,C1,signal,2026-11-11T08:27:00Z,advisory,advisory,exercise_ared,2026-11-11T08:28:00Z,sensor check (signal) outside a fault,C1-M-20261111T0827Z,Check your sensor: no clean signal
+922,C1,signal,2026-11-11T08:37:00Z,advisory,advisory,exercise_ared,2026-11-11T08:38:00Z,sensor check (signal) outside a fault,C1-M-20261111T0837Z,Check your sensor: no clean signal
+923,C1,signal,2026-11-11T08:45:00Z,advisory,advisory,exercise_ared,2026-11-11T08:46:00Z,sensor check (signal) outside a fault,C1-M-20261111T0845Z,Check your sensor: no clean signal
+924,C2,heart_rate,2026-11-11T09:29:59Z,caution,warning,exercise_ared,2026-11-11T10:38:59Z,NC01 exercise HR/BP,C2-M-20261111T0930Z,"Heart rate 116.6 bpm, out of range for 5 s"
+925,C3,signal,2026-11-11T10:33:00Z,advisory,advisory,exercise_cevis,2026-11-11T10:34:00Z,sensor check (signal) outside a fault,C3-M-20261111T1033Z,Check your sensor: no clean signal
+926,C3,heart_rate,2026-11-11T10:38:00Z,warning,emergency,exercise_cevis,2026-11-11T11:46:00Z,NC01 exercise HR/BP,C3-M-20261111T1038Z,"Heart rate 138.8 bpm, out of range for 5 s"
+927,C3,signal,2026-11-11T11:01:00Z,advisory,advisory,exercise_cevis,2026-11-11T11:02:00Z,sensor check (signal) outside a fault,C3-M-20261111T1101Z,Check your sensor: no clean signal
+928,C3,signal,2026-11-11T11:20:00Z,advisory,advisory,exercise_cevis,2026-11-11T11:21:00Z,sensor check (signal) outside a fault,C3-M-20261111T1120Z,Check your sensor: no clean signal
+929,C3,bp_sys,2026-11-11T12:38:00Z,caution,caution,meal,2026-11-11T13:34:00Z,"inside the personal band, outside NEWS2",C3-M-20261111T1238Z,"Systolic blood pressure 110 mmHg, out of range for 5 s"
+930,C4,heart_rate,2026-11-11T13:32:00Z,caution,warning,exercise_ared,2026-11-11T14:44:00Z,NC01 exercise HR/BP,C4-M-20261111T1332Z,"Heart rate 115.6 bpm, out of range for 5 s"
+931,C4,signal,2026-11-11T13:37:00Z,advisory,advisory,exercise_ared,2026-11-11T13:38:00Z,sensor check (signal) outside a fault,C4-M-20261111T1337Z,Check your sensor: no clean signal
+932,C4,signal,2026-11-11T14:23:00Z,advisory,advisory,exercise_ared,2026-11-11T14:24:00Z,sensor check (signal) outside a fault,C4-M-20261111T1423Z,Check your sensor: no clean signal
+933,C3,bp_sys,2026-11-11T14:58:00Z,caution,caution,work,2026-11-11T15:31:00Z,"inside the personal band, outside NEWS2",C3-M-20261111T1458Z,"Systolic blood pressure 106.6 mmHg, out of range for 5 s"
+934,C1,heart_rate,2026-11-11T15:11:00Z,caution,emergency,exercise_cevis,2026-11-11T16:29:00Z,NC01 exercise HR/BP,C1-M-20261111T1511Z,"Heart rate 134.7 bpm, out of range for 5 s"
+935,C3,bp_sys,2026-11-11T16:16:00Z,caution,caution,work,2026-11-11T16:27:00Z,"inside the personal band, outside NEWS2",C3-M-20261111T1616Z,"Systolic blood pressure 108.7 mmHg, out of range for 5 s"
+936,C2,heart_rate,2026-11-11T16:43:58Z,caution,emergency,exercise_cevis,2026-11-11T17:55:58Z,NC01 exercise HR/BP,C2-M-20261111T1644Z,"Heart rate 135.4 bpm, out of range for 5 s"
+937,C2,signal,2026-11-11T16:48:58Z,advisory,advisory,exercise_cevis,2026-11-11T16:49:58Z,sensor check (signal) outside a fault,C2-M-20261111T1649Z,Check your sensor: no clean signal
+938,C2,signal,2026-11-11T16:56:58Z,advisory,advisory,exercise_cevis,2026-11-11T16:57:58Z,sensor check (signal) outside a fault,C2-M-20261111T1657Z,Check your sensor: no clean signal
+939,C3,heart_rate,2026-11-11T17:13:00Z,caution,warning,exercise_ared,2026-11-11T18:26:01Z,NC01 exercise HR/BP,C3-M-20261111T1713Z,"Heart rate 123.1 bpm, out of range for 5 s"
+940,C3,signal,2026-11-11T17:36:00Z,advisory,advisory,exercise_ared,2026-11-11T17:37:00Z,sensor check (signal) outside a fault,C3-M-20261111T1736Z,Check your sensor: no clean signal
+941,C2,signal,2026-11-11T17:40:58Z,advisory,advisory,exercise_cevis,2026-11-11T17:41:58Z,sensor check (signal) outside a fault,C2-M-20261111T1741Z,Check your sensor: no clean signal
+942,C3,signal,2026-11-11T18:07:00Z,advisory,advisory,exercise_ared,2026-11-11T18:08:00Z,sensor check (signal) outside a fault,C3-M-20261111T1807Z,Check your sensor: no clean signal
+943,C3,bp_sys,2026-11-11T18:25:01Z,caution,warning,work,2026-11-12T06:31:00Z,"inside the personal band, outside NEWS2",C3-M-20261111T1825Z,"Systolic blood pressure 108 mmHg, out of range for 5 s"
+944,C1,bp_sys,2026-11-11T18:36:00Z,caution,caution,work,2026-11-11T18:51:00Z,"inside the personal band, outside NEWS2",C1-M-20261111T1836Z,"Systolic blood pressure 109.3 mmHg, out of range for 5 s"
+945,C1,bp_sys,2026-11-11T19:04:00Z,caution,caution,meal,2026-11-11T20:41:00Z,"inside the personal band, outside NEWS2",C1-M-20261111T1904Z,"Systolic blood pressure 108.7 mmHg, out of range for 5 s"
+946,C4,heart_rate,2026-11-11T19:38:00Z,caution,caution,pre_sleep,2026-11-11T21:00:00Z,"inside the personal band, outside NEWS2",C4-M-20261111T1938Z,"Heart rate 47.8 bpm, out of range for 5 s"
+947,C1,bp_sys,2026-11-11T20:54:00Z,caution,warning,pre_sleep,2026-11-12T06:14:00Z,"inside the personal band, outside NEWS2",C1-M-20261111T2054Z,"Systolic blood pressure 108.8 mmHg, out of range for 5 s"
+948,C4,heart_rate,2026-11-11T21:18:00Z,caution,caution,pre_sleep,2026-11-12T06:02:00Z,"inside the personal band, outside NEWS2",C4-M-20261111T2118Z,"Heart rate 49.5 bpm, out of range for 5 s"
+949,C4,bp_sys,2026-11-11T21:26:00Z,caution,warning,pre_sleep,2026-11-12T06:01:00Z,unexplained,C4-M-20261111T2126Z,"Systolic blood pressure 109.6 mmHg, out of range for 5 s"
+950,C2,bp_sys,2026-11-11T21:38:58Z,caution,warning,awake_in_bed,2026-11-12T06:16:59Z,NC02 sleeping HR/BP (normal night dip),C2-M-20261111T2139Z,"Systolic blood pressure 109.8 mmHg, out of range for 5 s"
+951,C1,heart_rate,2026-11-12T00:53:00Z,caution,caution,sleep,2026-11-12T01:24:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261112T0053Z,"Heart rate 47.9 bpm, out of range for 5 s"
+952,C1,heart_rate,2026-11-12T01:46:00Z,caution,caution,sleep,2026-11-12T02:34:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261112T0146Z,"Heart rate 49.8 bpm, out of range for 5 s"
+953,C1,heart_rate,2026-11-12T03:55:00Z,caution,caution,sleep,2026-11-12T05:07:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261112T0355Z,"Heart rate 49.6 bpm, out of range for 5 s"
+954,C1,heart_rate,2026-11-12T05:44:00Z,caution,caution,sleep,2026-11-12T06:12:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261112T0544Z,"Heart rate 47.7 bpm, out of range for 5 s"
+955,C3,bp_sys,2026-11-12T06:36:00Z,caution,caution,typed_checkin,2026-11-12T07:39:00Z,"inside the personal band, outside NEWS2",,"Systolic blood pressure 108 mmHg, out of range"
+956,C4,heart_rate,2026-11-12T07:38:00Z,caution,emergency,exercise_cevis,2026-11-12T08:59:00Z,NC01 exercise HR/BP,C4-M-20261112T0738Z,"Heart rate 135.1 bpm, out of range for 5 s"
+957,C4,signal,2026-11-12T07:42:00Z,advisory,advisory,exercise_cevis,2026-11-12T07:43:00Z,sensor check (signal) outside a fault,C4-M-20261112T0742Z,Check your sensor: no clean signal
+958,C1,heart_rate,2026-11-12T08:03:00Z,caution,warning,exercise_ared,2026-11-12T09:13:00Z,NC01 exercise HR/BP,C1-M-20261112T0803Z,"Heart rate 115.4 bpm, out of range for 5 s"
+959,C1,signal,2026-11-12T08:07:00Z,advisory,advisory,exercise_ared,2026-11-12T08:08:00Z,sensor check (signal) outside a fault,C1-M-20261112T0807Z,Check your sensor: no clean signal
+960,C1,signal,2026-11-12T08:28:00Z,advisory,advisory,exercise_ared,2026-11-12T08:29:00Z,sensor check (signal) outside a fault,C1-M-20261112T0828Z,Check your sensor: no clean signal
+961,C4,signal,2026-11-12T08:32:00Z,advisory,advisory,exercise_cevis,2026-11-12T08:33:00Z,sensor check (signal) outside a fault,C4-M-20261112T0832Z,Check your sensor: no clean signal
+962,C4,signal,2026-11-12T08:39:00Z,advisory,advisory,exercise_cevis,2026-11-12T08:40:00Z,sensor check (signal) outside a fault,C4-M-20261112T0839Z,Check your sensor: no clean signal
+963,C3,bp_sys,2026-11-12T09:22:00Z,caution,caution,work,2026-11-12T09:47:00Z,"inside the personal band, outside NEWS2",C3-M-20261112T0922Z,"Systolic blood pressure 109 mmHg, out of range for 5 s"
+964,C2,signal,2026-11-12T09:32:59Z,advisory,advisory,exercise_ared,2026-11-12T09:33:59Z,sensor check (signal) outside a fault,C2-M-20261112T0933Z,Check your sensor: no clean signal
+965,C2,heart_rate,2026-11-12T09:37:59Z,caution,warning,exercise_ared,2026-11-12T10:49:59Z,NC01 exercise HR/BP,C2-M-20261112T0938Z,"Heart rate 112.7 bpm, out of range for 5 s"
+966,C2,signal,2026-11-12T10:13:59Z,advisory,advisory,exercise_ared,2026-11-12T10:14:59Z,sensor check (signal) outside a fault,C2-M-20261112T1014Z,Check your sensor: no clean signal
+967,C3,heart_rate,2026-11-12T10:31:00Z,caution,emergency,exercise_cevis,2026-11-12T11:46:00Z,NC01 exercise HR/BP,C3-M-20261112T1031Z,"Heart rate 143.3 bpm, out of range for 5 s"
+968,C3,signal,2026-11-12T10:35:00Z,advisory,advisory,exercise_cevis,2026-11-12T10:36:00Z,sensor check (signal) outside a fault,C3-M-20261112T1035Z,Check your sensor: no clean signal
+969,C3,bp_sys,2026-11-12T12:34:00Z,caution,caution,meal,2026-11-12T13:11:00Z,"inside the personal band, outside NEWS2",C3-M-20261112T1234Z,"Systolic blood pressure 107.9 mmHg, out of range for 5 s"
+970,C4,heart_rate,2026-11-12T13:32:00Z,caution,warning,exercise_ared,2026-11-12T14:46:00Z,NC01 exercise HR/BP,C4-M-20261112T1332Z,"Heart rate 111.7 bpm, out of range for 5 s"
+971,C4,signal,2026-11-12T13:52:00Z,advisory,advisory,exercise_ared,2026-11-12T13:53:00Z,sensor check (signal) outside a fault,C4-M-20261112T1352Z,Check your sensor: no clean signal
+972,C4,signal,2026-11-12T13:59:00Z,advisory,advisory,exercise_ared,2026-11-12T14:00:00Z,sensor check (signal) outside a fault,C4-M-20261112T1359Z,Check your sensor: no clean signal
+973,C3,bp_sys,2026-11-12T14:23:00Z,caution,caution,work,2026-11-12T17:06:00Z,"inside the personal band, outside NEWS2",C3-M-20261112T1423Z,"Systolic blood pressure 109.8 mmHg, out of range for 5 s"
+974,C1,heart_rate,2026-11-12T15:06:00Z,caution,emergency,exercise_cevis,2026-11-12T16:24:00Z,NC01 exercise HR/BP,C1-M-20261112T1506Z,"Heart rate 133.4 bpm, out of range for 5 s"
+975,C1,signal,2026-11-12T16:05:00Z,advisory,advisory,exercise_cevis,2026-11-12T16:06:00Z,sensor check (signal) outside a fault,C1-M-20261112T1605Z,Check your sensor: no clean signal
+976,C1,signal,2026-11-12T16:07:00Z,advisory,advisory,exercise_cevis,2026-11-12T16:08:00Z,sensor check (signal) outside a fault,C1-M-20261112T1607Z,Check your sensor: no clean signal
+977,C2,heart_rate,2026-11-12T16:33:59Z,caution,emergency,exercise_cevis,2026-11-12T17:54:58Z,NC01 exercise HR/BP,C2-M-20261112T1634Z,"Heart rate 135.6 bpm, out of range for 5 s"
+978,C3,heart_rate,2026-11-12T17:01:00Z,caution,warning,exercise_ared,2026-11-12T18:10:00Z,NC01 exercise HR/BP,C3-M-20261112T1701Z,"Heart rate 121.3 bpm, out of range for 5 s"
+979,C2,signal,2026-11-12T17:05:58Z,advisory,advisory,exercise_cevis,2026-11-12T17:06:58Z,sensor check (signal) outside a fault,C2-M-20261112T1706Z,Check your sensor: no clean signal
+980,C2,signal,2026-11-12T17:10:58Z,advisory,advisory,exercise_cevis,2026-11-12T17:11:58Z,sensor check (signal) outside a fault,C2-M-20261112T1711Z,Check your sensor: no clean signal
+981,C1,bp_sys,2026-11-12T17:54:00Z,caution,caution,work,2026-11-12T18:27:00Z,"inside the personal band, outside NEWS2",C1-M-20261112T1754Z,"Systolic blood pressure 108.2 mmHg, out of range for 5 s"
+982,C3,bp_sys,2026-11-12T18:12:00Z,caution,warning,work,2026-11-13T07:40:00Z,"inside the personal band, outside NEWS2",C3-M-20261112T1812Z,"Systolic blood pressure 107.7 mmHg, out of range for 5 s"
+983,C4,bp_sys,2026-11-12T19:27:00Z,caution,caution,meal,2026-11-12T20:12:00Z,unexplained,C4-M-20261112T1927Z,"Systolic blood pressure 109.2 mmHg, out of range for 5 s"
+984,C4,heart_rate,2026-11-12T19:42:00Z,caution,caution,pre_sleep,2026-11-12T20:05:00Z,"inside the personal band, outside NEWS2",C4-M-20261112T1942Z,"Heart rate 47.5 bpm, out of range for 5 s"
+985,C1,bp_sys,2026-11-12T19:50:00Z,caution,warning,pre_sleep,2026-11-13T06:09:00Z,unexplained,C1-M-20261112T1950Z,"Systolic blood pressure 107.4 mmHg, out of range for 5 s"
+986,C4,bp_sys,2026-11-12T20:38:00Z,caution,warning,pre_sleep,2026-11-13T06:03:00Z,"inside the personal band, outside NEWS2",C4-M-20261112T2038Z,"Systolic blood pressure 110 mmHg, out of range for 5 s"
+987,C4,heart_rate,2026-11-12T20:56:00Z,caution,caution,pre_sleep,2026-11-12T21:28:00Z,"inside the personal band, outside NEWS2",C4-M-20261112T2056Z,"Heart rate 48.8 bpm, out of range for 5 s"
+988,C2,bp_sys,2026-11-12T21:33:58Z,caution,warning,awake_in_bed,2026-11-13T06:09:59Z,NC02 sleeping HR/BP (normal night dip),C2-M-20261112T2134Z,"Systolic blood pressure 110 mmHg, out of range for 5 s"
+989,C4,heart_rate,2026-11-12T21:51:00Z,caution,caution,awake_in_bed,2026-11-13T06:35:00Z,NC02 sleeping HR/BP (normal night dip),C4-M-20261112T2151Z,"Heart rate 49.4 bpm, out of range for 5 s"
+990,C1,heart_rate,2026-11-12T23:35:00Z,caution,caution,sleep,2026-11-13T00:15:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261112T2335Z,"Heart rate 47.9 bpm, out of range for 5 s"
+991,C1,heart_rate,2026-11-13T00:41:00Z,caution,caution,sleep,2026-11-13T02:58:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261113T0041Z,"Heart rate 49.5 bpm, out of range for 5 s"
+992,C1,bp_sys,2026-11-13T06:37:00Z,caution,caution,typed_checkin,2026-11-13T06:48:00Z,"inside the personal band, outside NEWS2",,"Systolic blood pressure 110 mmHg, out of range"
+993,C4,heart_rate,2026-11-13T07:51:00Z,caution,emergency,exercise_cevis,2026-11-13T09:10:00Z,NC01 exercise HR/BP,C4-M-20261113T0751Z,"Heart rate 135.7 bpm, out of range for 5 s"
+994,C3,bp_sys,2026-11-13T07:53:00Z,caution,caution,work,2026-11-13T08:20:00Z,"inside the personal band, outside NEWS2",C3-M-20261113T0753Z,"Systolic blood pressure 109.3 mmHg, out of range for 5 s"
+995,C1,signal,2026-11-13T07:58:00Z,advisory,advisory,exercise_ared,2026-11-13T07:59:00Z,sensor check (signal) outside a fault,C1-M-20261113T0758Z,Check your sensor: no clean signal
+996,C1,heart_rate,2026-11-13T08:03:00Z,caution,warning,exercise_ared,2026-11-13T09:22:00Z,NC01 exercise HR/BP,C1-M-20261113T0803Z,"Heart rate 115.2 bpm, out of range for 5 s"
+997,C4,signal,2026-11-13T08:17:00Z,advisory,advisory,exercise_cevis,2026-11-13T08:18:00Z,sensor check (signal) outside a fault,C4-M-20261113T0817Z,Check your sensor: no clean signal
+998,C1,signal,2026-11-13T08:28:00Z,advisory,advisory,exercise_ared,2026-11-13T08:29:00Z,sensor check (signal) outside a fault,C1-M-20261113T0828Z,Check your sensor: no clean signal
+999,C2,heart_rate,2026-11-13T09:41:59Z,caution,warning,exercise_ared,2026-11-13T10:56:59Z,NC01 exercise HR/BP,C2-M-20261113T0942Z,"Heart rate 117.3 bpm, out of range for 5 s"
+1000,C2,signal,2026-11-13T09:49:59Z,advisory,advisory,exercise_ared,2026-11-13T09:50:59Z,sensor check (signal) outside a fault,C2-M-20261113T0950Z,Check your sensor: no clean signal
+1001,C3,heart_rate,2026-11-13T10:30:00Z,caution,emergency,exercise_cevis,2026-11-13T11:44:00Z,NC01 exercise HR/BP,C3-M-20261113T1030Z,"Heart rate 139.5 bpm, out of range for 5 s"
+1002,C2,signal,2026-11-13T10:40:59Z,advisory,advisory,exercise_ared,2026-11-13T10:41:59Z,sensor check (signal) outside a fault,C2-M-20261113T1041Z,Check your sensor: no clean signal
+1003,C3,signal,2026-11-13T10:50:00Z,advisory,advisory,exercise_cevis,2026-11-13T10:51:00Z,sensor check (signal) outside a fault,C3-M-20261113T1050Z,Check your sensor: no clean signal
+1004,C3,signal,2026-11-13T11:19:00Z,advisory,advisory,exercise_cevis,2026-11-13T11:20:00Z,sensor check (signal) outside a fault,C3-M-20261113T1119Z,Check your sensor: no clean signal
+1005,C1,bp_sys,2026-11-13T12:58:00Z,caution,caution,meal,2026-11-13T13:08:00Z,"inside the personal band, outside NEWS2",C1-M-20261113T1258Z,"Systolic blood pressure 109.5 mmHg, out of range for 5 s"
+1006,C3,bp_sys,2026-11-13T13:12:00Z,caution,caution,meal,2026-11-13T13:34:00Z,"inside the personal band, outside NEWS2",C3-M-20261113T1312Z,"Systolic blood pressure 107.5 mmHg, out of range for 5 s"
+1007,C4,heart_rate,2026-11-13T13:38:00Z,caution,warning,exercise_ared,2026-11-13T14:44:00Z,NC01 exercise HR/BP,C4-M-20261113T1338Z,"Heart rate 115.7 bpm, out of range for 5 s"
+1008,C4,signal,2026-11-13T13:46:00Z,advisory,advisory,exercise_ared,2026-11-13T13:47:00Z,sensor check (signal) outside a fault,C4-M-20261113T1346Z,Check your sensor: no clean signal
+1009,C3,bp_sys,2026-11-13T14:29:00Z,caution,caution,work,2026-11-13T15:24:00Z,"inside the personal band, outside NEWS2",C3-M-20261113T1429Z,"Systolic blood pressure 109.8 mmHg, out of range for 5 s"
+1010,C1,heart_rate,2026-11-13T15:10:00Z,caution,emergency,exercise_cevis,2026-11-13T16:23:00Z,NC01 exercise HR/BP,C1-M-20261113T1510Z,"Heart rate 135 bpm, out of range for 5 s"
+1011,C3,bp_sys,2026-11-13T15:41:00Z,caution,caution,work,2026-11-13T15:51:00Z,"inside the personal band, outside NEWS2",C3-M-20261113T1541Z,"Systolic blood pressure 109.3 mmHg, out of range for 5 s"
+1012,C1,signal,2026-11-13T15:45:00Z,advisory,advisory,exercise_cevis,2026-11-13T15:46:00Z,sensor check (signal) outside a fault,C1-M-20261113T1545Z,Check your sensor: no clean signal
+1013,C3,bp_sys,2026-11-13T16:11:00Z,caution,caution,work,2026-11-13T17:14:00Z,"inside the personal band, outside NEWS2",C3-M-20261113T1611Z,"Systolic blood pressure 108.8 mmHg, out of range for 5 s"
+1014,C2,heart_rate,2026-11-13T16:37:59Z,caution,emergency,exercise_cevis,2026-11-13T17:51:58Z,NC01 exercise HR/BP,C2-M-20261113T1638Z,"Heart rate 135.9 bpm, out of range for 5 s"
+1015,C2,signal,2026-11-13T17:05:58Z,advisory,advisory,exercise_cevis,2026-11-13T17:06:58Z,sensor check (signal) outside a fault,C2-M-20261113T1706Z,Check your sensor: no clean signal
+1016,C3,heart_rate,2026-11-13T17:09:00Z,caution,warning,exercise_ared,2026-11-13T18:24:01Z,NC01 exercise HR/BP,C3-M-20261113T1709Z,"Heart rate 119.4 bpm, out of range for 5 s"
+1017,C3,signal,2026-11-13T17:16:00Z,advisory,advisory,exercise_ared,2026-11-13T17:17:00Z,sensor check (signal) outside a fault,C3-M-20261113T1716Z,Check your sensor: no clean signal
+1018,C3,signal,2026-11-13T17:20:00Z,advisory,advisory,exercise_ared,2026-11-13T17:21:00Z,sensor check (signal) outside a fault,C3-M-20261113T1720Z,Check your sensor: no clean signal
+1019,C2,signal,2026-11-13T17:25:58Z,advisory,advisory,exercise_cevis,2026-11-13T17:26:58Z,sensor check (signal) outside a fault,C2-M-20261113T1726Z,Check your sensor: no clean signal
+1020,C1,bp_sys,2026-11-13T17:32:00Z,caution,caution,work,2026-11-13T17:54:00Z,unexplained,C1-M-20261113T1732Z,"Systolic blood pressure 106.4 mmHg, out of range for 5 s"
+1021,C3,bp_sys,2026-11-13T18:34:01Z,caution,warning,work,,"inside the personal band, outside NEWS2",C3-M-20261113T1834Z,"Systolic blood pressure 108.4 mmHg, out of range for 5 s"
+1022,C1,bp_sys,2026-11-13T19:11:00Z,caution,warning,meal,,unexplained,C1-M-20261113T1911Z,"Systolic blood pressure 107.3 mmHg, out of range for 5 s"
+1023,C4,bp_sys,2026-11-13T19:27:00Z,caution,warning,meal,2026-11-14T06:11:57Z,unexplained,C4-M-20261113T1927Z,"Systolic blood pressure 109.8 mmHg, out of range for 5 s"
+1024,C4,heart_rate,2026-11-13T20:07:00Z,caution,emergency,pre_sleep,,"inside the personal band, outside NEWS2",C4-M-20261113T2007Z,"Heart rate 48.7 bpm, out of range for 5 s"
+1025,C2,bp_sys,2026-11-13T21:52:58Z,caution,caution,awake_in_bed,2026-11-14T06:07:58Z,NC02 sleeping HR/BP (normal night dip),C2-M-20261113T2153Z,"Systolic blood pressure 107.9 mmHg, out of range for 5 s"
+1026,C1,heart_rate,2026-11-14T00:26:00Z,caution,caution,sleep,2026-11-14T01:09:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261114T0026Z,"Heart rate 49.2 bpm, out of range for 5 s"
+1027,C1,heart_rate,2026-11-14T01:19:00Z,caution,caution,sleep,2026-11-14T02:27:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261114T0119Z,"Heart rate 50 bpm, out of range for 5 s"
+1028,C1,heart_rate,2026-11-14T02:46:00Z,caution,caution,sleep,2026-11-14T03:23:00Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261114T0246Z,"Heart rate 48.5 bpm, out of range for 5 s"
+1029,C1,heart_rate,2026-11-14T03:40:00Z,caution,caution,sleep,2026-11-14T06:04:48Z,NC02 sleeping HR/BP (normal night dip),C1-M-20261114T0340Z,"Heart rate 48.4 bpm, out of range for 5 s"
+1030,C2,heart_rate,2026-11-14T04:51:57Z,caution,caution,sleep,2026-11-14T06:02:08Z,NC02 sleeping HR/BP (normal night dip),C2-S-20261114T045158Z,"Heart rate 48.3 bpm, out of range for 5 s"

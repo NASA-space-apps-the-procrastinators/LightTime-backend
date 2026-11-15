@@ -1,0 +1,83 @@
+message_id,alert_id,direction,kind,from_side,author,text,priority,created_at,sent_at,delay_s,deliver_at,status_at_demo_now,in_reply_to,simulated,provenance
+M1,,to_earth,message,crew,Lindqvist,Daily crew health summary for mission day 129: 4 of 4 check-ins complete. Table attached.,2,2026-10-16T20:00:00Z,2026-10-16T20:00:00Z,777.26,2026-10-16T20:12:57Z,delivered,,true,sim
+M2,,to_ship,reply,ground,Dr. Adeyemi,"Received, thank you. No change to the plan.",0,2026-10-16T20:17:57Z,2026-10-16T20:17:57Z,777.26,2026-10-16T20:30:54Z,delivered,M1,true,sim
+M3,,to_earth,message,crew,Lindqvist,Daily crew health summary for mission day 130: 4 of 4 check-ins complete. Table attached.,2,2026-10-17T20:00:00Z,2026-10-17T20:00:00Z,773.50,2026-10-17T20:12:53Z,delivered,,true,sim
+M4,,to_ship,reply,ground,Dr. Adeyemi,"Received, thank you. No change to the plan.",0,2026-10-17T20:17:53Z,2026-10-17T20:17:53Z,773.50,2026-10-17T20:30:47Z,delivered,M3,true,sim
+M5,,to_earth,message,crew,Lindqvist,Daily crew health summary for mission day 131: 4 of 4 check-ins complete. Table attached.,2,2026-10-18T20:00:00Z,2026-10-18T20:00:00Z,769.72,2026-10-18T20:12:49Z,delivered,,true,sim
+M6,,to_ship,reply,ground,Dr. Adeyemi,"Received, thank you. No change to the plan.",0,2026-10-18T20:17:49Z,2026-10-18T20:17:49Z,769.72,2026-10-18T20:30:39Z,delivered,M5,true,sim
+M7,,to_earth,message,crew,Lindqvist,Daily crew health summary for mission day 132: 4 of 4 check-ins complete. Table attached.,2,2026-10-19T20:00:00Z,2026-10-19T20:00:00Z,765.92,2026-10-19T20:12:45Z,delivered,,true,sim
+M8,,to_ship,reply,ground,Dr. Adeyemi,"Received, thank you. No change to the plan.",0,2026-10-19T20:17:45Z,2026-10-19T20:17:45Z,765.92,2026-10-19T20:30:31Z,delivered,M7,true,sim
+M9,,to_earth,message,crew,Lindqvist,Daily crew health summary for mission day 133: 4 of 4 check-ins complete. Table attached.,2,2026-10-20T20:00:00Z,2026-10-20T20:00:00Z,762.11,2026-10-20T20:12:42Z,delivered,,true,sim
+M10,,to_ship,reply,ground,Dr. Adeyemi,"Received, thank you. No change to the plan.",0,2026-10-20T20:17:42Z,2026-10-20T20:17:42Z,762.11,2026-10-20T20:30:24Z,delivered,M9,true,sim
+M11,,to_earth,message,crew,Lindqvist,Daily crew health summary for mission day 134: 4 of 4 check-ins complete. Table attached.,2,2026-10-21T20:00:00Z,2026-10-21T20:00:00Z,758.27,2026-10-21T20:12:38Z,delivered,,true,sim
+M12,,to_ship,reply,ground,Dr. Adeyemi,"Received, thank you. No change to the plan.",0,2026-10-21T20:17:38Z,2026-10-21T20:17:38Z,758.27,2026-10-21T20:30:16Z,delivered,M11,true,sim
+M13,,to_earth,message,crew,Lindqvist,Daily crew health summary for mission day 135: 4 of 4 check-ins complete. Table attached.,2,2026-10-22T20:00:00Z,2026-10-22T20:00:00Z,754.41,2026-10-22T20:12:34Z,delivered,,true,sim
+M14,,to_ship,reply,ground,Dr. Adeyemi,"Received, thank you. No change to the plan.",0,2026-10-22T20:17:34Z,2026-10-22T20:17:34Z,754.41,2026-10-22T20:30:08Z,delivered,M13,true,sim
+M15,,to_earth,message,crew,Lindqvist,Daily crew health summary for mission day 136: 4 of 4 check-ins complete. Table attached.,2,2026-10-23T20:00:00Z,2026-10-23T20:00:00Z,750.54,2026-10-23T20:12:30Z,delivered,,true,sim
+M16,,to_ship,reply,ground,Dr. Adeyemi,"Received, thank you. No change to the plan.",0,2026-10-23T20:17:30Z,2026-10-23T20:17:30Z,750.54,2026-10-23T20:30:01Z,delivered,M15,true,sim
+M17,,to_earth,message,crew,Lindqvist,Daily crew health summary for mission day 137: 4 of 4 check-ins complete. Table attached.,2,2026-10-24T20:00:00Z,2026-10-24T20:00:00Z,746.64,2026-10-24T20:12:26Z,delivered,,true,sim
+M18,,to_ship,reply,ground,Dr. Adeyemi,"Received, thank you. No change to the plan.",0,2026-10-24T20:17:26Z,2026-10-24T20:17:26Z,746.64,2026-10-24T20:29:53Z,delivered,M17,true,sim
+M19,,to_earth,message,crew,Lindqvist,Daily crew health summary for mission day 138: 4 of 4 check-ins complete. Table attached.,2,2026-10-25T20:00:00Z,2026-10-25T20:00:00Z,742.73,2026-10-25T20:12:22Z,delivered,,true,sim
+M20,,to_ship,reply,ground,Dr. Adeyemi,"Received, thank you. No change to the plan.",0,2026-10-25T20:17:22Z,2026-10-25T20:17:22Z,742.73,2026-10-25T20:29:45Z,delivered,M19,true,sim
+M21,,to_earth,message,crew,Lindqvist,Daily crew health summary for mission day 139: 4 of 4 check-ins complete. Table attached.,2,2026-10-26T20:00:00Z,2026-10-26T20:00:00Z,738.80,2026-10-26T20:12:18Z,delivered,,true,sim
+M22,,to_ship,reply,ground,Dr. Adeyemi,"Received, thank you. No change to the plan.",0,2026-10-26T20:17:18Z,2026-10-26T20:17:18Z,738.80,2026-10-26T20:29:37Z,delivered,M21,true,sim
+M23,,to_earth,message,crew,Lindqvist,Daily crew health summary for mission day 140: 4 of 4 check-ins complete. Table attached.,2,2026-10-27T20:00:00Z,2026-10-27T20:00:00Z,734.85,2026-10-27T20:12:14Z,delivered,,true,sim
+M24,,to_ship,reply,ground,Dr. Adeyemi,"Received, thank you. No change to the plan.",0,2026-10-27T20:17:14Z,2026-10-27T20:17:14Z,734.85,2026-10-27T20:29:29Z,delivered,M23,true,sim
+M25,,to_earth,message,crew,Lindqvist,Daily crew health summary for mission day 141: 4 of 4 check-ins complete. Table attached.,2,2026-10-28T20:00:00Z,2026-10-28T20:00:00Z,730.88,2026-10-28T20:12:10Z,delivered,,true,sim
+M26,,to_ship,reply,ground,Dr. Adeyemi,"Received, thank you. No change to the plan.",0,2026-10-28T20:17:10Z,2026-10-28T20:17:10Z,730.88,2026-10-28T20:29:21Z,delivered,M25,true,sim
+M27,,to_earth,message,crew,Lindqvist,Daily crew health summary for mission day 142: 4 of 4 check-ins complete. Table attached.,2,2026-10-29T20:00:00Z,2026-10-29T20:00:00Z,726.89,2026-10-29T20:12:06Z,delivered,,true,sim
+M28,,to_ship,reply,ground,Dr. Adeyemi,"Received, thank you. No change to the plan.",0,2026-10-29T20:17:06Z,2026-10-29T20:17:06Z,726.89,2026-10-29T20:29:13Z,delivered,M27,true,sim
+M29,,to_earth,message,crew,Lindqvist,Daily crew health summary for mission day 143: 4 of 4 check-ins complete. Table attached.,2,2026-10-30T20:00:00Z,2026-10-30T20:00:00Z,722.89,2026-10-30T20:12:02Z,delivered,,true,sim
+M30,,to_ship,reply,ground,Dr. Adeyemi,"Received, thank you. No change to the plan.",0,2026-10-30T20:17:02Z,2026-10-30T20:17:02Z,722.89,2026-10-30T20:29:05Z,delivered,M29,true,sim
+M31,,to_earth,message,crew,Lindqvist,Daily crew health summary for mission day 144: 4 of 4 check-ins complete. Table attached.,2,2026-10-31T20:00:00Z,2026-10-31T20:00:00Z,718.87,2026-10-31T20:11:58Z,delivered,,true,sim
+M32,,to_ship,reply,ground,Dr. Adeyemi,"Received, thank you. No change to the plan.",0,2026-10-31T20:16:58Z,2026-10-31T20:16:58Z,718.87,2026-10-31T20:28:57Z,delivered,M31,true,sim
+M33,,to_earth,message,crew,Lindqvist,Daily crew health summary for mission day 145: 3 of 4 check-ins complete. Table attached.,2,2026-11-01T20:00:00Z,2026-11-01T20:00:00Z,714.83,2026-11-01T20:11:54Z,delivered,,true,sim
+M34,,to_ship,reply,ground,Dr. Adeyemi,"Received, thank you. No change to the plan.",0,2026-11-01T20:16:54Z,2026-11-01T20:16:54Z,714.83,2026-11-01T20:28:49Z,delivered,M33,true,sim
+M35,A2,to_earth,report,crew,Okafor,"Lindqvist: Core temperature 38.1 C, over 38.0 C. Handoff report with the last 30 readings attached.",0,2026-11-02T11:36:00Z,2026-11-02T11:36:00Z,710.77,2026-11-02T11:47:50Z,delivered,,true,injected:AN05
+M36,A2,to_earth,message,crew,Okafor,Paracetamol given. Fluids up.,2,2026-11-02T11:44:00Z,2026-11-02T11:44:00Z,710.77,2026-11-02T11:55:50Z,delivered,,true,injected:AN05
+M37,A2,to_ship,reply,ground,Dr. Adeyemi,Temperature every 4 hours. 500 mL more fluids today. Report if over 39 C.,0,2026-11-02T11:53:50Z,2026-11-02T11:53:50Z,710.77,2026-11-02T12:05:41Z,delivered,M35,true,injected:AN05
+M38,A2,to_earth,update,crew,Okafor,Resolved by Okafor.,1,2026-11-02T12:09:41Z,2026-11-02T12:09:41Z,710.77,2026-11-02T12:21:32Z,delivered,,true,injected:AN05
+M39,,to_earth,message,crew,Lindqvist,Daily crew health summary for mission day 146: 4 of 4 check-ins complete. Table attached.,2,2026-11-02T20:00:00Z,2026-11-02T20:00:00Z,710.77,2026-11-02T20:11:50Z,delivered,,true,sim
+M40,,to_ship,reply,ground,Dr. Adeyemi,"Received, thank you. No change to the plan.",0,2026-11-02T20:16:50Z,2026-11-02T20:16:50Z,710.77,2026-11-02T20:28:41Z,delivered,M39,true,sim
+M41,,to_earth,message,crew,Lindqvist,Daily crew health summary for mission day 147: 4 of 4 check-ins complete. Table attached.,2,2026-11-03T20:00:00Z,2026-11-03T20:00:00Z,706.70,2026-11-03T20:11:46Z,delivered,,true,sim
+M42,,to_ship,reply,ground,Dr. Adeyemi,"Received, thank you. No change to the plan.",0,2026-11-03T20:16:46Z,2026-11-03T20:16:46Z,706.70,2026-11-03T20:28:33Z,delivered,M41,true,sim
+M43,,to_earth,message,crew,Lindqvist,Daily crew health summary for mission day 148: 4 of 4 check-ins complete. Table attached.,2,2026-11-04T20:00:00Z,2026-11-04T20:00:00Z,702.61,2026-11-04T20:11:42Z,delivered,,true,sim
+M44,,to_ship,reply,ground,Dr. Adeyemi,"Received, thank you. No change to the plan.",0,2026-11-04T20:16:42Z,2026-11-04T20:16:42Z,702.61,2026-11-04T20:28:25Z,delivered,M43,true,sim
+M45,,to_earth,message,crew,Lindqvist,Daily crew health summary for mission day 149: 4 of 4 check-ins complete. Table attached.,2,2026-11-05T20:00:00Z,2026-11-05T20:00:00Z,698.50,2026-11-05T20:11:38Z,delivered,,true,sim
+M46,,to_ship,reply,ground,Dr. Adeyemi,"Received, thank you. No change to the plan.",0,2026-11-05T20:16:38Z,2026-11-05T20:16:38Z,698.50,2026-11-05T20:28:17Z,delivered,M45,true,sim
+M47,A3,to_earth,report,crew,Lindqvist,"Sato: Blood oxygen 93 %, under 94 % at rest. Handoff report with the last 30 readings attached.",0,2026-11-06T14:31:00Z,2026-11-06T14:31:00Z,694.37,2026-11-06T14:42:34Z,delivered,,true,injected:AN02
+M48,A3,to_earth,message,crew,Lindqvist,Mask on at 2 L/min. SpO2 back to 95 % after four minutes.,2,2026-11-06T14:39:00Z,2026-11-06T14:39:00Z,694.37,2026-11-06T14:50:34Z,delivered,,true,injected:AN02
+M49,A3,to_ship,reply,ground,Dr. Adeyemi,Agree with oxygen. Check the cabin O2 sensor in Hab A and recheck SpO2 hourly today.,0,2026-11-06T14:48:34Z,2026-11-06T14:48:34Z,694.37,2026-11-06T15:00:08Z,delivered,M47,true,injected:AN02
+M50,A3,to_earth,update,crew,Lindqvist,Resolved by Lindqvist.,1,2026-11-06T15:04:08Z,2026-11-06T15:04:08Z,694.37,2026-11-06T15:15:43Z,delivered,,true,injected:AN02
+M51,,to_earth,message,crew,Lindqvist,Daily crew health summary for mission day 150: 4 of 4 check-ins complete. Table attached.,2,2026-11-06T20:00:00Z,2026-11-06T20:00:00Z,694.37,2026-11-06T20:11:34Z,delivered,,true,sim
+M52,,to_ship,reply,ground,Dr. Adeyemi,"Received, thank you. No change to the plan.",0,2026-11-06T20:16:34Z,2026-11-06T20:16:34Z,694.37,2026-11-06T20:28:08Z,delivered,M51,true,sim
+M53,,to_earth,message,crew,Lindqvist,Daily crew health summary for mission day 151: 4 of 4 check-ins complete. Table attached.,2,2026-11-07T20:00:00Z,2026-11-07T20:00:00Z,690.23,2026-11-07T20:11:30Z,delivered,,true,sim
+M54,,to_ship,reply,ground,Dr. Adeyemi,"Received, thank you. No change to the plan.",0,2026-11-07T20:16:30Z,2026-11-07T20:16:30Z,690.23,2026-11-07T20:28:00Z,delivered,M53,true,sim
+M55,A4,to_earth,report,crew,Okafor,"Lindqvist: Heart rate 133 bpm at rest, no exercise. Handoff report with the last 30 readings attached.",0,2026-11-08T10:43:00Z,2026-11-08T10:43:00Z,686.08,2026-11-08T10:54:26Z,delivered,,true,injected:AN03
+M56,A4,to_earth,message,crew,Okafor,Ended on its own after 20 min. ECG strip attached.,2,2026-11-08T10:51:00Z,2026-11-08T10:51:00Z,686.08,2026-11-08T11:02:26Z,delivered,,true,injected:AN03
+M57,A4,to_ship,reply,ground,Dr. Adeyemi,Looks like a paroxysmal tachycardia. No caffeine today; record an ECG if it returns.,0,2026-11-08T11:00:26Z,2026-11-08T11:00:26Z,686.08,2026-11-08T11:11:52Z,delivered,M55,true,injected:AN03
+M58,A4,to_earth,update,crew,Okafor,Resolved by Okafor.,1,2026-11-08T11:15:52Z,2026-11-08T11:15:52Z,686.08,2026-11-08T11:27:18Z,delivered,,true,injected:AN03
+M59,,to_earth,message,crew,Lindqvist,Daily crew health summary for mission day 152: 4 of 4 check-ins complete. Table attached.,2,2026-11-08T20:00:00Z,2026-11-08T20:00:00Z,686.08,2026-11-08T20:11:26Z,delivered,,true,sim
+M60,,to_ship,reply,ground,Dr. Adeyemi,"Received, thank you. No change to the plan.",0,2026-11-08T20:16:26Z,2026-11-08T20:16:26Z,686.08,2026-11-08T20:27:52Z,delivered,M59,true,sim
+M61,,to_earth,message,crew,Lindqvist,Daily crew health summary for mission day 153: 4 of 4 check-ins complete. Table attached.,2,2026-11-09T20:00:00Z,2026-11-09T20:00:00Z,681.91,2026-11-09T20:11:21Z,delivered,,true,sim
+M62,,to_ship,reply,ground,Dr. Adeyemi,"Received, thank you. No change to the plan.",0,2026-11-09T20:16:21Z,2026-11-09T20:16:21Z,681.91,2026-11-09T20:27:43Z,delivered,M61,true,sim
+M63,A5,to_earth,report,crew,Lindqvist,"Mensah: Heart rate 37 bpm in sleep, under the personal sleeping range. Handoff report with the last 30 readings attached.",0,2026-11-10T02:05:00Z,2026-11-10T02:05:00Z,677.73,2026-11-10T02:16:17Z,delivered,,true,injected:AN04
+M64,A5,to_earth,message,crew,Lindqvist,"Woke up fine, no dizziness.",2,2026-11-10T02:13:00Z,2026-11-10T02:13:00Z,677.73,2026-11-10T02:24:17Z,delivered,,true,injected:AN04
+M65,A5,to_ship,reply,ground,Dr. Adeyemi,Probably vagal in sleep. Repeat the overnight ECG tonight.,0,2026-11-10T02:22:17Z,2026-11-10T02:22:17Z,677.73,2026-11-10T02:33:35Z,delivered,M63,true,injected:AN04
+M66,A5,to_earth,update,crew,Lindqvist,Resolved by Lindqvist.,1,2026-11-10T02:37:35Z,2026-11-10T02:37:35Z,677.73,2026-11-10T02:48:53Z,delivered,,true,injected:AN04
+M67,,to_earth,message,crew,Lindqvist,Daily crew health summary for mission day 154: 4 of 4 check-ins complete. Table attached.,2,2026-11-10T20:00:00Z,2026-11-10T20:00:00Z,677.73,2026-11-10T20:11:17Z,delivered,,true,sim
+M68,,to_ship,reply,ground,Dr. Adeyemi,"Received, thank you. No change to the plan.",0,2026-11-10T20:16:17Z,2026-11-10T20:16:17Z,677.73,2026-11-10T20:27:35Z,delivered,M67,true,sim
+M69,A6,to_earth,report,crew,Ship (auto SOS),Mensah: Manual SOS: triple glove tap. Handoff report with the last 30 readings attached.,0,2026-11-11T16:20:07Z,2026-11-11T16:20:07Z,673.53,2026-11-11T16:31:20Z,delivered,,true,injected:AN09
+M70,A6,to_earth,message,crew,Lindqvist,"Hand trapped in the rack, freed. Bruising only.",2,2026-11-11T16:28:07Z,2026-11-11T16:28:07Z,673.53,2026-11-11T16:39:20Z,delivered,,true,injected:AN09
+M71,A6,to_ship,reply,ground,Dr. Adeyemi,"Ice for 20 min, check grip strength and sensation, photo of the hand please.",0,2026-11-11T16:37:20Z,2026-11-11T16:37:20Z,673.53,2026-11-11T16:48:34Z,delivered,M69,true,injected:AN09
+M72,A6,to_earth,update,crew,Lindqvist,Resolved by Lindqvist.,1,2026-11-11T16:52:34Z,2026-11-11T16:52:34Z,673.53,2026-11-11T17:03:47Z,delivered,,true,injected:AN09
+M73,,to_earth,message,crew,Lindqvist,Daily crew health summary for mission day 155: 4 of 4 check-ins complete. Table attached.,2,2026-11-11T20:00:00Z,2026-11-11T20:00:00Z,673.53,2026-11-11T20:11:13Z,delivered,,true,sim
+M74,,to_ship,reply,ground,Dr. Adeyemi,"Received, thank you. No change to the plan.",0,2026-11-11T20:16:13Z,2026-11-11T20:16:13Z,673.53,2026-11-11T20:27:27Z,delivered,M73,true,sim
+M75,,to_earth,message,crew,Lindqvist,Daily crew health summary for mission day 156: 4 of 4 check-ins complete. Table attached.,2,2026-11-12T20:00:00Z,2026-11-13T12:00:00Z,665.10,2026-11-13T12:11:05Z,delivered,,true,sim
+M76,A7,to_earth,report,crew,Ship (auto SOS),"Sato: Blood oxygen 91 % in sleep, link down. Handoff report with the last 30 readings attached.",0,2026-11-13T03:11:00Z,2026-11-13T12:00:00Z,665.10,2026-11-13T12:11:05Z,delivered,,true,injected:AN10
+M77,A7,to_earth,message,crew,Lindqvist,"Treated on board during the blackout: oxygen, SpO2 97 % by 04:00.",2,2026-11-13T03:19:00Z,2026-11-13T12:00:00Z,665.10,2026-11-13T12:11:05Z,delivered,,true,injected:AN10
+M78,A7,to_earth,update,crew,Lindqvist,Resolved by Lindqvist.,1,2026-11-13T04:20:00Z,2026-11-13T12:00:00Z,665.10,2026-11-13T12:11:05Z,delivered,,true,injected:AN10
+M79,,to_ship,reply,ground,Dr. Adeyemi,"Received, thank you. No change to the plan.",0,2026-11-13T12:16:05Z,2026-11-13T12:16:05Z,665.10,2026-11-13T12:27:10Z,delivered,M75,true,sim
+M80,A7,to_ship,reply,ground,Dr. Adeyemi,Reviewed the queued report. Agree with what you did. Send a 24 h SpO2 trend.,0,2026-11-13T12:17:05Z,2026-11-13T12:17:05Z,665.10,2026-11-13T12:28:10Z,delivered,M76,true,injected:AN10
+M81,,to_earth,message,crew,Lindqvist,Daily crew health summary for mission day 157: 4 of 4 check-ins complete. Table attached.,2,2026-11-13T20:00:00Z,2026-11-13T20:00:00Z,665.10,2026-11-13T20:11:05Z,delivered,,true,sim
+M82,,to_ship,reply,ground,Dr. Adeyemi,"Received, thank you. No change to the plan.",0,2026-11-13T20:16:05Z,2026-11-13T20:16:05Z,665.10,2026-11-13T20:27:10Z,delivered,M81,true,sim

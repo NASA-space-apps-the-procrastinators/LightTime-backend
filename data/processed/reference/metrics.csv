@@ -1,0 +1,17 @@
+metric,unit,api_name,backend_name,min_possible,max_possible,description
+hr_bpm,bpm,hr,heart_rate,25.0,230.0,Heart rate from the shirt ECG
+hr_rest_bpm,bpm,hr_rest,heart_rate,25.0,150.0,"Morning resting HR: median of the first 20 min after waking, at rest"
+resp_rpm,/min,resp,,4.0,60.0,Breathing rate from the chest bands
+spo2_pct,%,spo2,spo2,50.0,100.0,Blood oxygen from the headband pulse oximeter
+skin_temp_c,C,skin_temp_c,skin_temp,25.0,42.0,"Skin temperature, headband"
+core_temp_c,C,temp_c,,34.0,42.5,"Core temperature, heat-flux sensor"
+activity_g,g,activity_g,,0.0,4.0,Accelerometer magnitude above gravity-free rest
+bp_sys_est_mmhg,mmHg,bp_sys,bp_sys,60.0,230.0,Systolic BP estimated by the shirt
+bp_sys_mmhg,mmHg,bp_sys,bp_sys,60.0,230.0,"Systolic BP, morning cuff"
+bp_dia_mmhg,mmHg,bp_dia,bp_dia,30.0,140.0,"Diastolic BP, morning cuff"
+sleep_h,h,sleep_h,sleep_hours,0.0,24.0,"Sleep, self-reported at check-in"
+mood,1-5,mood,mood,1.0,5.0,Mood at check-in
+pvt_ms,ms,pvt_ms,,100.0,3000.0,Psychomotor vigilance test mean reaction time
+dose_msv_day,mSv/day,dose_mSv_day,,0.0,50.0,"Radiation dose, station"
+co2_mmhg,mmHg,co2_mmHg,,0.1,10.0,Cabin CO2 partial pressure
+signal_quality,0-1,signal_quality,signal_ok,0.0,1.0,Worst channel quality; ok is >= 0.6

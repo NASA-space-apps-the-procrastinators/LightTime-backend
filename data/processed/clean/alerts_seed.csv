@@ -1,0 +1,1 @@
+alert_id,crew_id,metric,value,unit,state,level,stage,reason,rule,source,nasa_risk,symptoms,steps_done,raised_at,acknowledged_at,sent_at,earth_at,reply_at,resolved_at,anomaly_id,simulated,provenance

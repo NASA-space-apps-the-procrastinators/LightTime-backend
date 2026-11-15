@@ -1,0 +1,10 @@
+source,device_model,metrics,native_rate,note
+ecg,CSA Bio-Monitor (Astroskin) shirt ECG,hr_bpm,1 Hz (beat-derived),
+chest_band,Bio-Monitor shirt respiratory inductance bands,resp_rpm,1 Hz,
+pulse_ox,Bio-Monitor headband pulse oximeter,spo2_pct,1 Hz,whole percent
+skin_temp,Bio-Monitor headband skin sensor,skin_temp_c,1 Hz,
+core_temp,Heat-flux core temperature sensor,core_temp_c,1/min,Bio-Monitor does not list core temp; modelled on ISS heat-flux sensors. Check before citing
+accel,Bio-Monitor shirt 3-axis accelerometer,activity_g,1 Hz,
+bp_est,Bio-Monitor shirt systolic BP estimate,bp_sys_est_mmhg,1/min,"estimate, systolic only"
+cuff,Manual BP cuff at the morning check-in,bp_sys_mmhg|bp_dia_mmhg,daily,
+cabin,Cabin environment sensors,co2_mmhg,5 min,EDA RR-1 replay in H1

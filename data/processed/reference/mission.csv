@@ -1,0 +1,2 @@
+mission_id,launch_date,platform,demo_now,link_model,simulated,provenance
+LT-2026,2026-06-10,ISS,2026-11-14T06:30:00Z,ISS platform with a Mars-distance link (the backend dial's analogue); see link_windows.csv,true,sim

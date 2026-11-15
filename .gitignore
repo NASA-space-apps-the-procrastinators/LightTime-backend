@@ -3,3 +3,8 @@ __pycache__/
 .pytest_cache/
 instance/
 .env
+
+# Generated data: rebuild with `python data/scripts/build_all.py` (see data/README.md)
+data/processed/*/packets.csv
+data/processed/reports/*.log
+data/scripts/__pycache__/
