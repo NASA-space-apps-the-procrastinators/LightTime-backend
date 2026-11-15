@@ -4,7 +4,7 @@ from datetime import timedelta
 
 from flask import Blueprint, abort, current_app, jsonify, request
 
-from base_station import habitat, lookahead, recorder, reports, rules, scenario, usual
+from base_station import habitat, lookahead, recorder, reports, rules, scenario, scoring, usual
 from common import link, modes, sources
 from common.models import (VITALS, Alert, Crew, LinkMessage, MissionState, Reading, db, iso,
                            utcnow)
@@ -42,26 +42,73 @@ def look_ahead(alert, source=None):
         return lookahead.check(alert.crew_id, alert.vital, cfg["bands"][0][0], source)
 
 
+STATE = {"advisory": "WATCH", "caution": "WATCH", "warning": "ALERT", "emergency": "SOS"}
+NOT_A_DIAGNOSIS = "This is a fixed rule, not a diagnosis. A person, not the ship, decides."
+
+
+def alert_code(alert):
+    """The id the screens use: "A1" for an alert loaded with the morning, "A" and the row number otherwise."""
+    return alert.ref or f"A{alert.id}"
+
+
+def find_alert(ref):
+    """An alert from "A1" or from the row number, or None."""
+    text = str(ref)
+    alert = Alert.query.filter_by(ref=text).first()
+    number = text[1:] if text[:1] == "A" else text
+    if alert is None and number.isdigit():
+        alert = Alert.query.filter_by(id=int(number), ref=None).first()
+    return alert
+
+
+def alert_or_404(ref):
+    alert = find_alert(ref)
+    if alert is None:
+        abort(404)
+    return alert
+
+
+def stage(alert, line):
+    """Where the alert is on its round trip. Worked out from the times, never stored."""
+    if alert.cleared_at is not None:
+        return "resolved"
+    if line["reply_at"]:
+        return "replied"
+    if line["sent_at"]:
+        return "sent"
+    return "acknowledged" if alert.acknowledged_at is not None else "raised"
+
+
 def alert_dict(alert):
     crew = db.session.get(Crew, alert.crew_id)
     cfg = rules.LIMITS["vitals"].get(alert.vital)
     report = db.session.get(LinkMessage, alert.report_id) if alert.report_id else None
     look = report.payload.get("lookahead") if report else None     # as it stood when the report left
-    if alert.level == "emergency":
-        speak = reports.speak(alert, crew, current_state())
-    else:
-        speak = reports.speak_falling(crew, cfg["label"], look) if look else None
+    line = timeline(alert)
+    text = scoring.rule_text().get(alert.metric) if alert.metric else None
+    if text:                                    # a console rule raised it: a daily value against the person's band
+        unit, rule, source, speak = text["unit"], text["alert"], text["source"], None
+        why = [f"What was seen: {alert.reason}.", f"Rule: {rule}.", f"Source: {source}.", NOT_A_DIAGNOSIS]
+    else:                                       # the ship AI raised it, or a person pressed SOS
+        why = reports.why(alert)
+        unit = cfg["unit"].strip() if cfg else None
+        rule = next((item[6:] for item in why if item.startswith("Rule: ")), None)
+        source = rules.LIMITS["source"] if cfg else None
+        if alert.level == "emergency":
+            speak = reports.speak(alert, crew, current_state())
+        else:
+            speak = reports.speak_falling(crew, cfg["label"], look) if look else None
     return {
-        "id": alert.id, "crew_id": alert.crew_id, "crew": crew.name, "at": iso(alert.at),
-        "level": alert.level, "vital": alert.vital, "value": alert.value,
-        "unit": cfg["unit"].strip() if cfg else None, "reason": alert.reason,
-        "source": rules.LIMITS["source"] if cfg else None,
-        "auto": alert.auto, "nasa_risk": alert.nasa_risk,
+        "id": alert_code(alert), "crew_id": crew.code, "crew": crew.name, "at": iso(alert.at),
+        "level": alert.level, "state": "RECHECK" if alert.vital == "signal" else STATE[alert.level],
+        "stage": stage(alert, line), "vital": alert.vital, "metric": alert.metric or alert.vital,
+        "value": alert.value, "unit": unit, "reason": alert.reason, "rule": rule, "source": source,
+        "auto": alert.auto, "nasa_risk": alert.nasa_risk, "symptoms": alert.symptoms or [],
         "steps": reports.steps_for(alert.vital), "steps_done": alert.steps_done,
         "acknowledged_by": alert.acknowledged_by,
         "cleared_at": iso(alert.cleared_at), "cleared_by": alert.cleared_by,
-        "cleared_note": alert.cleared_note, "why": reports.why(alert),
-        "timeline": timeline(alert),
+        "cleared_note": alert.cleared_note, "why": why,
+        "timeline": line,
         "lookahead": look,
         "speak": speak,
     }
@@ -221,20 +268,29 @@ def alerts():
     return jsonify([alert_dict(a) for a in query.order_by(Alert.at.desc(), Alert.id.desc())])
 
 
-@bp.post("/alerts/<int:alert_id>/ack")
+@bp.get("/alerts/<alert_id>")
+def one_alert(alert_id):
+    return jsonify(alert_dict(alert_or_404(alert_id)))
+
+
+@bp.post("/alerts/<alert_id>/ack")
 def acknowledge(alert_id):
-    alert = db.get_or_404(Alert, alert_id)
+    alert = alert_or_404(alert_id)
+    sent = body()
+    if isinstance(sent.get("symptoms"), list):
+        alert.symptoms = [item for item in sent["symptoms"] if isinstance(item, str)][:6]
+        db.session.commit()
     if alert.acknowledged_at is None:
         alert.acknowledged_at = utcnow()
-        alert.acknowledged_by = person(body().get("by"))
+        alert.acknowledged_by = person(sent.get("by"))
         db.session.commit()
         tell_earth(alert, {"event": "acknowledged", "by": alert.acknowledged_by})
     return jsonify(alert_dict(alert))
 
 
-@bp.post("/alerts/<int:alert_id>/steps")
+@bp.post("/alerts/<alert_id>/steps")
 def tick_step(alert_id):
-    alert = db.get_or_404(Alert, alert_id)
+    alert = alert_or_404(alert_id)
     try:
         index = int((request.get_json(silent=True) or {})["index"])
     except (KeyError, TypeError, ValueError):
@@ -249,18 +305,18 @@ def tick_step(alert_id):
     return jsonify(alert_dict(alert))
 
 
-@bp.post("/alerts/<int:alert_id>/send")
+@bp.post("/alerts/<alert_id>/send")
 def send_alert(alert_id):
     """The crew sends an alert to the flight surgeon. An SOS has already gone."""
-    alert = db.get_or_404(Alert, alert_id)
+    alert = alert_or_404(alert_id)
     if alert.report_id is None:
         send_report(alert, look_ahead(alert))
     return jsonify(alert_dict(alert))
 
 
-@bp.post("/alerts/<int:alert_id>/clear")
+@bp.post("/alerts/<alert_id>/clear")
 def clear_alert(alert_id):
-    alert = db.get_or_404(Alert, alert_id)
+    alert = alert_or_404(alert_id)
     if alert.cleared_at is None:        # a second press changes nothing
         sent = body()
         note = sent.get("note")
@@ -280,9 +336,10 @@ def crew_message():
     if not data.get("text"):
         return jsonify(error="a message needs text"), 400
     state = current_state()
+    about = find_alert(data["alert_id"]) if data.get("alert_id") is not None else None
     message = link.send("to_earth", "message",
                         {"text": data["text"], "from": data.get("from", "Crew"),
-                         "alert_id": data.get("alert_id")},
+                         "alert_id": about.id if about else None},
                         state["delay_s"], state["link_up"], priority=2)
     return jsonify(link.to_dict(message)), 201
 
@@ -357,3 +414,13 @@ def send_summaries():
 @bp.get("/sources")
 def data_sources():
     return jsonify(sources.listing())
+
+
+@bp.errorhandler(404)
+def not_found(error):
+    return jsonify(error="not found"), 404
+
+
+@bp.errorhandler(400)
+def bad_request(error):
+    return jsonify(error=error.description, field=None), 400

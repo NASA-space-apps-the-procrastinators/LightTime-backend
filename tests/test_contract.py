@@ -7,7 +7,7 @@ TIMELINE = {"raised_at", "acknowledged_at", "sent_at", "earth_eta_s", "earth_at"
             "reply_at", "resolved_at"}
 ALERT = {"id", "crew_id", "crew", "at", "level", "vital", "value", "unit", "reason", "source", "auto",
          "nasa_risk", "steps", "steps_done", "acknowledged_by", "cleared_at", "cleared_by", "cleared_note",
-         "why", "timeline", "lookahead", "speak"}
+         "why", "timeline", "lookahead", "speak", "state", "stage", "metric", "rule", "symptoms"}
 MESSAGE = {"id", "direction", "kind", "priority", "payload", "status", "in_reply_to", "created_at",
            "sent_at", "deliver_at", "delay_s", "eta_s", "arrives_after_s", "earliest_reply_after_s"}
 

@@ -116,8 +116,9 @@ def test_a_warning_goes_to_earth_only_when_the_crew_sends_it(client):
 
 
 def test_the_crew_can_message_the_flight_surgeon(client):
-    sent = client.post("/api/base/messages", json={"text": "He is awake and talking.", "alert_id": 7})
+    alert = client.post("/api/base/sos", json={"crew_id": 1}).get_json()
+    sent = client.post("/api/base/messages", json={"text": "He is awake and talking.", "alert_id": alert["id"]})
     assert sent.status_code == 201
     message = client.get("/api/base/outbox").get_json()[0]
-    assert message["kind"] == "message" and message["payload"]["alert_id"] == 7
+    assert message["kind"] == "message" and f"A{message['payload']['alert_id']}" == alert["id"]
     assert message["payload"]["text"] == "He is awake and talking."
