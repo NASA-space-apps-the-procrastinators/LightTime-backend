@@ -94,3 +94,45 @@ def test_bots_are_known_by_their_user_agent():
     assert visitor.is_bot("GoogleHC/1.0")
     assert visitor.is_bot("Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)")
     assert not visitor.is_bot(CHROME)
+
+
+BROWSER = {"User-Agent": CHROME}
+
+
+def _counts(app):
+    with app.app_context():
+        counter.flush()
+        return {(r.kind, r.name): r.n for r in StatCount.query}
+
+
+def test_polls_are_counted_by_route(app, client):
+    client.get("/api/base/state", headers=BROWSER)
+    client.get("/api/base/state", headers=BROWSER)
+    assert _counts(app) == {("poll", "GET /api/base/state"): 2}
+    with app.app_context():
+        assert StatVisitor.query.count() == 1
+
+
+def test_a_route_with_an_id_is_counted_once_by_its_rule(app, client):
+    client.get("/api/base/crew/C1", headers=BROWSER)
+    client.get("/api/base/crew/C2", headers=BROWSER)
+    assert _counts(app) == {("poll", "GET /api/base/crew/<ref>"): 2}
+
+
+def test_a_dial_press_is_a_request(app, client):
+    client.post("/api/base/dial", json={"stop": "mars"}, headers=BROWSER)
+    assert _counts(app) == {("request", "POST /api/base/dial"): 1}
+
+
+def test_a_path_no_route_has_is_unmatched(app, client):
+    assert client.get("/api/base/nowhere", headers=BROWSER).status_code == 404
+    assert _counts(app) == {("poll", "unmatched"): 1}
+
+
+def test_bots_preflights_and_the_ships_own_calls_are_not_counted(app, client):
+    client.get("/api/base/state", headers={"User-Agent": "GoogleHC/1.0"})
+    client.options("/api/base/state", headers=BROWSER)
+    client.get("/api/base/state")       # the test client's own user agent, as the vitals feed sends
+    assert _counts(app) == {}
+    with app.app_context():
+        assert StatVisitor.query.count() == 0

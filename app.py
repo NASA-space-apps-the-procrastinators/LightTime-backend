@@ -6,6 +6,7 @@ from flask_cors import CORS
 
 from common import dataset, lighttime
 from common.models import db, seed, utcnow
+from stats import counter, visitor
 
 
 def create_app(database_url=None, morning=None):
@@ -26,9 +27,22 @@ def create_app(database_url=None, morning=None):
     from base_station import console, log  # noqa: F401  (each adds its routes to the ship's blueprint)
     from base_station.routes import bp as base_bp
     from command_center.routes import bp as earth_bp
-    from stats import models as stats_models  # noqa: F401  (its tables, for create_all)
     app.register_blueprint(base_bp, url_prefix="/api/base")
     app.register_blueprint(earth_bp, url_prefix="/api/earth")
+
+    @app.after_request
+    def count_traffic(response):
+        """Count one API call by its route rule, so /crew/C1 and /crew/C2 count as one. A GET is a
+        poll. Not counted: the stats routes, preflights, bots, and the test client's user agent,
+        which is how the vitals feed posts readings to the ship (command_center/feed.py)."""
+        agent = request.headers.get("User-Agent", "")
+        if (request.path.startswith("/api/stats") or request.method == "OPTIONS"
+                or visitor.is_bot(agent) or agent.startswith("Werkzeug/")):
+            return response
+        name = f"{request.method} {request.url_rule.rule}" if request.url_rule else "unmatched"
+        counter.add("poll" if request.method == "GET" else "request", name)
+        counter.see(visitor.visitor_id(request))
+        return response
 
     @app.errorhandler(404)
     @app.errorhandler(405)
