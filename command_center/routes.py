@@ -2,9 +2,9 @@
 itself sent). The logic is in command_center/cases.py."""
 import statistics
 
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, current_app, jsonify, request
 
-from command_center import cases
+from command_center import cases, feed
 from common import dsn, lighttime, link, modes
 from common.models import LinkMessage, MissionState, db
 
@@ -65,6 +65,52 @@ def case_thread(alert_id):
     if aid is None or cases.report_for(aid, now) is None:
         return not_found()
     return jsonify(alert_id=cases.code("A", aid), messages=cases.thread(aid, now))
+
+
+@bp.post("/feed/start")
+def feed_start():
+    """Start the suits' vitals feed to Earth. {"interval_s": 120} is optional."""
+    data = request.get_json(silent=True)
+    data = data if isinstance(data, dict) else {}
+    interval_s = data.get("interval_s", feed.DEFAULT_INTERVAL_S)
+    if (isinstance(interval_s, bool) or not isinstance(interval_s, (int, float))
+            or not feed.MIN_INTERVAL_S <= interval_s <= feed.MAX_INTERVAL_S):
+        return bad(f"interval_s is a number of seconds from {feed.MIN_INTERVAL_S} to {feed.MAX_INTERVAL_S}",
+                   "interval_s")
+    feed.start(current_app._get_current_object(), interval_s)
+    return jsonify(feed.status())
+
+
+@bp.post("/feed/stop")
+def feed_stop():
+    feed.stop()
+    return jsonify(feed.status())
+
+
+@bp.get("/feed")
+def feed_status():
+    return jsonify(feed.status())
+
+
+@bp.get("/vitals")
+def vitals():
+    """The suit readings Earth has received, newest first, and the latest per crew member.
+    ?crew=C1 for one person, ?limit= up to 1000 (default 100)."""
+    crew = request.args.get("crew")
+    if crew is not None:
+        number = cases.parse_id(crew.upper().lstrip("C")) if crew.strip() else None
+        if number is None:
+            return bad("crew is a crew id such as C1", "crew")
+        crew = cases.code("C", number)
+    limit = request.args.get("limit", 100)
+    try:
+        limit = int(limit)
+    except (TypeError, ValueError):
+        return bad("limit is a whole number", "limit")
+    if not 1 <= limit <= 1000:
+        return bad("limit is from 1 to 1000", "limit")
+    readings, latest = cases.vitals(link.utcnow(), crew, limit)
+    return jsonify(readings=readings, latest=latest, simulated=True)
 
 
 @bp.get("/outbox")

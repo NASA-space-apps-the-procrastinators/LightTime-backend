@@ -243,6 +243,24 @@ def report_for(alert_id, now):
     return next((m for m in arrived(now) if m.kind == "report" and _alert_of(m) == alert_id), None)
 
 
+def vitals(now, crew=None, limit=100):
+    """Every suit reading that has reached Earth, newest first. Earth keeps them all; the ship
+    drops its own copies after 24 hours. Returns (readings, latest reading per crew member)."""
+    out = []
+    for m in reversed(arrived(now)):          # newest arrival first
+        if m.kind != "vitals":
+            continue
+        for r in m.payload.get("readings", []):
+            if crew is None or r.get("crew_id") == crew:
+                out.append({**r, "message_id": code("M", m.id), "arrived_at": iso(m.deliver_at),
+                            "age_s": round(mission_age(m, now), 1), "simulated": bool(m.payload.get("simulated"))})
+    out.sort(key=lambda r: r.get("at") or "", reverse=True)
+    latest = {}
+    for r in out:
+        latest.setdefault(r["crew_id"], r)
+    return out[:limit], latest
+
+
 def last_contact(now):
     ship = arrived(now)
     if not ship:
