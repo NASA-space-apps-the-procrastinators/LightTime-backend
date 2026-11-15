@@ -340,7 +340,7 @@ The estimated output is about 25 to 35 MB of CSV. My proposal is to commit `refe
 | # | Question | My default if you don't say |
 | --- | --- | --- |
 | Q1 | Platform and timeline: is it ISS, mission day 158 (frontend), or a Mars transit (the backend dial)? | ISS calendar, with `link_windows` using the dial stops (mostly `mars` delay, one `sun` blackout) so the light-time story still plays |
-| Q2 | Crew: C1–C4 (TJ, Rebecca, Kyler, David) for the data, even though the backend seeds David, Damola and Youssef? | Yes, C1–C4. The replay maps them to ints |
+| Q2 | Crew: C1–C4 for the data, even though the backend then seeded the team's names (David, Damola and Youssef)? | Yes, C1–C4. The replay maps them to ints. Since 15 November the four carry team names: TJ, Rebecca, Kyler and David; Dr. Youssef and Damola work the Earth side |
 | Q3 | Can you get `thresholds.json`, `crew-seed.json` and `packet-schema.json` from the frontend repo? | Draft values marked `source=draft`, replaced when the files arrive |
 | Q4 | mGy to mSv: which factor and source? | No conversion. Simulated mSv flagged, real mGy kept next to it |
 | Q5 | CO2 ppm to mmHg by Dalton's law using the row's own pressure: is that "cited" enough? | Yes, with the formula written in the README |
