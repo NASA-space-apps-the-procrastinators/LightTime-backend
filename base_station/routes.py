@@ -96,11 +96,24 @@ def person(value):
     return (value.strip()[:40] if isinstance(value, str) else "") or "crew"
 
 
+def find_crew(ref):
+    """A crew member from "C1" or from the row number, or None."""
+    text = str(ref)
+    crew = Crew.query.filter_by(code=text).first()
+    if crew is None and text.isdigit():
+        crew = db.session.get(Crew, int(text))
+    return crew
+
+
+def crew_or_404(ref):
+    crew = find_crew(ref)
+    if crew is None:
+        abort(404)
+    return crew
+
+
 def crew_id_or_400(data):
-    try:
-        crew = db.session.get(Crew, int(data["crew_id"]))
-    except (KeyError, TypeError, ValueError):
-        crew = None
+    crew = find_crew(data.get("crew_id"))
     if crew is None:
         abort(400, "unknown crew_id")
     return crew.id
@@ -191,10 +204,11 @@ def crew_board():
                     for c in Crew.query.order_by(Crew.id)])
 
 
-@bp.get("/crew/<int:crew_id>/readings")
-def crew_readings(crew_id):
+@bp.get("/crew/<ref>/readings")
+def crew_readings(ref):
+    crew = crew_or_404(ref)
     limit = min(request.args.get("limit", 120, type=int), 600)
-    rows = (Reading.query.filter_by(crew_id=crew_id)
+    rows = (Reading.query.filter_by(crew_id=crew.id)
             .order_by(Reading.at.desc(), Reading.id.desc()).limit(limit).all())
     return jsonify([row.to_dict() for row in reversed(rows)])
 

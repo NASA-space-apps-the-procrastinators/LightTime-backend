@@ -25,7 +25,7 @@ def test_earth_sees_nothing_until_the_light_arrives(client, monkeypatch):
     later(monkeypatch, 12)
     messages = earth_messages(client)
     assert len(messages) == 1
-    assert messages[0]["payload"]["sbar"]["situation"].startswith("David")
+    assert messages[0]["payload"]["sbar"]["situation"].startswith("Okafor")
     assert messages[0]["status"] == "delivered"
 
 
