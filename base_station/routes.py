@@ -4,8 +4,8 @@ from datetime import timedelta
 
 from flask import Blueprint, abort, current_app, jsonify, request
 
-from base_station import habitat, lookahead, recorder, reports, rules, scenario, scoring, usual
-from common import link, modes, sources
+from base_station import habitat, lookahead, morning, recorder, reports, rules, scenario, scoring, usual
+from common import dataset, link, modes, sources
 from common.models import (VITALS, Alert, Crew, LinkMessage, MissionState, Reading, db, iso,
                            utcnow)
 
@@ -204,6 +204,8 @@ def health():
 def state():
     out = current_state()
     out["speedup"] = link.SPEEDUP
+    out["mission_day"] = dataset.mission_day(utcnow())
+    out["platform"] = dataset.mission()["platform"]
     out["stops"] = [modes.describe(stop) for stop in modes.STOPS]
     return jsonify(out)
 
@@ -377,6 +379,8 @@ def reset():
         model.query.delete()
     db.session.commit()      # the dial stays where it is, so a restarted demo keeps its distance
     usual.clear()
+    if current_app.config.get("MORNING"):
+        morning.load()       # the demo morning starts again, at 06:30, with its own dial stop
     return jsonify(ok=True)
 
 

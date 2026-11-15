@@ -6,8 +6,7 @@ from base_station import usual
 from common import dsn, lighttime, models
 
 
-@pytest.fixture
-def app(monkeypatch):
+def _offline(monkeypatch):
     def offline(*args):
         raise requests.ConnectionError("tests do not use the network")
 
@@ -17,7 +16,12 @@ def app(monkeypatch):
     dsn._cache.clear()
     usual.clear()
     models.set_clock(None)
-    app = create_app("sqlite:///:memory:")
+
+
+@pytest.fixture
+def app(monkeypatch):
+    _offline(monkeypatch)
+    app = create_app("sqlite:///:memory:", morning=False)
     app.config["TESTING"] = True
     return app
 
@@ -25,3 +29,13 @@ def app(monkeypatch):
 @pytest.fixture
 def client(app):
     return app.test_client()
+
+
+@pytest.fixture
+def morning(monkeypatch):
+    """A client on the demo morning: 14 November 2026, 06:30 UTC, alert A1 just raised."""
+    _offline(monkeypatch)
+    app = create_app("sqlite:///:memory:", morning=True)
+    app.config["TESTING"] = True
+    yield app.test_client()
+    models.set_clock(None)

@@ -14,7 +14,7 @@ MESSAGE = {"id", "direction", "kind", "priority", "payload", "status", "in_reply
 
 def test_every_screen_gets_the_fields_the_typed_client_expects(client):
     state = client.get("/api/base/state").get_json()
-    assert set(state) == STOP | {"speedup", "stops"} and set(state["stops"][0]) == STOP
+    assert set(state) == STOP | {"speedup", "stops", "mission_day", "platform"} and set(state["stops"][0]) == STOP
     for _ in range(5):
         posted = client.post("/api/base/readings", json={"crew_id": 1, "spo2": 86, "heart_rate": 88}).get_json()
     assert set(posted) == {"reading", "alerts"} and set(posted["reading"]) == READING

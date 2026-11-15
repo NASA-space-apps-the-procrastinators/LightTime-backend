@@ -8,11 +8,14 @@ from common import lighttime
 from common.models import db, seed
 
 
-def create_app(database_url=None):
+def create_app(database_url=None, morning=None):
     load_dotenv()
     app = Flask(__name__)
     app.config["SQLALCHEMY_DATABASE_URI"] = (
         database_url or os.getenv("DATABASE_URL", "sqlite:///lighttime.db"))
+    # Morning mode loads the demo morning and starts the mission clock. Run one process only:
+    # the clock lives in this process's memory.
+    app.config["MORNING"] = os.getenv("LIGHTTIME_MORNING") == "1" if morning is None else morning
     CORS(app)
     db.init_app(app)
 
@@ -24,6 +27,9 @@ def create_app(database_url=None):
     with app.app_context():
         db.create_all()
         seed()
+        if app.config["MORNING"]:
+            from base_station import morning as demo_morning
+            demo_morning.load()
     lighttime.mars_seconds()    # ask JPL once now, so no screen waits on it later
     return app
 
