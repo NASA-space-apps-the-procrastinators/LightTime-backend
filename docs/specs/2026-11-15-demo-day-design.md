@@ -52,7 +52,7 @@ Not goals: a trained model that decides anything (ADR 0001); phone push; storing
 |---|---|---|
 | Raised | The alert as the ship worded it: reason, value, rule, source | `GET /alerts`: `reason`, `value`, `unit`, `rule`, `source`, `raised_by` |
 | Acknowledged | Who acknowledged, and when | `POST /alerts/<id>/ack {"by"}`; `timeline.acknowledged_at` |
-| Sent | "Earth is 11 min 1 s away. Earliest possible reply: 06:53." With no link: the report is queued and leaves when the link returns | `POST /alerts/<id>/send`; `timeline.earliest_reply_at`; `state.link_up`, `delay_s`, `round_trip_s` |
+| Sent | "Earth is 11 min 1 s away. Earliest possible reply: 22 min 2 s after sending." (Changed on 15 November by the finish spec, decision F1: the stamp is on the demo clock, so the true length is printed.) With no link: the report is queued and leaves when the link returns | `POST /alerts/<id>/send`; `timeline.earliest_reply_at`; `state.link_up`, `delay_s`, `round_trip_s` |
 | Replied | The reply in the thread, when it lands and not before. Nothing replies by itself | `GET /alerts/<id>/thread`; `timeline.reply_at` |
 | Resolved | The plan accepted, four reminders | `POST /alerts/<id>/accept-plan`; `GET /reminders?open=1` |
 
@@ -102,8 +102,8 @@ What it was tried on, and where the app says so (`GET /sources`, `base_station/l
 
 | Result | Source |
 |---|---|
-| Warned before the emergency for 6 of 6 volunteers, a median of 97 seconds ahead (159, 106, 98, 96, 68, 14) | University of Washington overnight oximetry, each volunteer held out in turn |
-| False emergencies on a healthy sleeper over 7.8 hours: 4 with the first rules, then 1, then 0 as they were tightened | The same set's control recording |
+| Warned before the emergency for 6 of 6 volunteers, a median of 97 seconds ahead (159, 106, 98, 96, 68, 14) | Six laboratory recordings of induced low oxygen, 14 to 19 minutes each (Hoffman et al. 2022, University of Washington), each volunteer held out in turn |
+| False emergencies on a healthy sleeper over 7.8 hours: 4 with the first rules, then 1, then 0 as they were tightened | Record c01r of the Apnea-ECG Database on PhysioNet (Penzel et al. 2000), a different dataset |
 | Heart rate judged with hospital bands tripped for 14 of 15 healthy people at a desk. Switched off | PPG-DaLiA wrist recordings |
 | The suit's blood pressure estimate sat in the caution band or worse on 77,647 of 168,600 healthy minutes. Switched off | The generated month's healthy build, so a noise check only (`limits.json`) |
 | The Mars delay: 660.86 s on 14 November. The Deep Space Network measured about 657 s the same hour | NASA JPL Horizons; NASA DSN Now |

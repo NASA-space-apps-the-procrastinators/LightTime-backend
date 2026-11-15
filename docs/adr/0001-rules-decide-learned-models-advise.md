@@ -8,7 +8,7 @@ LIGHTTIME tells a crew far from Earth when a reading matters and who has to act.
 
 The data we have:
 
-- Six overnight blood oxygen recordings and two apnea recordings from real people. Eight people, one of them a patient.
+- Six short laboratory recordings of induced low blood oxygen (Hoffman et al. 2022) and two overnight recordings from the Apnea-ECG Database (Penzel et al. 2000), one of them a healthy control, all from real people. Eight people, one of them a patient.
 - Fifteen wrist recordings of heart rate with activity labels from real, healthy people. No recording contains an emergency.
 - A generated 30-day month for four crew. It is simulated: a model trained on it would learn the generator's own formulas, and any score on it would be circular.
 

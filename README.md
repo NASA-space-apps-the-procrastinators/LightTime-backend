@@ -1,6 +1,23 @@
-# LightTime Backend
+# LIGHT-TIME backend
 
-The ship's computer and the link to Earth for LIGHT-TIME (NASA Space Apps 2026).
+**Crew health monitoring that knows how far away Earth is.** NASA Space Apps Challenge 2026, challenge "Create Health Monitoring Software for Astronauts on Space Missions".
+
+A message from the space station reaches a flight surgeon and comes back in half a second. From Mars on 14 November 2026 the same round trip takes 22 minutes, and behind the Sun there is no link at all. LIGHT-TIME is health monitoring software built around that fact. It watches the crew's readings, works out how much time a falling reading has left, compares that with the time a reply from Earth needs, and tells the crew plainly who has to act: the flight surgeon, the crew medical officer, or the crew alone.
+
+This repository is the ship's computer and the delayed link to Earth: a Flask API with a rule-based adviser called LIGHTTIME. The crew console and the Earth console are a Next.js app in the `LightTime-frontend` repository.
+
+![The crew console on the demo morning](docs/screens/overview.png)
+
+## Documentation
+
+| Read this | For |
+|---|---|
+| [Project documentation](docs/project-documentation.md) | What the system does, every screen, the architecture, the API and the data |
+| [How it works](docs/how-it-works.md) | The light-time math, LIGHTTIME's rules and statistics, the evidence and its limits |
+| [Deployment tutorial](docs/deployment.md) | Running it on a laptop, in Docker and on Google Cloud Run |
+| [Submission text](docs/submission.md) | Copy-ready text for each field of the project page, and the checklist |
+| [Where things stand](docs/reviews/2026-11-15-overnight-review.md) | What is built, what was checked and what is left |
+| [Design and API contract](docs/specs/2026-11-14-backend-design.md) | The API table the console builds against |
 
 ## Code Organization
 
@@ -10,16 +27,27 @@ The ship's computer and the link to Earth for LIGHT-TIME (NASA Space Apps 2026).
 
 The folder names use underscores because Python cannot import a folder with a hyphen in its name.
 
-## Run
+## Quick start
+
+Windows PowerShell:
 
     python -m venv .venv
     .venv\Scripts\activate
     pip install -r requirements.txt
-    python app.py
+    $env:DATABASE_URL = 'sqlite:///lighttime.db'; $env:LIGHTTIME_MORNING = '1'; python app.py
 
-The server listens on port 5000 and does not reload on its own: stop it with Ctrl+C
-and start it again after a change. Without a `.env` file it uses a local SQLite file.
-For Postgres, copy `.env.example` to `.env` and set `DATABASE_URL`.
+macOS or Linux:
+
+    python3 -m venv .venv
+    source .venv/bin/activate
+    pip install -r requirements.txt
+    DATABASE_URL=sqlite:///lighttime.db LIGHTTIME_MORNING=1 python app.py
+
+The ship answers at http://localhost:5000/api/base/state on the demo morning, 14 November 2026 at 06:30 UTC. Run one process only: the mission clock lives in its memory. The server does not reload on its own: stop it with Ctrl+C and start it again after a change.
+
+Setting `DATABASE_URL` on the command line keeps the run on a local SQLite file whatever a `.env` file says. For Postgres, copy `.env.example` to `.env` and set `DATABASE_URL` there instead.
+
+To see it, start the console from the `LightTime-frontend` repository with `NEXT_PUBLIC_API_URL=http://localhost:5000` in its `.env.local`, then `corepack pnpm install` and `corepack pnpm dev`, and open http://localhost:3000. The full walk-through, Docker and Google Cloud are in [the deployment tutorial](docs/deployment.md).
 
 ## Run with Docker
 
@@ -59,7 +87,7 @@ What the ship AI and data work changed (from `docs/specs/2026-11-14-ship-ai-and-
 | Reading | New `context`. `source` can be `replay` |
 | New | `GET /api/base/habitat`: cabin and radiation with source and date |
 | New | `POST /api/base/summary/send`: daily summaries to Earth |
-| Story | `POST /api/base/scenario/start` takes `{"name": "stage" or "full" or "real", "replay": true}`. `real` plays a recorded oxygen fall and takes about three and a half minutes to reach SOS. Keep `stage` for the pitch |
+| Story | `POST /api/base/scenario/start` takes `{"name": "stage" or "full" or "real", "replay": true}`. `real` plays a recorded oxygen fall and takes about three and a half minutes to reach SOS. Use `full` for the pitch: it is the story with the early warning, and `stage` has none |
 | Report to Earth | New `asked_ahead` (list of `q` and `a`), `lookahead`, `usual`. The strip is 60 readings. New link kind `summary`, new update event `escalated` |
 | Behaviour | Heart rate alone raises nothing. Reset keeps the dial. A second SOS press returns the same alert with 200. Bad input returns 400 |
 
