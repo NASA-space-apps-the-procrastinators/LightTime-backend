@@ -90,7 +90,7 @@ def test_a_check_in_symptom_that_is_not_text_is_a_400(morning):
 def test_the_report_for_a_console_alert_carries_what_the_crew_sees_and_no_strip(morning):
     for _ in range(6):
         morning.post("/api/base/readings", json={"crew_id": "C1", "heart_rate": 80, "spo2": 97})
-    morning.post("/api/base/alerts/A1/ack", json={"by": "Okafor"})
+    morning.post("/api/base/alerts/A1/ack", json={"by": "TJ"})
     morning.post("/api/base/alerts/A1/send")
     payload = morning.get("/api/base/outbox").get_json()[0]["payload"]
     assert payload["why"] == morning.get("/api/base/alerts/A1").get_json()["why"]
@@ -105,9 +105,9 @@ def test_reset_clears_check_ins_and_reminders_without_the_morning(client):
     client.post("/api/base/sos", json={"crew_id": "C1"})
     later(2)
     report = client.get("/api/earth/inbox").get_json()["messages"][0]
-    client.post("/api/earth/reply", json={"message_id": report["id"], "text": "Rest.", "from": "Dr. Adeyemi"})
+    client.post("/api/earth/reply", json={"message_id": report["id"], "text": "Rest.", "from": "Dr. Youssef"})
     later(2)
-    assert len(client.post("/api/base/alerts/A1/accept-plan", json={"by": "Okafor"}).get_json()["reminders"]) == 4
+    assert len(client.post("/api/base/alerts/A1/accept-plan", json={"by": "TJ"}).get_json()["reminders"]) == 4
     client.post("/api/base/reset")
     assert client.get("/api/base/reminders").get_json() == []
     assert client.get("/api/base/checkins/today").get_json()["done"] == []

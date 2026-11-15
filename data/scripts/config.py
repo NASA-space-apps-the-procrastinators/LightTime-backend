@@ -64,13 +64,13 @@ def parse_ts(text):
 # C1's numbers are copied from the frontend contract (backend-api-contract.md).
 # C2-C4 are a draft until crew-seed.json from the frontend repo is in hand.
 CREW = [
-    {"crew_id": "C1", "backend_id": 1, "name": "Okafor", "role": "Commander", "suit_id": "LT-01",
+    {"crew_id": "C1", "backend_id": 1, "name": "TJ", "role": "Commander", "suit_id": "LT-01",
      "home_habitat_id": "H1", "is_cmo": False, "source": "backend-api-contract.md"},
-    {"crew_id": "C2", "backend_id": 2, "name": "Linda Rodenburg", "role": "Flight Engineer", "suit_id": "LT-02",
+    {"crew_id": "C2", "backend_id": 2, "name": "Rebecca", "role": "Crew Medical Officer", "suit_id": "LT-02",
      "home_habitat_id": "H1", "is_cmo": True, "source": "draft"},
-    {"crew_id": "C3", "backend_id": 3, "name": "Sato", "role": "Flight Engineer", "suit_id": "LT-03",
+    {"crew_id": "C3", "backend_id": 3, "name": "Kyler", "role": "Flight Engineer", "suit_id": "LT-03",
      "home_habitat_id": "H2", "is_cmo": False, "source": "draft"},
-    {"crew_id": "C4", "backend_id": 4, "name": "Rebecca Qi", "role": "Mission Specialist", "suit_id": "LT-04",
+    {"crew_id": "C4", "backend_id": 4, "name": "David", "role": "Mission Specialist", "suit_id": "LT-04",
      "home_habitat_id": "H2", "is_cmo": False, "source": "draft"},
 ]
 CREW_IDS = [c["crew_id"] for c in CREW]
@@ -253,7 +253,7 @@ HZ_WINDOWS = [
 
 SYMPTOMS = ["headache", "short sleep", "congestion", "nausea", "blurred vision", "back pain"]
 
-FLIGHT_SURGEON = "Dr. Adeyemi"
+FLIGHT_SURGEON = "Dr. Youssef"
 
 
 def near_spike(t, minutes=2):

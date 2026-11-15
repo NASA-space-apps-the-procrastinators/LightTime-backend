@@ -44,7 +44,7 @@ def test_earth_has_no_case_until_the_report_arrives(client, monkeypatch):
     later(monkeypatch, 12)
     [case] = cases(client)
     assert case["alert_id"] == ship_alert_id(client) and case["alert_id"].startswith("A")
-    assert case["crew_id"] == "C1" and case["crew"] == "Okafor" and case["vital"] == "spo2"
+    assert case["crew_id"] == "C1" and case["crew"] == "TJ" and case["vital"] == "spo2"
     assert case["level"] == "emergency" and case["state"] == "SOS" and case["status"] == "reported"
     assert case["awaiting_reply"] is True
 
@@ -66,7 +66,7 @@ def test_case_status_follows_the_updates_that_arrive(client, monkeypatch):
     later(monkeypatch, 1)
     case = client.get(f"/api/earth/cases/{aid}").get_json()
     assert case["status"] == "in_progress" and case["acknowledged_by"] == "Damola"
-    assert case["steps_done"] == [0] and case["report"]["sbar"]["situation"].startswith("Okafor")
+    assert case["steps_done"] == [0] and case["report"]["sbar"]["situation"].startswith("TJ")
     client.post(f"/api/base/alerts/{aid}/clear", json={"by": "Damola"})
     later(monkeypatch, 2)
     assert client.get(f"/api/earth/cases/{aid}").get_json()["status"] == "resolved"

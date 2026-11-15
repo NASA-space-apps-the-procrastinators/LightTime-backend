@@ -43,7 +43,7 @@ def test_at_mars_the_ship_says_earth_cannot_answer_in_time(client):
     fall(client)
     alert = open_alert(client)
     assert alert["lookahead"]["earth_in_time"] is False and alert["lookahead"]["reply_s"] > 1200
-    assert "That is too late. Crew medical officer, check on Okafor now." in alert["speak"]
+    assert "That is too late. Crew medical officer, check on TJ now." in alert["speak"]
 
 
 def test_near_earth_the_ship_says_the_surgeon_can_answer(client):

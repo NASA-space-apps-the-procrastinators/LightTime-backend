@@ -95,7 +95,7 @@ The frontend's **Packet** object (one metric per packet, with `ts`, `suit_id`, `
 
 | Issue | Where |
 | --- | --- |
-| Crew are David, Damola and Youssef with int ids 1 to 3. The frontend expects C1 to C4 (Okafor, Linda Rodenburg, Sato, Rebecca Qi) as strings | `models.seed`, `<int:crew_id>` routes |
+| Crew are David, Damola and Youssef with int ids 1 to 3. The frontend expects C1 to C4 (TJ, Rebecca, Kyler, David) as strings | `models.seed`, `<int:crew_id>` routes |
 | Field names differ: `heart_rate`, `skin_temp`, `sleep_hours` versus `hr_rest`, `temp_c`, `sleep_h` | `models.VITALS` |
 | `level` (NEWS2) versus `state` (OK, WATCH, ALERT, RECHECK, SOS). Alerts have no `stage`, `metric`, `rule` or `symptoms` | `alert_dict` |
 | Platform: the frontend says ISS, mission day 158. The backend story is a Mars dial | `modes.py` vs contract |
