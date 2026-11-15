@@ -64,7 +64,7 @@ def test_a_typed_reading_alerts_at_once_but_never_above_warning(app):
 def test_a_cleared_alert_stays_quiet_unless_it_gets_worse(app):
     with app.app_context():
         caution = feed(1, N, spo2=95, heart_rate=72)[0]
-        caution.cleared_at, caution.cleared_by = utcnow(), "Damola"
+        caution.cleared_at, caution.cleared_by = utcnow(), "Lindqvist"
         db.session.commit()
         assert feed(1, N, spo2=95, heart_rate=72) == []
         assert [a.level for a in feed(1, N, spo2=86, heart_rate=72)] == ["emergency"]
@@ -74,3 +74,12 @@ def test_heart_rate_alone_never_raises_an_alert(app):
     with app.app_context():
         assert feed(1, 4 * N, heart_rate=140, spo2=98) == []
         assert rules.band("heart_rate", 140) == 3
+
+
+def test_an_estimated_blood_pressure_from_the_suit_never_alarms(client):
+    raised = [alert for _ in range(6)
+              for alert in client.post("/api/base/readings", json={"crew_id": 1, "bp_sys": 95}).get_json()["alerts"]]
+    assert raised == [] and client.get("/api/base/alerts").get_json() == []
+    typed = client.post("/api/base/readings",
+                        json={"crew_id": 1, "source": "typed", "bp_sys": 88}).get_json()["alerts"]
+    assert [alert["level"] for alert in typed] == ["warning"]         # a cuff reading typed by the crew still counts

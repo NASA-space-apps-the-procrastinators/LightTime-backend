@@ -16,7 +16,7 @@ def sos(client):
 
 def test_an_unknown_crew_member_is_refused_and_breaks_nothing(client):
     assert client.post("/api/base/sos", json={"crew_id": 99}).status_code == 400
-    assert client.post("/api/base/readings", json={"crew_id": "David", "spo2": 98}).status_code == 400
+    assert client.post("/api/base/readings", json={"crew_id": "Okafor", "spo2": 98}).status_code == 400
     assert client.post("/api/base/readings", json={}).status_code == 400
     assert client.get("/api/base/alerts").get_json() == []
 
@@ -38,7 +38,7 @@ def test_a_step_that_is_not_on_the_checklist_is_refused(client):
 def test_resolving_twice_tells_earth_once(client):
     alert = sos(client)
     first = client.post(f"/api/base/alerts/{alert['id']}/clear", json={"by": None}).get_json()
-    second = client.post(f"/api/base/alerts/{alert['id']}/clear", json={"by": "Damola"}).get_json()
+    second = client.post(f"/api/base/alerts/{alert['id']}/clear", json={"by": "Lindqvist"}).get_json()
     assert first["cleared_by"] == second["cleared_by"] == "crew" and first["cleared_at"] == second["cleared_at"]
     events = [m["payload"].get("event") for m in client.get("/api/base/outbox").get_json()]
     assert events.count("resolved") == 1
@@ -57,7 +57,7 @@ def test_a_message_or_reply_with_no_text_is_refused(client):
 
 
 def test_a_second_sender_for_the_same_person_does_not_hide_an_emergency(client):
-    """The story plays for David while a real sensor on him reports normal numbers."""
+    """The story plays for Okafor while a real sensor on them reports normal numbers."""
     raised = []
     for _ in range(5):
         raised += client.post("/api/base/readings", json={**LOW, "source": "scenario"}).get_json()["alerts"]

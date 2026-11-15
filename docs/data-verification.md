@@ -2,7 +2,7 @@
 
 `python scripts/verify_data.py` checks what a script can: the light-time constants, live Horizons and DSN Now, the NEWS2 bands, the clean tables and the checksums of the raw files. First run on 14 Nov 2026: every check passed (DSN 655.0 s one way against Horizons 660.86 s).
 
-The checks below need a person. Rebecca, tick each line on Sunday morning. About 20 minutes.
+The checks below need a person. The documentation owner, tick each line on Sunday morning. About 20 minutes.
 
 | # | Open this | Confirm | Done |
 |---|---|---|---|

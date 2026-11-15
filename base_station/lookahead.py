@@ -32,7 +32,8 @@ def falling(values, red_line):
     eta_s = (now - red_line) / -slope
     if eta_s > HORIZON_S:
         return None
-    return {"now": round(now, 1), "per_min": round(slope * 60, 1), "eta_s": round(eta_s), "red_line": red_line}
+    return {"now": round(now, 1), "per_min": round(slope * 60, 1), "eta_s": round(eta_s), "red_line": red_line,
+            "agreement": round(agreement, 2)}
 
 
 def check(crew_id, vital, red_line, source=None):

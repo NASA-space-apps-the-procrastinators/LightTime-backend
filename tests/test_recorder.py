@@ -28,8 +28,8 @@ def test_the_daily_summary_gives_low_middle_and_high(app):
 
 def test_summaries_travel_to_earth_like_everything_else(client, monkeypatch):
     client.post("/api/base/readings", json={"crew_id": 1, "heart_rate": 70, "spo2": 98})
-    assert client.post("/api/base/summary/send").get_json() == {"sent": 3, "pruned": 0}
+    assert client.post("/api/base/summary/send").get_json() == {"sent": 4, "pruned": 0}
     clock = link.utcnow
     monkeypatch.setattr(link, "utcnow", lambda: clock() + timedelta(seconds=2))
     arrived = client.get("/api/earth/inbox").get_json()["messages"]
-    assert sorted(m["payload"]["crew"] for m in arrived if m["kind"] == "summary") == ["Damola", "David", "Youssef"]
+    assert sorted(m["payload"]["crew"] for m in arrived if m["kind"] == "summary") == ["Lindqvist", "Mensah", "Okafor", "Sato"]

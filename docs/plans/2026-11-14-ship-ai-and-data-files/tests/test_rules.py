@@ -64,7 +64,7 @@ def test_a_typed_reading_alerts_at_once_but_never_above_warning(app):
 def test_a_cleared_alert_stays_quiet_unless_it_gets_worse(app):
     with app.app_context():
         caution = feed(1, N, spo2=95, heart_rate=72)[0]
-        caution.cleared_at, caution.cleared_by = utcnow(), "Damola"
+        caution.cleared_at, caution.cleared_by = utcnow(), "Lindqvist"
         db.session.commit()
         assert feed(1, N, spo2=95, heart_rate=72) == []
         assert [a.level for a in feed(1, N, spo2=86, heart_rate=72)] == ["emergency"]
