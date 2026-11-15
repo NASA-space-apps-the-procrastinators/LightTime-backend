@@ -27,7 +27,7 @@ def test_a_tick_is_one_link_message_with_four_readings(app, client):
     payload = sent[0]["payload"]
     assert payload["simulated"] is True and payload["alert_id"] is None
     assert [(r["crew_id"], r["crew"]) for r in payload["readings"]] == [
-        ("C1", "Okafor"), ("C2", "Linda Rodenburg"), ("C3", "Sato"), ("C4", "Rebecca Qi")]
+        ("C1", "TJ"), ("C2", "Rebecca"), ("C3", "Kyler"), ("C4", "David")]
 
 
 def test_the_ship_stores_each_reading_through_its_own_api(app, client):
