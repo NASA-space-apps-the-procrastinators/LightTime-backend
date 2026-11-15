@@ -7,6 +7,7 @@ ground's own replies (Earth always knows what it sent).
 Ages are in mission time, like eta_s: the trip is counted at its real light time
 (delay_s), not the 60x faster stage time, so an 11-minute trip reads 660 s.
 """
+import re
 from datetime import datetime
 
 from common import link
@@ -64,25 +65,77 @@ def _alert_of(message):
     return message.payload.get("alert_id")
 
 
-def thread_entry(message, now):
-    """One message in the contract's ThreadMessage shape."""
-    status = link.to_dict(message, now)["status"]
+# The demo morning's preloaded messages carry only text and an author, not the fields a live
+# report or update carries. Earth reads what the message itself says: "Sato: Blood oxygen 91 %...
+# Handoff report..." for a report, "Resolved by Lindqvist." for an update.
+REPORT_TEXT = re.compile(r"^(?P<crew>[^:]{1,40}): (?P<reason>.+?)(?:\.? Handoff report.*)?\.?$")
+UPDATE_TEXT = re.compile(r"^(?P<event>Acknowledged|Resolved) by (?P<by>[^.]{1,40})\.")
+AUTO_SOS = "Ship (auto SOS)"
+
+
+def _update_event(payload):
+    """(event, by) for an update: from its fields, or from its text when it has none."""
+    if payload.get("event"):
+        return payload["event"], payload.get("by")
+    found = UPDATE_TEXT.match(payload.get("text") or "")
+    return (found["event"].lower(), found["by"]) if found else (None, None)
+
+
+def _line(message):
+    """The message's text, worded as the ship's own thread words it (base_station/console.py)."""
     p = message.payload
+    if p.get("text"):
+        return p["text"]
     if message.kind == "report":
-        author, text = "Ship", p.get("sbar", {}).get("situation", p.get("reason", ""))
-    elif message.kind == "update":
-        author = p.get("by", "crew")
-        text = {"acknowledged": f"Acknowledged by {author}", "resolved": f"Resolved by {author}",
-                "step": f"Step done: {p.get('step', p.get('step_index'))}"}.get(p.get("event"), p.get("event", ""))
-    else:
-        author, text = p.get("from", "crew" if message.direction == "to_earth" else "Flight surgeon"), p.get("text", "")
+        return f"{p.get('crew', 'Crew')}: {p.get('reason', 'alert')}. Handoff report attached."
+    event = p.get("event")
+    if event == "acknowledged":
+        return f"Acknowledged by {p.get('by', 'crew')}."
+    if event == "step":
+        return f"Step done: {p.get('step')}."
+    if event == "escalated":
+        return f"Now {p.get('level')}: {p.get('reason')}."
+    if event == "resolved":
+        return f"Resolved by {p.get('by', 'crew')}." + (f" {p['note']}" if p.get("note") else "")
+    return message.kind
+
+
+def _author(message):
+    """Who wrote it, by the ship thread's rule, so both screens name the same person."""
+    p, ours = message.payload, message.direction == "to_earth"
+    sos = message.kind == "report" and p.get("level") == "emergency"
+    return (p.get("from") or (AUTO_SOS if sos else None) or p.get("crew") or p.get("by")
+            or ("Ship" if ours else "Flight surgeon"))
+
+
+def thread_entry(message, now):
+    """One message in the contract's ThreadMessage shape, with the same text and author as the ship's thread."""
+    status = link.to_dict(message, now)["status"]
     return {
         "id": code("M", message.id), "alert_id": code("A", _alert_of(message)),
-        "from": "crew" if message.direction == "to_earth" else "ground", "author": author, "kind": message.kind,
-        "text": text, "created_at": iso(message.created_at), "sent_at": iso(message.sent_at),
-        "arrived_at": iso(message.deliver_at) if status == "delivered" else None, "status": status,
-        "in_reply_to": code("M", message.in_reply_to),
+        "from": "crew" if message.direction == "to_earth" else "ground", "author": _author(message),
+        "kind": message.kind, "text": _line(message), "created_at": iso(message.created_at),
+        "sent_at": iso(message.sent_at), "arrived_at": iso(message.deliver_at) if status == "delivered" else None,
+        "status": status, "in_reply_to": code("M", message.in_reply_to),
+        "simulated": bool(message.payload.get("simulated")),
     }
+
+
+def _report_facts(report):
+    """crew, reason and state for a report, and the names of any read from its text rather than its fields."""
+    p = report.payload
+    crew, reason, inferred = p.get("crew"), p.get("reason"), []
+    found = REPORT_TEXT.match(p.get("text") or "")
+    if found and crew is None:
+        crew, inferred = found["crew"].strip(), inferred + ["crew"]
+    if found and reason is None:
+        reason, inferred = found["reason"].strip(), inferred + ["reason"]
+    if p.get("level") in STATE:
+        state = STATE[p["level"]]
+    else:
+        # Only an alert or an SOS sends a report, so a report with no level is at least ALERT.
+        state, inferred = ("SOS" if p.get("from") == AUTO_SOS else "ALERT"), inferred + ["state"]
+    return crew, reason, state, inferred
 
 
 def _case(report, updates, replies, now):
@@ -91,10 +144,13 @@ def _case(report, updates, replies, now):
     newest = max((_parse_iso(r["at"]) for r in recent), default=None)
     report_age = mission_age(report, now)
     last = max([report] + updates, key=lambda m: m.deliver_at)
+    crew, reason, state, inferred = _report_facts(report)
     case = {
-        "alert_id": code("A", p["alert_id"]), "crew_id": code("C", p.get("crew_id")), "crew": p.get("crew"),
-        "vital": p.get("vital"), "level": p.get("level"), "state": STATE.get(p.get("level"), "WATCH"),
-        "value": p.get("value"), "reason": p.get("reason"), "nasa_risk": p.get("nasa_risk"),
+        "alert_id": code("A", p["alert_id"]), "crew_id": code("C", p.get("crew_id")), "crew": crew,
+        "vital": p.get("vital"), "level": p.get("level"), "state": state,
+        "value": p.get("value"), "reason": reason, "nasa_risk": p.get("nasa_risk"),
+        "inferred": inferred,
+        "simulated": any(bool(m.payload.get("simulated")) for m in [report] + updates + replies),
         "mode_at_send": p.get("mode"), "who_decides_at_send": p.get("who_decides"),
         "raised_at": p.get("raised_at") or iso(report.created_at),
         "status": "reported", "acknowledged_by": None, "acknowledged_at": None,
@@ -116,11 +172,14 @@ def _case(report, updates, replies, now):
     for u in updates:
         if u.kind != "update":
             continue
-        event = u.payload.get("event")
+        event, by = _update_event(u.payload)
         if event == "acknowledged":
-            case["acknowledged_by"], case["acknowledged_at"] = u.payload.get("by"), iso(u.created_at)
+            case["acknowledged_by"], case["acknowledged_at"] = by, iso(u.created_at)
             if case["status"] == "reported":
                 case["status"] = "acknowledged"
+        elif event == "escalated" and u.payload.get("level") in STATE:
+            case["level"], case["state"] = u.payload["level"], STATE[u.payload["level"]]
+            case["reason"] = u.payload.get("reason") or case["reason"]
         elif event == "step":
             index = u.payload.get("step_index")
             if index not in case["steps_done"]:
@@ -128,7 +187,7 @@ def _case(report, updates, replies, now):
             if case["status"] in ("reported", "acknowledged"):
                 case["status"] = "in_progress"
         elif event == "resolved":
-            case["resolved_by"], case["resolved_at"] = u.payload.get("by"), iso(u.created_at)
+            case["resolved_by"], case["resolved_at"] = by, iso(u.created_at)
             case["status"] = "resolved"
     return case
 
@@ -182,16 +241,6 @@ def thread(alert_id, now):
 def report_for(alert_id, now):
     """The arrived report message for an alert, or None."""
     return next((m for m in arrived(now) if m.kind == "report" and _alert_of(m) == alert_id), None)
-
-
-def outbox(now):
-    out = []
-    for m in reversed(ground_sent()):
-        entry = thread_entry(m, now)
-        d = link.to_dict(m, now)
-        entry.update({"eta_s": d["eta_s"], "delay_s": m.delay_s, "deliver_at": iso(m.deliver_at)})
-        out.append(entry)
-    return out
 
 
 def last_contact(now):
