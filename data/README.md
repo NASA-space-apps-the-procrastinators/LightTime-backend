@@ -28,6 +28,7 @@ Everything the backend reads that is not code. The rules and the reasons are in 
 | `eda/rr1_radiation.json` | https://visualization.osdr.nasa.gov/eda/api/missions/RR-1/radiation_data/ | 14 Nov 2026 | Claude, for TJ |
 | `eda/missions.json` | https://visualization.osdr.nasa.gov/eda/api/missions/ | 14 Nov 2026 | Claude, for TJ |
 | `reference/horizons_mars_light_time.csv` | https://ssd.jpl.nasa.gov/api/horizons.api (Mars, observer at Earth's centre, quantity 21, daily 16 Oct to 15 Nov 2026) | 14 Nov 2026 | Claude Code, for Ore |
+| `reference/console_thresholds.json` | The console repo's `src/data/thresholds.json` (branch `feat/alert-loop-and-log`) | 14 Nov 2026 | Claude Code, for the backend owner |
 
 ## Credit lines for the project page
 
