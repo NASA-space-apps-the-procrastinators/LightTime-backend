@@ -3,8 +3,8 @@ import json
 import os
 from datetime import timedelta
 
-from base_station import lookahead, rules
-from common.models import Reading, iso, utcnow
+from base_station import lookahead, rules, scoring
+from common.models import Checkin, Reading, iso, utcnow
 
 with open(os.path.join(os.path.dirname(__file__), "procedures.json")) as f:
     PROCEDURES = json.load(f)
@@ -17,19 +17,34 @@ REQUEST = {
 }
 
 
+NOT_A_DIAGNOSIS = "This is a fixed rule, not a diagnosis. A person, not the ship, decides."
+
+
 def steps_for(vital):
     return PROCEDURES.get(vital, PROCEDURES["default"])
 
 
+def console_rule(alert):
+    """The console rule's words and source when a daily value raised the alert, else None."""
+    return scoring.rule_text().get(alert.metric) if alert.metric else None
+
+
 def why(alert):
-    """How the ship reached this alert, in plain lines a medical officer can check."""
+    """How the ship reached this alert, in plain lines a medical officer can check. The crew's screen
+    and the report to Earth both show these lines (lighttime-ai-design A3)."""
+    text = console_rule(alert)
+    if text:
+        return [f"What was seen: {alert.reason}.", f"Rule: {text['alert']}.", f"Source: {text['source']}.",
+                NOT_A_DIAGNOSIS]
     if alert.vital == "manual":
         return ["A crew member pressed SOS. No rule was involved."]
     cfg = rules.LIMITS["vitals"].get(alert.vital)
     if cfg is None:
         return ["The sensor signal was not clean, so no reading was judged."]
-    recent = (Reading.query.filter(Reading.crew_id == alert.crew_id, getattr(Reading, alert.vital).isnot(None))
-              .order_by(Reading.at.desc(), Reading.id.desc()).limit(5).all())
+    query = Reading.query.filter(Reading.crew_id == alert.crew_id, getattr(Reading, alert.vital).isnot(None))
+    if cfg.get("typed_only"):                   # the suit's estimate never counts, so do not list it
+        query = query.filter(Reading.source == "typed")
+    recent = query.order_by(Reading.at.desc(), Reading.id.desc()).limit(5).all()
     values = ", ".join(f"{getattr(r, alert.vital):g}" for r in reversed(recent))
     if alert.reason.endswith(lookahead.FALLING):
         rule = "Rule: the reading is still in the normal band but falling steadily toward the red line."
@@ -37,8 +52,7 @@ def why(alert):
         rule = ("Rule: the reading sat in an out-of-range band. A sensor needs five readings in a row "
                 "with a clean signal. A typed number counts once and stops at a warning.")
     return [f"What was seen: {alert.reason}.", f"Last readings: {values}{cfg['unit']}.", rule,
-            f"Band table: {rules.LIMITS['source']}",
-            "This is a fixed rule, not a diagnosis. A person, not the ship, decides."]
+            f"Band table: {rules.LIMITS['source']}", NOT_A_DIAGNOSIS]
 
 
 def _show(value, unit):
@@ -82,24 +96,32 @@ def asked_ahead(alert, crew, recent, look, usual):
                     else "Yes, every reading in the strip had a clean signal."})
     done = [steps_for(alert.vital)[i] for i in alert.steps_done]
     answers.append({"q": "What has the crew done so far?", "a": "; ".join(done) if done else "Nothing yet."})
-    checkin = (Reading.query.filter_by(crew_id=crew.id, source="typed")
-               .order_by(Reading.at.desc(), Reading.id.desc()).first())
+    checkin = Checkin.query.filter_by(crew_id=crew.id).order_by(Checkin.day.desc()).first()
+    typed = (Reading.query.filter_by(crew_id=crew.id, source="typed")
+             .order_by(Reading.at.desc(), Reading.id.desc()).first())
+    sleep, mood = ((checkin.sleep_h, checkin.mood) if checkin else
+                   (typed.sleep_hours, typed.mood) if typed else (None, None))
     answers.append({"q": "How did they sleep and feel?",
-                    "a": f"Last check-in: slept {_show(checkin.sleep_hours, ' h')}, "
-                         f"mood {_show(checkin.mood, ' of 5')}." if checkin else "No check-in on record."})
+                    "a": f"Last check-in: slept {_show(sleep, ' h')}, mood {_show(mood, ' of 5')}."
+                    if checkin or typed else "No check-in on record."})
     return answers
 
 
 def build(alert, crew, state, look=None, usual=None):
-    recent = (Reading.query.filter(Reading.crew_id == crew.id, Reading.source != "typed")
-              .order_by(Reading.at.desc(), Reading.id.desc()).limit(60).all())
-    if recent:
+    """The report. For an alert a console rule raised, Earth gets the week instead of a strip of readings
+    (console-link section 7): the caller adds the bundle."""
+    daily = console_rule(alert) is not None
+    recent = [] if daily else (Reading.query.filter(Reading.crew_id == crew.id, Reading.source != "typed")
+                               .order_by(Reading.at.desc(), Reading.id.desc()).limit(60).all())
+    if daily:
+        latest = ""
+    elif recent:
         last = recent[0]
-        vitals = (f"heart rate {_show(last.heart_rate, ' bpm')}, "
+        latest = (f" Latest: heart rate {_show(last.heart_rate, ' bpm')}, "
                   f"blood oxygen {_show(last.spo2, '%')}, "
-                  f"skin temperature {_show(last.skin_temp, ' C')}")
+                  f"skin temperature {_show(last.skin_temp, ' C')}.")
     else:
-        vitals = "no sensor readings yet"
+        latest = " Latest: no sensor readings yet."
     if alert.auto:
         assessment = "Raised by a fixed rule on the readings. This is not a diagnosis."
     else:
@@ -110,15 +132,14 @@ def build(alert, crew, state, look=None, usual=None):
         "nasa_risk": alert.nasa_risk, "mode": state["mode"], "who_decides": state["who_decides"],
         "sbar": {
             "situation": f"{crew.name}: {alert.reason}. Raised at {alert.at:%H:%M:%S} UTC.",
-            "background": (f"Mission stop: {state['label']}. "
-                           f"One-way delay {state['delay_s']:.0f} s. Latest: {vitals}."),
+            "background": f"Mission stop: {state['label']}. One-way delay {state['delay_s']:.0f} s.{latest}",
             "assessment": assessment,
             "request": REQUEST[state["mode"]],
         },
         "why": why(alert),
-        "asked_ahead": asked_ahead(alert, crew, recent, look, usual),
+        "asked_ahead": [] if daily else asked_ahead(alert, crew, recent, look, usual),
         "lookahead": deadline(look, state) if look else None,
-        "usual": usual,
+        "usual": None if daily else usual,
         "steps": steps_for(alert.vital),
         "recent": [reading.to_dict() for reading in reversed(recent)],
     }

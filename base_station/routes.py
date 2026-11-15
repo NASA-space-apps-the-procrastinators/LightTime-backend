@@ -1,13 +1,13 @@
 """The ship's side: readings in, alerts and reports out."""
 import time
-from datetime import timedelta
+from datetime import datetime, timedelta
 
-from flask import Blueprint, abort, current_app, jsonify, request
+from flask import Blueprint, abort, current_app, jsonify, make_response, request
 
-from base_station import habitat, lookahead, morning, recorder, reports, rules, scenario, scoring, usual
+from base_station import habitat, lookahead, morning, recorder, reports, rules, scenario, usual
 from common import dataset, link, modes, sources
-from common.models import (VITALS, Alert, Crew, LinkMessage, MissionState, Reading, db, iso,
-                           utcnow)
+from common.models import (VITALS, Alert, Checkin, Crew, LinkMessage, MissionState, Reading, Reminder, db,
+                           iso, utcnow)
 
 bp = Blueprint("base", __name__)
 
@@ -23,8 +23,12 @@ def timeline(alert):
     sent = link.to_dict(report) if report else {}
     reply = next((m for m in reversed(link.delivered("to_ship"))
                   if m.payload.get("alert_id") == alert.id), None)
-    earliest = (report.deliver_at + timedelta(seconds=link.real_delay_s(report.delay_s))
-                if report is not None and report.sent_at is not None else None)
+    earliest = None
+    if report is not None and report.sent_at is not None:
+        took = (report.deliver_at - report.sent_at).total_seconds()
+        # one leg back on the clock the report used: a message loaded with the morning took real light time
+        leg = min((report.delay_s, link.real_delay_s(report.delay_s)), key=lambda one: abs(took - one))
+        earliest = report.deliver_at + timedelta(seconds=leg)
     return {
         "raised_at": iso(alert.at), "acknowledged_at": iso(alert.acknowledged_at),
         "sent_at": sent.get("sent_at"), "earth_eta_s": sent.get("eta_s"),
@@ -43,22 +47,24 @@ def look_ahead(alert, source=None):
 
 
 STATE = {"advisory": "WATCH", "caution": "WATCH", "warning": "ALERT", "emergency": "SOS"}
-NOT_A_DIAGNOSIS = "This is a fixed rule, not a diagnosis. A person, not the ship, decides."
+
+
+def row_number(text, prefix):
+    """The row number in "A6" or "6", or None. Only plain digits, and few enough to fit a column."""
+    text = str(text)
+    text = text[len(prefix):] if text[:len(prefix)] == prefix else text
+    return int(text) if text.isascii() and text.isdigit() and len(text) <= 9 else None
 
 
 def alert_code(alert):
-    """The id the screens use: "A1" for an alert loaded with the morning, "A" and the row number otherwise."""
-    return alert.ref or f"A{alert.id}"
+    """The id the screens use: "A" and the row number. An alert loaded with the morning has the row its code names."""
+    return f"A{alert.id}"
 
 
 def find_alert(ref):
     """An alert from "A1" or from the row number, or None."""
-    text = str(ref)
-    alert = Alert.query.filter_by(ref=text).first()
-    number = text[1:] if text[:1] == "A" else text
-    if alert is None and number.isdigit():
-        alert = Alert.query.filter_by(id=int(number), ref=None).first()
-    return alert
+    number = row_number(ref, "A")
+    return db.session.get(Alert, number) if number is not None else None
 
 
 def alert_or_404(ref):
@@ -85,12 +91,11 @@ def alert_dict(alert):
     report = db.session.get(LinkMessage, alert.report_id) if alert.report_id else None
     look = report.payload.get("lookahead") if report else None     # as it stood when the report left
     line = timeline(alert)
-    text = scoring.rule_text().get(alert.metric) if alert.metric else None
+    text = reports.console_rule(alert)
+    why = reports.why(alert)
     if text:                                    # a console rule raised it: a daily value against the person's band
         unit, rule, source, speak = text["unit"], text["alert"], text["source"], None
-        why = [f"What was seen: {alert.reason}.", f"Rule: {rule}.", f"Source: {source}.", NOT_A_DIAGNOSIS]
     else:                                       # the ship AI raised it, or a person pressed SOS
-        why = reports.why(alert)
         unit = cfg["unit"].strip() if cfg else None
         rule = next((item[6:] for item in why if item.startswith("Rule: ")), None)
         source = rules.LIMITS["source"] if cfg else None
@@ -98,6 +103,8 @@ def alert_dict(alert):
             speak = reports.speak(alert, crew, current_state())
         else:
             speak = reports.speak_falling(crew, cfg["label"], look) if look else None
+    if alert.cleared_at is not None:            # nothing left to say about a resolved alert
+        speak = None
     todo = [step for index, step in enumerate(reports.steps_for(alert.vital)) if index not in alert.steps_done]
     return {
         "id": alert_code(alert), "crew_id": crew.code, "crew": crew.name, "at": iso(alert.at),
@@ -120,9 +127,9 @@ def send_report(alert, look=None):
     state = current_state()
     crew = db.session.get(Crew, alert.crew_id)
     payload = reports.build(alert, crew, state, look, usual.usual_range(crew.id))
-    if alert.metric:                       # a console rule raised it: Earth gets seven days and the check-in
+    if reports.console_rule(alert):        # a console rule raised it: Earth gets seven days and the check-in
         from base_station import console   # imported here because console imports this module
-        payload.update(bundle=console.bundle(crew), text=console.BUNDLE_TEXT, asked_ahead=[])
+        payload.update(bundle=console.bundle(crew), text=console.BUNDLE_TEXT)
     message = link.send("to_earth", "report", payload, state["delay_s"], state["link_up"], priority=0)
     alert.report_id = message.id
     db.session.commit()
@@ -143,6 +150,11 @@ def body():
     return data if isinstance(data, dict) else {}
 
 
+def bad(message, field):
+    """A 400 that names the field at fault."""
+    return jsonify(error=message, field=field), 400
+
+
 def person(value):
     """Who pressed the button, cut to fit the 40-character column."""
     return (value.strip()[:40] if isinstance(value, str) else "") or "crew"
@@ -150,10 +162,10 @@ def person(value):
 
 def find_crew(ref):
     """A crew member from "C1" or from the row number, or None."""
-    text = str(ref)
-    crew = Crew.query.filter_by(code=text).first()
-    if crew is None and text.isdigit():
-        crew = db.session.get(Crew, int(text))
+    crew = Crew.query.filter_by(code=str(ref)).first()
+    number = row_number(ref, "")
+    if crew is None and number is not None:
+        crew = db.session.get(Crew, number)
     return crew
 
 
@@ -167,7 +179,7 @@ def crew_or_404(ref):
 def crew_id_or_400(data):
     crew = find_crew(data.get("crew_id"))
     if crew is None:
-        abort(400, "unknown crew_id")
+        abort(make_response(*bad("unknown crew_id", "crew_id")))
     return crew.id
 
 
@@ -183,7 +195,7 @@ def ingest(data):
     vitals = {vital: number(data.get(vital)) for vital in VITALS}
     plausible = all(low <= vitals[vital] <= high for vital, (low, high) in rules.LIMITS["plausible"].items()
                     if vitals[vital] is not None)
-    reading = Reading(crew_id=data["crew_id"], source=data.get("source", "suit"),
+    reading = Reading(crew_id=data["crew_id"], source=data.get("source") or "suit",
                       signal_ok=bool(data.get("signal_ok", True)) and plausible, context=data.get("context"),
                       **vitals)
     db.session.add(reading)
@@ -210,7 +222,8 @@ def state():
     out = current_state()
     out["speedup"] = link.SPEEDUP
     out["ship_ai"] = modes.SHIP_AI
-    out["mission_day"] = dataset.mission_day(utcnow())
+    from base_station import console    # imported here because console imports this module
+    out["mission_day"] = dataset.mission_day(datetime.fromisoformat(console.today()))   # stops with the dataset
     out["platform"] = dataset.mission()["platform"]
     out["stops"] = [modes.describe(stop) for stop in modes.STOPS]
     return jsonify(out)
@@ -218,9 +231,9 @@ def state():
 
 @bp.post("/dial")
 def dial():
-    stop = request.get_json().get("stop")
+    stop = body().get("stop")
     if stop not in modes.STOPS:
-        return jsonify(error="unknown stop"), 400
+        return bad("unknown stop", "stop")
     db.session.get(MissionState, 1).stop = stop
     db.session.commit()
     new_state = current_state()
@@ -230,12 +243,17 @@ def dial():
 
 @bp.post("/readings")
 def post_reading():
-    data = request.get_json(silent=True) or {}
-    try:
-        reading, raised = ingest({**data, "crew_id": crew_id_or_400(data)})
-    except (TypeError, ValueError):
-        db.session.rollback()
-        abort(400, "a reading must be a number")
+    data = body()
+    crew_id = crew_id_or_400(data)
+    for vital in VITALS:
+        try:
+            number(data.get(vital))
+        except (TypeError, ValueError):
+            return bad("a reading must be a number", vital)
+    for field in ("source", "context"):
+        if data.get(field) is not None and not (isinstance(data[field], str) and len(data[field]) <= 12):
+            return bad(f"{field} is text of at most 12 characters", field)
+    reading, raised = ingest({**data, "crew_id": crew_id})
     return jsonify(reading=reading.to_dict(), alerts=[alert_dict(a) for a in raised]), 201
 
 
@@ -292,11 +310,11 @@ def acknowledge(alert_id):
 def tick_step(alert_id):
     alert = alert_or_404(alert_id)
     try:
-        index = int((request.get_json(silent=True) or {})["index"])
+        index = int(body()["index"])
     except (KeyError, TypeError, ValueError):
         index = -1
     if not 0 <= index < len(reports.steps_for(alert.vital)):
-        return jsonify(error="unknown step"), 400
+        return bad("unknown step", "index")
     if index not in alert.steps_done:
         alert.steps_done = alert.steps_done + [index]
         db.session.commit()
@@ -321,7 +339,7 @@ def clear_alert(alert_id):
         sent = body()
         note = sent.get("note")
         if note is not None and not isinstance(note, str):
-            return jsonify(error="a note must be text"), 400
+            return bad("a note must be text", "note")
         alert.cleared_at = utcnow()
         alert.cleared_by = person(sent.get("by"))
         alert.cleared_note = (note or "").strip()[:280] or None
@@ -332,11 +350,14 @@ def clear_alert(alert_id):
 
 @bp.post("/messages")
 def crew_message():
-    data = request.get_json(silent=True) or {}
+    data = body()
     if not data.get("text"):
-        return jsonify(error="a message needs text"), 400
+        return bad("a message needs text", "text")
+    named = data.get("alert_id") not in (None, "")    # an empty box on a form names no alert
+    about = find_alert(data["alert_id"]) if named else None
+    if named and about is None:
+        return bad("unknown alert_id", "alert_id")
     state = current_state()
-    about = find_alert(data["alert_id"]) if data.get("alert_id") is not None else None
     message = link.send("to_earth", "message",
                         {"text": data["text"], "from": data.get("from", "Crew"),
                          "alert_id": about.id if about else None},
@@ -346,7 +367,7 @@ def crew_message():
 
 @bp.post("/sos")
 def manual_sos():
-    crew_id = crew_id_or_400(request.get_json(silent=True) or {})
+    crew_id = crew_id_or_400(body())
     alert = Alert.query.filter_by(crew_id=crew_id, vital="manual", cleared_at=None).first()
     if alert is not None:               # a second press changes nothing
         return jsonify(alert_dict(alert))
@@ -373,7 +394,7 @@ def inbox():
 @bp.post("/reset")
 def reset():
     scenario.stop()
-    for model in (LinkMessage, Alert, Reading):
+    for model in (Reminder, Checkin, LinkMessage, Alert, Reading):
         model.query.delete()
     db.session.commit()      # the dial stays where it is, so a restarted demo keeps its distance
     usual.clear()
@@ -384,10 +405,10 @@ def reset():
 
 @bp.post("/scenario/start")
 def scenario_start():
-    body = request.get_json(silent=True) or {}
-    name, real = body.get("name", "stage"), bool(body.get("replay"))
+    sent = body()
+    name, real = sent.get("name", "stage"), bool(sent.get("replay"))
     if name not in scenario.SCENARIOS:
-        return jsonify(error="unknown scenario"), 400
+        return bad("unknown scenario", "name")
     scenario.start(current_app._get_current_object(), name, real)
     return jsonify(ok=True, name=name, replay=real)
 

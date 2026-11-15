@@ -8,8 +8,8 @@ from flask import jsonify, request
 
 from base_station import scoring, usual
 from base_station.morning import when
-from base_station.routes import (_latest, _level, alert_code, alert_dict, alert_or_404, body, bp, crew_or_404,
-                                 person, stage, tell_earth, timeline)
+from base_station.routes import (_latest, _level, alert_code, alert_dict, alert_or_404, bad, body, bp,
+                                 crew_or_404, person, row_number, stage, tell_earth, timeline)
 from common import dataset, link
 from common.models import Alert, Checkin, Crew, LinkMessage, Reminder, db, iso, utcnow
 
@@ -20,10 +20,6 @@ LABEL = {"hr_rest": "resting heart rate", "bp_sys": "systolic blood pressure", "
          "spo2": "blood oxygen", "temp_c": "temperature", "resp": "breathing rate", "sleep_h": "sleep",
          "mood": "mood", "pvt_ms": "reaction time", "dose_mSv_day": "radiation dose"}
 TYPED = ("mood", "pvt_ms", "bp_sys", "bp_dia")            # what a check-in gives; the rest comes from the suit
-
-
-def bad(message, field):
-    return jsonify(error=message, field=field), 400
 
 
 @functools.lru_cache(maxsize=None)
@@ -167,7 +163,7 @@ def _cabin():
 
 @bp.get("/station")
 def station():
-    now = iso(utcnow())
+    now = iso(utcnow().replace(microsecond=0))      # the rows are whole seconds: "06:29:00Z" sorts after "06:29:00.3Z"
     row = next((r for r in reversed(_cabin()) if r["ts"] <= now), _cabin()[0])
     real = dataset.listed(row["real_fields"])
     dose = next((r for r in dataset.table("anomalous/radiation_daily") if r["date"] == today()), None)
@@ -191,7 +187,7 @@ def station():
 
 @bp.get("/space-weather")
 def space_weather():
-    now = iso(utcnow())
+    now = iso(utcnow().replace(microsecond=0))
     event = next((e for e in dataset.table("anomalous/space_weather_events")
                   if e["event_time"] <= now <= e["end_time"]), None)
     if event is None:
@@ -238,7 +234,7 @@ def post_checkin(ref):
         return bad("mood is a whole number from 1 to 5", "mood")
     if not _number(sent.get("sleep_h"), 0, 24):
         return bad("sleep_h is from 0 to 24", "sleep_h")
-    if not (isinstance(symptoms, list) and all(item in SYMPTOMS for item in symptoms)):
+    if not (isinstance(symptoms, list) and all(isinstance(item, str) and item in SYMPTOMS for item in symptoms)):
         return bad("symptoms come from: " + ", ".join(sorted(SYMPTOMS)), "symptoms")
     if not isinstance(note, str) or len(note) > 500:
         return bad("note is at most 500 characters", "note")
@@ -256,13 +252,13 @@ def post_checkin(ref):
         db.session.add(row)
     earlier = (Checkin.query.filter(Checkin.crew_id == crew.id, Checkin.day < day)
                .order_by(Checkin.day.desc()).first())
-    for field in ("bp_sys", "bp_dia"):       # the last cuff reading stands until a new one is sent
+    for field in ("bp_sys", "bp_dia", "pvt_ms"):     # the last typed value stands until a new one is sent (D9)
         if sent.get(field) is not None:
-            setattr(row, field, float(sent[field]))
+            setattr(row, field, sent[field] if field == "pvt_ms" else float(sent[field]))
         elif getattr(row, field) is None and earlier is not None:
             setattr(row, field, getattr(earlier, field))
     row.completed_at, row.mood, row.sleep_h = utcnow(), sent["mood"], float(sent["sleep_h"])
-    row.pvt_ms, row.symptoms, row.note = sent.get("pvt_ms"), symptoms, note
+    row.symptoms, row.note = symptoms, note
     for alert in Alert.query.filter_by(crew_id=crew.id, cleared_at=None):
         alert.symptoms = symptoms
     db.session.commit()
@@ -285,7 +281,7 @@ def bundle(crew):
     day = today()
     values, symptoms, checkin_day, _ = day_of(crew, day)
     return {"days": {metric: history(crew, metric, 7)["days"] for metric in BUNDLE},
-            "today": {**values, "symptoms": symptoms, "checkin_from": checkin_day}}
+            "today": {**values, "symptoms": symptoms, "checkin_from": checkin_day}, "simulated": True}
 
 
 def _line(message):
@@ -310,9 +306,10 @@ def _line(message):
 def thread_message(message, alert, now):
     sent, ours = link.to_dict(message, now), message.direction == "to_earth"
     payload = message.payload
+    sos = message.kind == "report" and payload.get("level") == "emergency"    # the ship sends an SOS by itself
     return {"id": f"M{message.id}", "alert_id": alert_code(alert), "from": "crew" if ours else "ground",
-            "author": payload.get("from") or payload.get("crew") or payload.get("by")
-                      or ("Ship" if ours else "Flight surgeon"),
+            "author": payload.get("from") or ("Ship (auto SOS)" if sos else None) or payload.get("crew")
+                      or payload.get("by") or ("Ship" if ours else "Flight surgeon"),
             "text": _line(message), "kind": message.kind, "sent_at": sent["sent_at"],
             "arrived_at": sent["deliver_at"] if sent["status"] == "delivered" else None, "status": sent["status"]}
 
@@ -361,8 +358,8 @@ def reminders():
 
 @bp.post("/reminders/<ref>/done")
 def reminder_done(ref):
-    number = str(ref)[1:] if str(ref)[:1] == "R" else str(ref)
-    reminder = db.session.get(Reminder, int(number)) if number.isdigit() else None
+    number = row_number(ref, "R")
+    reminder = db.session.get(Reminder, number) if number is not None else None
     if reminder is None:
         return jsonify(error="not found"), 404
     if reminder.done_at is None:

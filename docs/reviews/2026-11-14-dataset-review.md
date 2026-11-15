@@ -49,7 +49,7 @@ What the backend does: treats the clean-build count as the measurement that moti
 
 ### F2. The estimated blood pressure still alarms on healthy sleep
 
-The shirt's systolic estimate arrives once a minute and is judged with the hospital NEWS2 bands (caution at 110 mmHg or below). The crew's own bands start between 104 and 112, and the estimate dips about 10 in sleep. In the healthy build 54,021 minute rows sit in the caution band, 23,427 in the warning band and 183 at or below 90. An offline re-run of today's rules gives about 300 blood pressure alerts in 30 healthy days, three of them reaching emergency and sending a report to Earth by themselves. 45 of the 119 morning cuff readings are also at or below 110 and would each raise a typed caution.
+The shirt's systolic estimate arrives once a minute and is judged with the hospital NEWS2 bands (caution at 110 mmHg or below). The crew's own bands start between 104 and 112, and the estimate dips about 10 in sleep. In the healthy build 53,850 minute rows sit in the caution band, 23,614 in the warning band and 183 at or below 90: 77,647 in all (corrected on 14 November; 54,021, 23,427 and 183 are the anomalous build's). An offline re-run of today's rules gives about 300 blood pressure alerts in 30 healthy days, three of them reaching emergency and sending a report to Earth by themselves. 45 of the 119 morning cuff readings are also at or below 110 and would each raise a typed caution.
 
 This is the same failure the ship AI already fixed for heart rate, measured on a second dataset. Root cause: a fixed hospital band applied to a continuous estimate, for people whose normal range crosses that band.
 

@@ -24,7 +24,9 @@ def test_the_files_the_ship_reads_are_the_build_they_say_they_are():
 
 
 def test_the_ship_cannot_open_the_answer_key():
-    for name in ("ground_truth/anomalies", "reports/replay_alerts_clean", "clean/daily_summary"):
+    for name in ("ground_truth/anomalies", "reports/replay_alerts_clean", "clean/daily_summary",
+                 "reference/../clean/daily_summary", "anomalous/../../processed/ground_truth/anomalies",
+                 "reference\\..\\clean\\daily_summary"):
         with pytest.raises(ValueError):
             dataset.table(name)
 

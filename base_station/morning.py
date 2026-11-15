@@ -4,6 +4,8 @@ Loaded at start and on every reset when the app is in morning mode, so a restart
 always begins at the same moment. Everything here comes from data/processed."""
 from datetime import datetime
 
+from sqlalchemy import text
+
 from common import dataset
 from common.models import (Alert, Checkin, Crew, LinkMessage, MissionState, Reading, Reminder, db,
                            set_clock)
@@ -42,8 +44,9 @@ def load():
         if row["metric"] in SKIP:
             continue
         done = bool(row["resolved_at"])
-        alerts[row["alert_id"]] = alert = Alert(
-            ref=row["alert_id"], crew_id=crew[row["crew_id"]].id, at=when(row["raised_at"]),
+        alerts[row["alert_id"]] = alert = Alert(       # A6 is row 6, so a live alert never takes its id
+            id=int(row["alert_id"][1:]), ref=row["alert_id"], crew_id=crew[row["crew_id"]].id,
+            at=when(row["raised_at"]),
             level=row["level"], vital=CHECKLIST.get(row["metric"], row["metric"]), metric=row["metric"],
             value=dataset.num(row["value"]), reason=row["reason"], auto=row["metric"] != "manual",
             nasa_risk=row["nasa_risk"], steps_done=[int(i) for i in dataset.listed(row["steps_done"])],
@@ -52,6 +55,9 @@ def load():
             cleared_at=when(row["resolved_at"]), cleared_by="crew" if done else None)
         db.session.add(alert)
     db.session.flush()
+    if db.engine.dialect.name == "postgresql":   # rows given their own id do not move the counter
+        db.session.execute(text("SELECT setval(pg_get_serial_sequence('alert', 'id'), "
+                                "(SELECT COALESCE(MAX(id), 1) FROM alert))"))
 
     numbers = {}                          # the dataset's "M12" to this table's row number
     for row in dataset.table("anomalous/messages"):

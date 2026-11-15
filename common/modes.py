@@ -1,5 +1,6 @@
 """The four dial stops and the rule for who decides."""
 from common import lighttime, link
+from common.models import utcnow
 
 # NASA's NEEMO 16 test (Rader et al. 2013): at about five minutes one way,
 # critical medical advice cannot always get through.
@@ -47,14 +48,15 @@ def describe(stop):
     """One dial stop with its working: the delay, the path it stands for, the round trip,
     and how long one leg takes on the demo clock."""
     fixed = stop in FIXED_DELAY_S
-    delay_s = FIXED_DELAY_S[stop] if fixed else lighttime.mars_seconds()
+    day = utcnow().strftime("%Y-%m-%d")      # the mission date: 14 November on the demo morning (spec D13)
+    delay_s = FIXED_DELAY_S[stop] if fixed else lighttime.mars_seconds(day)
     link_up = STOPS[stop]["link_up"]
     mode = mode_for(delay_s, link_up)
     return {
         "stop": stop, "label": STOPS[stop]["label"], "link_up": link_up, "delay_s": delay_s,
         "mode": mode, "who_decides": WHO_DECIDES[mode],
         "ship_ai_role": ROLE[mode],
-        "light_time_source": "fixed" if fixed else lighttime.source(),
+        "light_time_source": "fixed" if fixed else lighttime.source(day),
         "path_km": round(lighttime.path_km(delay_s)), "round_trip_s": 2 * delay_s,
         "plays_as_s": link.real_delay_s(delay_s),
     }

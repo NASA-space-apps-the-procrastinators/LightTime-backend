@@ -14,7 +14,8 @@ ALLOWED = ("reference", "anomalous")
 @functools.lru_cache(maxsize=None)
 def table(name):
     """The rows of data/processed/<name>.csv as dicts, for example table("reference/crew")."""
-    if name.split("/")[0] not in ALLOWED:
+    parts = name.split("/")
+    if parts[0] not in ALLOWED or ".." in parts or "\\" in name:
         raise ValueError(f"the ship does not read {name}")
     with open(os.path.join(ROOT, "processed", name + ".csv"), newline="", encoding="utf-8") as f:
         return list(csv.DictReader(f))

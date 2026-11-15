@@ -85,7 +85,7 @@ The five-minute line comes from NASA's NEEMO 16 communication-delay test (refere
 **A10. An estimated blood pressure never alarms (plan Task 10).** The suit's systolic estimate is stored and shown. Only a cuff reading typed by the crew is judged against the bands.
 - [ ] Given six suit readings of 95 mmHg in a row, then no alert exists.
 - [ ] Given one typed reading of 88 mmHg, then a warning is raised, as before.
-- Why: on 30 healthy generated days for four crew, the once-a-minute estimate sat in the caution band or worse on 54,021 of 168,600 minutes, mostly asleep, and would have sent three reports to Earth by itself. This is the heart rate failure again, measured on a second dataset.
+- Why: on 30 healthy generated days for four crew, the once-a-minute estimate sat in the caution band or worse on 77,647 of 168,600 minutes, mostly asleep, and would have sent three reports to Earth by itself. This is the heart rate failure again, measured on a second dataset.
 
 **A11. One reading a second, or not at all (rule, no code tonight).** `POST /api/base/readings` is for a sender that reports once a second. Data that arrives once a minute must not be posted there.
 - Why: fed minute rows, "five in a row" becomes five minutes, and the time-left rule reads a fall per minute as a fall per second. Re-run offline on the generated month it raised 24 false trend warnings on ordinary evening drift, and on a real fall it said 88 seconds were left when the red line was 14 minutes away.
