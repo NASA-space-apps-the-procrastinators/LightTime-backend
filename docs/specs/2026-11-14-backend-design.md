@@ -152,7 +152,7 @@ An alert carries: `id` (`"A1"`), `crew_id` (`"C1"`), `crew`, `at`, `level`, `sta
 
 The `timeline` holds `raised_at`, `acknowledged_at`, `sent_at`, `earth_eta_s`, `earth_at`, `earliest_reply_at`, `reply_at` and `resolved_at`. A time is null until that step has happened. `earliest_reply_at` is the report's landing time plus the same leg back, as if the doctor answered at once; it is null while the report waits in the queue. It is on the demo clock, like every link time; `lookahead.red_line_at` is real time, so screens use `earth_in_time` for the verdict. `earth_eta_s` counts down in mission time to the moment Earth hears.
 
-The three times on a sent message are `sent_at`, `arrives_after_s` (the one-way delay) and `earliest_reply_after_s` (twice the delay). Every update, message and reply carries `payload.alert_id`, so the thread for one alert is the outbox and inbox filtered by that id. A report's payload also carries `why`, the same lines the crew sees on the alert.
+The three times on a sent message are `sent_at`, `arrives_after_s` (the one-way delay) and `earliest_reply_after_s` (twice the delay). Every update, message and reply carries `payload.alert_id`, so the thread for one alert is the outbox and inbox filtered by that id. A report's payload also carries `why`, the same lines the crew sees on the alert, and `raised_at`, when the alert was raised (UTC, the same as the alert's `at`), so Earth can tell how old the problem is and not only when the report left. The reports loaded with the demo morning carry it too.
 
 ## the frontend owner's screens against the API
 

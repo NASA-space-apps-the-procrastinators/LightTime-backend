@@ -127,7 +127,7 @@ def build(alert, crew, state, look=None, usual=None):
     else:
         assessment = "Raised by a crew member pressing SOS. This is not a diagnosis."
     return {
-        "alert_id": alert.id, "crew_id": crew.id, "crew": crew.name, "level": alert.level,
+        "alert_id": alert.id, "raised_at": iso(alert.at), "crew_id": crew.id, "crew": crew.name, "level": alert.level,
         "vital": alert.vital, "value": alert.value, "reason": alert.reason,
         "nasa_risk": alert.nasa_risk, "mode": state["mode"], "who_decides": state["who_decides"],
         "sbar": {

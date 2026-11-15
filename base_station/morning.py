@@ -7,7 +7,7 @@ from datetime import datetime
 from sqlalchemy import text
 
 from common import dataset
-from common.models import (Alert, Checkin, Crew, LinkMessage, MissionState, Reading, Reminder, db,
+from common.models import (Alert, Checkin, Crew, LinkMessage, MissionState, Reading, Reminder, db, iso,
                            set_clock)
 
 CHECKLIST = {"hr_rest": "heart_rate"}     # which checklist a console alert uses; others use their own name
@@ -64,10 +64,13 @@ def load():
         if row["alert_id"] and row["alert_id"] not in alerts:
             continue                      # the thread of an alert that was not loaded
         about = alerts.get(row["alert_id"])
+        payload = {"alert_id": about.id if about else None, "text": row["text"], "from": row["author"],
+                   "simulated": True}
+        if about is not None and row["kind"] == "report":
+            payload["raised_at"] = iso(about.at)      # as a live report carries it
         message = LinkMessage(
             direction=row["direction"], kind=row["kind"], priority=int(row["priority"]),
-            payload={"alert_id": about.id if about else None, "text": row["text"], "from": row["author"],
-                     "simulated": True},
+            payload=payload,
             created_at=when(row["created_at"]), sent_at=when(row["sent_at"]), delay_s=dataset.num(row["delay_s"]),
             deliver_at=when(row["deliver_at"]), in_reply_to=numbers.get(row["in_reply_to"]))
         db.session.add(message)
