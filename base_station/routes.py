@@ -35,6 +35,9 @@ def timeline(alert):
         "sent_at": sent.get("sent_at"), "earth_eta_s": sent.get("eta_s"),
         "earth_at": sent.get("deliver_at") if sent.get("status") == "delivered" else None,
         "earliest_reply_at": iso(earliest),
+        # the true length of each leg, in mission seconds: the stamps above are on the demo clock
+        "earth_after_s": sent.get("arrives_after_s"),
+        "earliest_reply_after_s": sent.get("earliest_reply_after_s"),
         "reply_at": iso(reply.deliver_at) if reply else None,
         "resolved_at": iso(alert.cleared_at),
     }
@@ -44,7 +47,7 @@ def look_ahead(alert, source=None):
     """Ship AI: the falling trend behind an open alert, if there is one."""
     cfg = rules.LIMITS["vitals"].get(alert.vital)
     if cfg and cfg.get("lookahead") and alert.cleared_at is None and alert.level != "emergency":
-        return lookahead.check(alert.crew_id, alert.vital, cfg["bands"][0][0], source)
+        return lookahead.check(alert.crew_id, alert.vital, cfg["bands"][0][0], source, scenario.since(source))
 
 
 STATE = {"advisory": "WATCH", "caution": "WATCH", "warning": "ALERT", "emergency": "SOS"}
@@ -166,6 +169,9 @@ def person(value):
 SUIT_NAMES = {"astronaut_id": "crew_id", "heart_rate_bpm": "heart_rate", "spo2_percent": "spo2",
               "skin_temp_c": "skin_temp"}              # the suit firmware's names for the ship's fields
 READ = set(VITALS) | {"crew_id", "source", "signal_ok", "context"} | set(SUIT_NAMES)
+# A heart rate outside this is refused as impossible input. A project choice for bad data,
+# not an alert rule: the alert bands live in limits.json.
+HEART_RATE_POSSIBLE = (20, 250)
 
 
 def in_our_words(data):
@@ -259,6 +265,7 @@ def dial():
 def post_reading():
     data = in_our_words(body())
     crew_id = crew_id_or_400(data)
+    given = {}
     for vital in VITALS:
         try:
             value = number(data.get(vital))
@@ -266,6 +273,13 @@ def post_reading():
             value = math.nan
         if value is not None and not math.isfinite(value):       # "inf" would break Earth's JSON
             return bad("a reading must be a number", vital)
+        if value is not None:
+            given[vital] = value
+    if not given:
+        return bad("a reading needs at least one vital sign, such as heart_rate or spo2", "heart_rate")
+    low, high = HEART_RATE_POSSIBLE
+    if not low <= given.get("heart_rate", low) <= high:
+        return bad(f"heart_rate must be between {low} and {high} beats a minute", "heart_rate")
     for field in ("source", "context"):
         if data.get(field) is not None and not (isinstance(data[field], str) and len(data[field]) <= 12):
             return bad(f"{field} is text of at most 12 characters", field)
@@ -423,7 +437,7 @@ def reset():
 @bp.post("/scenario/start")
 def scenario_start():
     sent = body()
-    name, real = sent.get("name", "stage"), bool(sent.get("replay"))
+    name, real = sent.get("name", "full"), bool(sent.get("replay"))
     if not isinstance(name, str) or name not in scenario.SCENARIOS:
         return bad("unknown scenario", "name")
     scenario.start(current_app._get_current_object(), name, real)

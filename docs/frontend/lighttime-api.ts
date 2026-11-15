@@ -51,6 +51,8 @@ export interface Timeline {
   raised_at: string; acknowledged_at: string | null; sent_at: string | null;
   earth_eta_s: number | null; earth_at: string | null;
   earliest_reply_at: string | null;     // count down to this for "earliest reply". Demo clock: never compare with red_line_at
+  earth_after_s: number | null;           // true one-way seconds the report left with. Print this, not earth_at
+  earliest_reply_after_s: number | null;  // true round-trip seconds. Print this, not earliest_reply_at
   reply_at: string | null; resolved_at: string | null;
 }
 export interface Alert {

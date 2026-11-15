@@ -34,6 +34,30 @@ def treated():
     return alert is not None and (TREATMENT_STEP in alert.steps_done or alert.cleared_at is not None)
 
 
+def since(source):
+    """When the running story began, for the scripted story's own readings, so a trend never reaches
+    back into an earlier story. None for any other sender (the "real" story's replayed wrist history
+    is meant to be in the window), or once the clock has been put back."""
+    if source != "scenario" or _since is None or _since > utcnow():
+        return None
+    return _since
+
+
+def close_last_run():
+    """Resolve the patient's blood-oxygen alert that an earlier story left open, and tell Earth.
+    An open alert cannot be raised again, so without this a second story raises nothing.
+    Returns how many were closed."""
+    from base_station import routes
+
+    left = Alert.query.filter_by(crew_id=PATIENT, vital="spo2", cleared_at=None, auto=True).all()
+    for alert in left:
+        alert.cleared_at, alert.cleared_by = utcnow(), "auto: a new story started"
+    db.session.commit()
+    for alert in left:
+        routes.tell_earth(alert, {"event": "resolved", "by": alert.cleared_by, "note": None})
+    return len(left)
+
+
 def _patient_script(calm_s, drift_s, collapse_s, recover_s, tail_s, treated, event=False):
     """Yield (blood oxygen, heart rate) for the patient each second. None means normal.
     With event=True the fall is a real recording, played until the crew treats it."""
@@ -123,7 +147,7 @@ def stop():
         _halt()
 
 
-def start(app, name="stage", real=False):
+def start(app, name="full", real=False):
     """Start a story. With real=True the crew's heart rate and skin temperature are replayed
     from the volunteers' wrist data, and the recorder is given their earlier readings first.
     The "real" story always runs that way."""
@@ -132,10 +156,10 @@ def start(app, name="stage", real=False):
         _halt()
         _stop = threading.Event()           # a new flag for each run, so an old run stays stopped
         real = real or name == "real"
-        if real:
-            with app.app_context():
-                if Reading.query.filter_by(source="replay").count() == 0:
-                    backfill()
+        with app.app_context():
+            close_last_run()
+            if real and Reading.query.filter_by(source="replay").count() == 0:
+                backfill()
         _since = utcnow()
         _thread = threading.Thread(target=_run, args=(app, name, real, _stop), daemon=True, name="story")
         _thread.start()

@@ -169,7 +169,7 @@ def reply():
 @bp.get("/network")
 def network():
     """Two NASA figures for the same thing: Horizons works the Mars delay out from the orbits,
-    the Deep Space Network measures it to spacecraft that are there."""
+    the Deep Space Network reports it for spacecraft that are there."""
     passes, note = dsn.mars_passes()
     measured = round(statistics.median(p["round_trip_s"] for p in passes) / 2, 1) if passes else None
     worked_out = lighttime.mars_seconds()

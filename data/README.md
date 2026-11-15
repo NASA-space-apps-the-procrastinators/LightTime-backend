@@ -32,7 +32,7 @@ Everything the backend reads that is not code. The rules and the reasons are in 
 ## Credit lines for the project page
 
 - NASA OSDR: "Data and visualizations are courtesy of the Environmental Data Application (EDA) (https://visualization.osdr.nasa.gov/eda/), Version #."
-- PPG-DaLiA: Reiss, A., Indlekofer, I. and Schmidt, P. (2019). PPG-DaLiA. UCI Machine Learning Repository. https://doi.org/10.24432/C53890. Licence CC BY 4.0.
+- PPG-DaLiA: Reiss A, Indlekofer I, Schmidt P, Van Laerhoven K (2019). Deep PPG: Large-Scale Heart Rate Estimation with Convolutional Neural Networks. Sensors 19(14): 3079. https://doi.org/10.3390/s19143079. Dataset: UCI Machine Learning Repository, https://doi.org/10.24432/C53890. Licence CC BY 4.0.
 - Canadian Space Agency files: name the CSA as the source and link the Open Government Licence - Canada (https://open.canada.ca/en/open-government-licence-canada).
 
 ---

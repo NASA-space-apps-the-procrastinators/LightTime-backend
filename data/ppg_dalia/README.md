@@ -4,7 +4,7 @@ Real wrist-wearable readings from 15 volunteers during about 2.5 hours of daily 
 
 - Source: https://archive.ics.uci.edu/dataset/495/ppg+dalia
 - Licence: CC BY 4.0
-- Cite: Reiss, A., Indlekofer, I. and Schmidt, P. (2019). PPG-DaLiA. UCI Machine Learning Repository. https://doi.org/10.24432/C53890
+- Cite: Reiss A, Indlekofer I, Schmidt P, Van Laerhoven K (2019). Deep PPG: Large-Scale Heart Rate Estimation with Convolutional Neural Networks. Sensors 19(14): 3079. https://doi.org/10.3390/s19143079. Dataset: UCI Machine Learning Repository, https://doi.org/10.24432/C53890
 - Cut on 14 November 2026 from `ppg+dalia.zip`. The files are copied as they are; nothing in them was changed.
 
 ## What is here

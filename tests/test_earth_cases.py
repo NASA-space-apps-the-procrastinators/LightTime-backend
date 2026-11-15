@@ -140,10 +140,10 @@ def test_the_demo_mornings_cases_say_who_what_and_how_it_ended(morning):
     cases_by_id = {c["alert_id"]: c for c in morning.get("/api/earth/cases").get_json()["cases"]}
     a7 = cases_by_id["A7"]
     assert a7["crew"] == "Sato" and a7["reason"] == "Blood oxygen 91 % in sleep, link down"
-    assert a7["state"] == "SOS" and a7["status"] == "resolved" and a7["resolved_by"] == "Lindqvist"
+    assert a7["state"] == "SOS" and a7["status"] == "resolved" and a7["resolved_by"] == "Linda Rodenburg"
     assert a7["simulated"] is True and set(a7["inferred"]) == {"crew", "reason", "state"}
     a2 = cases_by_id["A2"]
-    assert a2["crew"] == "Lindqvist" and a2["state"] == "ALERT" and a2["status"] == "resolved"
+    assert a2["crew"] == "Linda Rodenburg" and a2["state"] == "ALERT" and a2["status"] == "resolved"
     assert all(c["crew"] and c["reason"] and c["state"] in ("ALERT", "SOS") for c in cases_by_id.values())
 
 
@@ -152,7 +152,7 @@ def test_earth_and_the_ship_tell_the_same_thread(morning):
     ship = morning.get("/api/base/alerts/A7/thread").get_json()["messages"]
     assert all(m["text"] and m["simulated"] is True for m in earth)
     assert earth[0]["author"] == "Ship (auto SOS)" and earth[0]["text"].startswith("Sato: Blood oxygen 91 %")
-    assert earth[2]["text"] == "Resolved by Lindqvist." and earth[2]["author"] == "Lindqvist"
+    assert earth[2]["text"] == "Resolved by Linda Rodenburg." and earth[2]["author"] == "Linda Rodenburg"
     pairs = {m["id"]: (m["author"], m["text"]) for m in ship}
     assert all(pairs[m["id"]] == (m["author"], m["text"]) for m in earth if m["id"] in pairs)
 

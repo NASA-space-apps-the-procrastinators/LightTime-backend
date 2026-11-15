@@ -42,6 +42,10 @@ def create_app(database_url=None, morning=None):
         if app.config["MORNING"]:
             from base_station import morning as demo_morning
             demo_morning.load()
+        try:
+            dataset.last_minutes()  # read the month's minute file now, so the first /packets is quick
+        except OSError:
+            app.logger.warning("the suits' minute file could not be read; /packets will try again")
     lighttime.mars_seconds()    # ask JPL once now, so no screen waits on it later
     lighttime.mars_seconds(dataset.mission_date(utcnow()))   # and for the mission date, which the dial uses
     return app
