@@ -17,7 +17,7 @@ Where both names for one field are sent, the ship's own name wins.
 
 - `astronaut_id` is the suit id (`LT-01` to `LT-04`) or the crew id (`C1` to `C4`). The live sensor uses `LT-04`, because the scripted story plays on `C1`. `S1` is refused with a 400 naming `crew_id`.
 - Send one reading a second. The alarm rules count readings, so a slower sender makes every alarm slower by the same factor.
-- `crew_id`: `"C1"` to `"C4"`, or the numbers 1 to 4 (C1 Okafor, C2 Linda Rodenburg, C3 Sato, C4 Rebecca Qi). Use C4 for the live sensor: the scripted stories play on C1 and also send background readings for C2 and C3, which would mix with the sensor's on those crew cards.
+- `crew_id`: `"C1"` to `"C4"`, or the numbers 1 to 4 (C1 TJ, C2 Rebecca, C3 Kyler, C4 David). Use C4 for the live sensor: the scripted stories play on C1 and also send background readings for C2 and C3, which would mix with the sensor's on those crew cards.
 - `heart_rate` in beats a minute and `spo2` in percent, as the MAX30102 board reports them. Leave a field out if there is no value.
 - `signal_ok`: send `false` when no finger is on the sensor. It must be the JSON literal `true` or `false`, not a quoted string. The ship then raises a sensor check (state `RECHECK`, "Check your sensor") and judges nothing.
 - `source` and `context` are at most 12 characters each.

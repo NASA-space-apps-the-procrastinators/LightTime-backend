@@ -39,6 +39,7 @@ export interface CrewMember {      // the ship AI's fields; the console's Crew t
   latest: Reading | null; typed: Reading | null; usual: { heart_rate: UsualRange | null };
   week: Record<string, (number | null)[]>;   // seven daily values per console metric, oldest first; the last is today's
   simulated: boolean;                         // the daily values come from the generated month
+  is_cmo: boolean; restricted: boolean;
 }
 
 export interface Lookahead {
@@ -57,6 +58,7 @@ export interface Timeline {
 }
 export interface Alert {
   id: string; crew_id: string; crew: string; at: string; level: Level; vital: string;   // "A1", "C1"
+  restricted: boolean;
   state: "OK" | "WATCH" | "ALERT" | "RECHECK" | "SOS";
   stage: "raised" | "acknowledged" | "sent" | "replied" | "resolved";
   metric: string; rule: string | null; symptoms: string[];
@@ -144,6 +146,7 @@ export const api = {
   reset: () => call<{ ok: boolean }>("/api/base/reset", {}),
   startStory: (name: Story, replay = true) => call<{ ok: boolean }>("/api/base/scenario/start", { name, replay }),
   stopStory: () => call<{ ok: boolean }>("/api/base/scenario/stop", {}),
+  startDemo: () => call<{ ok: boolean; name: string; state: StopState }>("/api/base/demo/start", {}),
   // Earth
   earthInbox: () => call<EarthInbox>("/api/earth/inbox"),
   earthOutbox: () => call<LinkMessage[]>("/api/earth/outbox"),

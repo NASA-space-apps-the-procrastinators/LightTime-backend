@@ -24,7 +24,7 @@ def test_the_one_open_alert_is_the_resting_heart_rate(morning):
 
 
 def test_restart_puts_the_same_morning_back(morning):
-    morning.post("/api/base/alerts/A1/ack", json={"by": "Okafor"})
+    morning.post("/api/base/alerts/A1/ack", json={"by": "TJ"})
     morning.post("/api/base/readings", json={"crew_id": "C2", "spo2": 97})
     morning.post("/api/base/dial", json={"stop": "moon"})
     assert morning.post("/api/base/reset").get_json() == {"ok": True}

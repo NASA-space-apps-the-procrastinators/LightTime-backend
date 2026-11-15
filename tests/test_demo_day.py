@@ -25,7 +25,7 @@ def test_generated_values_say_so(morning):
     assert morning.get("/api/base/crew/C1").get_json()["simulated"] is True
     old = morning.get("/api/base/alerts/A7/thread").get_json()["messages"]
     assert old and all(message["simulated"] for message in old)
-    morning.post("/api/base/messages", json={"text": "Checking in.", "from": "Okafor", "alert_id": "A1"})
+    morning.post("/api/base/messages", json={"text": "Checking in.", "from": "TJ", "alert_id": "A1"})
     assert morning.get("/api/base/alerts/A1/thread").get_json()["messages"][-1]["simulated"] is False
 
 
@@ -96,7 +96,7 @@ def test_the_ship_never_uses_the_words_to_avoid(client):
 def test_the_timeline_gives_each_leg_its_true_length(morning):
     before = morning.get("/api/base/alerts/A1").get_json()["timeline"]
     assert before["earth_after_s"] is None and before["earliest_reply_after_s"] is None
-    morning.post("/api/base/alerts/A1/ack", json={"by": "Okafor"})
+    morning.post("/api/base/alerts/A1/ack", json={"by": "TJ"})
     morning.post("/api/base/alerts/A1/send", json={})
     line = morning.get("/api/base/alerts/A1").get_json()["timeline"]
     state = morning.get("/api/base/state").get_json()

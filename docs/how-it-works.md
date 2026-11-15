@@ -16,7 +16,7 @@ LIGHT-TIME compares the two. If the answer can arrive first, the flight surgeon 
     reply_time = 2 x one-way light time
     Earth can answer in time only if reply_time < time_left
 
-On the demo morning at Mars the sentence the ship speaks is: "Okafor. Blood oxygen 96 and falling. At this rate it reaches the red line in about 70 seconds. Earth's earliest reply is 22 minutes away. That is too late. Crew medical officer, check on Okafor now."
+On the demo morning at Mars the sentence the ship speaks is: "TJ. Blood oxygen 96 and falling. At this rate it reaches the red line in about 70 seconds. Earth's earliest reply is 22 minutes away. That is too late. Crew medical officer, check on TJ now."
 
 ### What is different about it
 

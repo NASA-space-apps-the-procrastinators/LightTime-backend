@@ -7,7 +7,7 @@ Status: **approved and built**, 14 November 2026, on `Ore-backend`. Read `PROJEC
 | # | Decision |
 | --- | --- |
 | Q1 | ISS platform, mission day 158 = 14 Nov 2026 (matches the frontend), with a Mars-distance link: each day's real Horizons light time (`data/reference/horizons_mars_light_time.csv`) and one compressed conjunction blackout |
-| Q2 | Crew ids are the strings `C1`…`C4` (Okafor, Linda Rodenburg, Sato, Rebecca Qi). `crew.backend_id` maps them to the backend's integers. **The frontend keeps its id format; the backend should adopt `C1`…`C4`** (see `PROJECT_NOTES.md` §6) |
+| Q2 | Crew ids are the strings `C1`…`C4` (TJ, Rebecca, Kyler, David). `crew.backend_id` maps them to the backend's integers. **The frontend keeps its id format; the backend should adopt `C1`…`C4`** (see `PROJECT_NOTES.md` §6) |
 | Q3 | C2 to C4 baselines and roles are drafts (`source = draft`). Threshold rule text comes from the contract; sources not in the contract are marked `pending` |
 | Q4 | No mGy to mSv conversion. The real EDA mGy is kept; mSv is simulated, using the EDA day-to-day shape scaled so day 158 is 0.51 and the mission total is 81.0 |
 | Q5 | CO2 ppm to mmHg by Dalton's law, using each row's own cabin pressure |
@@ -79,7 +79,7 @@ PK is the primary key and FK a foreign key. All times are `timestamptz` in UTC. 
 | --- | --- | --- |
 | `crew_id` PK | text | `C1`…`C4` |
 | `backend_id` | int | 1…4. Used only by the replay, to map onto the backend's integer ids |
-| `name`, `role` | text | From `crew-seed.json` once it's received. Until then: Okafor (Commander), Linda Rodenburg, Sato, Rebecca Qi, with the other roles marked TBD |
+| `name`, `role` | text | From `crew-seed.json` once it's received. Until then: TJ (Commander), Rebecca, Kyler, David, with the other roles marked TBD |
 | `suit_id` | text | `LT-01`…`LT-04` |
 | `home_habitat_id` FK | text | → `habitats` |
 | `is_cmo` | bool | Which crew member is the medical officer |
@@ -99,10 +99,10 @@ Proposed values (C1 is copied from the contract; C2 to C4 are my draft until `cr
 
 | | HR rest | BP sys / dia | SpO2 | Core temp °C | Resp | Sleep h | PVT ms | VO2max |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| C1 Okafor | 52–64 | 108–122 / 66–78 | 96–99 | 36.3–36.9 | 12–16 | 6.8–7.6 | 265 | 44.0 |
-| C2 Linda Rodenburg | 58–70 | 112–128 / 70–82 | 96–99 | 36.4–37.0 | 13–17 | 6.5–7.3 | 280 | 40.0 |
-| C3 Sato | 60–72 | 104–118 / 64–76 | 96–99 | 36.2–36.8 | 12–16 | 7.0–7.8 | 250 | 42.0 |
-| C4 Rebecca Qi | 46–56 | 110–124 / 68–80 | 96–99 | 36.4–37.0 | 10–14 | 6.6–7.4 | 270 | 52.0 |
+| C1 TJ | 52–64 | 108–122 / 66–78 | 96–99 | 36.3–36.9 | 12–16 | 6.8–7.6 | 265 | 44.0 |
+| C2 Rebecca | 58–70 | 112–128 / 70–82 | 96–99 | 36.4–37.0 | 13–17 | 6.5–7.3 | 280 | 40.0 |
+| C3 Kyler | 60–72 | 104–118 / 64–76 | 96–99 | 36.2–36.8 | 12–16 | 7.0–7.8 | 250 | 42.0 |
+| C4 David | 46–56 | 110–124 / 68–80 | 96–99 | 36.4–37.0 | 10–14 | 6.6–7.4 | 270 | 52.0 |
 
 C4's resting HR is deliberately athletic. Asleep, C4 sits under the backend's NEWS2 line of 50 bpm, so C4 is the false-alarm control for the fixed bands.
 
@@ -340,7 +340,7 @@ The estimated output is about 25 to 35 MB of CSV. My proposal is to commit `refe
 | # | Question | My default if you don't say |
 | --- | --- | --- |
 | Q1 | Platform and timeline: is it ISS, mission day 158 (frontend), or a Mars transit (the backend dial)? | ISS calendar, with `link_windows` using the dial stops (mostly `mars` delay, one `sun` blackout) so the light-time story still plays |
-| Q2 | Crew: C1–C4 (Okafor, Linda Rodenburg, Sato, Rebecca Qi) for the data, even though the backend seeds David, Damola and Youssef? | Yes, C1–C4. The replay maps them to ints |
+| Q2 | Crew: C1–C4 (TJ, Rebecca, Kyler, David) for the data, even though the backend seeds David, Damola and Youssef? | Yes, C1–C4. The replay maps them to ints |
 | Q3 | Can you get `thresholds.json`, `crew-seed.json` and `packet-schema.json` from the frontend repo? | Draft values marked `source=draft`, replaced when the files arrive |
 | Q4 | mGy to mSv: which factor and source? | No conversion. Simulated mSv flagged, real mGy kept next to it |
 | Q5 | CO2 ppm to mmHg by Dalton's law using the row's own pressure: is that "cited" enough? | Yes, with the formula written in the README |

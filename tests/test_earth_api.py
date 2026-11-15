@@ -25,7 +25,7 @@ def test_earth_sees_nothing_until_the_light_arrives(client, monkeypatch):
     later(monkeypatch, 12)
     messages = earth_messages(client)
     assert len(messages) == 1
-    assert messages[0]["payload"]["sbar"]["situation"].startswith("Okafor")
+    assert messages[0]["payload"]["sbar"]["situation"].startswith("TJ")
     assert messages[0]["status"] == "delivered"
 
 
@@ -74,7 +74,7 @@ def test_the_round_trip_shows_on_the_alert_timeline(client, monkeypatch):
 
 
 def test_every_report_says_when_its_alert_was_raised(morning):
-    morning.post("/api/base/alerts/A1/ack", json={"by": "Okafor"})
+    morning.post("/api/base/alerts/A1/ack", json={"by": "TJ"})
     morning.post("/api/base/alerts/A1/send")
     assert morning.get("/api/base/outbox").get_json()[0]["payload"]["raised_at"] == "2026-11-14T06:12:00Z"
     loaded = [m for m in morning.get("/api/earth/inbox").get_json()["messages"] if m["kind"] == "report"]
