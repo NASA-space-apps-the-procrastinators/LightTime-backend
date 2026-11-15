@@ -36,18 +36,22 @@ def events():
         return "", 204
     try:
         sent = json.loads(data)
-    except ValueError:
+    except (ValueError, RecursionError):     # RecursionError: deeply nested input
         sent = None
     events = sent.get("events") if isinstance(sent, dict) else None
     if not isinstance(events, list) or len(events) > MAX_EVENTS:
         return bad(f"events must be a list of at most {MAX_EVENTS}", "events")
+    counted = []
     for event in events:
         if not isinstance(event, dict) or event.get("kind") not in EVENT_KINDS:
             return bad("unknown kind", "kind")
-        if not isinstance(event.get("name"), str) or not event["name"].strip():
-            return bad("an event needs a name", "name")
-    for event in events:
-        counter.add(event["kind"], event["name"].strip()[:80])
+        name = " ".join(event["name"].split()) if isinstance(event.get("name"), str) else ""
+        # Printable only: a NUL or a lone surrogate cannot be stored, and would stop every flush.
+        if not name or not name.isprintable():
+            return bad("an event needs a printable name", "name")
+        counted.append((event["kind"], name[:80]))
+    for kind, name in counted:
+        counter.add(kind, name)
     return "", 204
 
 
@@ -59,14 +63,15 @@ def _top(totals):
 @bp.get("")
 def totals():
     """Daily totals for the last ?days= days (1 to 90, default 7), oldest first, and the top ten
-    pages, clicks and routes over them. Flushes first, so the page is never 30 seconds behind."""
+    pages, clicks and routes over them. Flushes first, so the page is never 30 seconds behind,
+    unless a flush is already writing: then it does not wait for it."""
     try:
         days = int(request.args.get("days", "7"))
     except ValueError:
         days = 0
     if not 1 <= days <= 90:
         return bad("days must be a whole number from 1 to 90", "days")
-    counter.flush()
+    counter.flush(wait=False)       # a flush already writing will finish on its own
     since = counter.today() - timedelta(days=days - 1)
     by_day = defaultdict(lambda: dict.fromkeys(("visitors", "pageviews", "clicks", "requests", "polls"), 0))
     tops = {"pageview": Counter(), "click": Counter(), "route": Counter()}

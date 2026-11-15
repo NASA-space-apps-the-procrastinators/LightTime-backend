@@ -72,21 +72,29 @@ def _write(counts, visitors):
     db.session.commit()
 
 
-def flush():
+def flush(wait=True):
     """Write the counts held in memory. If the write fails, log a warning and keep them for the
-    next try: traffic stats must never break a ship request. Returns True when they were written."""
-    with _writing:
+    next try: traffic stats must never break a ship request. With wait=False, a flush already
+    writing is left to finish and this returns at once. Returns True when this call wrote them."""
+    if not _writing.acquire(blocking=wait):
+        return False
+    try:
         counts, visitors = _take()
         if not counts and not visitors:
             return True
         try:
+            if not current_app.config.get("STATS_TABLES"):     # the stats database was down at start
+                db.create_all(bind_key="stats")
+                current_app.config["STATS_TABLES"] = True
             _write(counts, visitors)
         except Exception:
             db.session.rollback()
             _keep(counts, visitors)
             current_app.logger.warning("traffic stats were not written; kept for the next try", exc_info=True)
             return False
-    return True
+        return True
+    finally:
+        _writing.release()
 
 
 def _flush_in(app):

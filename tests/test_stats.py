@@ -1,7 +1,10 @@
+import json
+import threading
 from datetime import date, timedelta
 
 from flask import request
 
+from app import create_app
 from common.models import db
 from stats import counter, visitor
 from stats.models import StatCount, StatVisitor
@@ -271,3 +274,42 @@ def test_outside_tests_the_first_request_starts_one_flush_thread(app, client, mo
     client.get("/api/base/state", headers=BROWSER)
     counter._thread.join(1)
     assert ran == [app] and at_exit == [(app,)]
+
+
+def test_a_name_the_database_cannot_hold_is_refused_and_others_still_flush(app, client):
+    for bad_name in ("a\u0000b", "\ud800", "\u0007"):
+        answer = client.post("/api/stats/events", data=json.dumps({"events": [{"kind": "click", "name": bad_name}]}),
+                             content_type="text/plain", headers=BROWSER)
+        assert answer.status_code == 400 and answer.get_json()["field"] == "name"
+    _send(client, [{"kind": "click", "name": "Send to\n   flight surgeon"}])
+    assert _counts(app) == {("click", "Send to flight surgeon"): 1}
+
+
+def test_deep_nesting_is_a_400_not_a_500(client):
+    answer = client.post("/api/stats/events", data="[" * 16000, content_type="text/plain", headers=BROWSER)
+    assert answer.status_code == 400
+
+
+def test_the_totals_do_not_wait_for_a_flush_already_writing(client):
+    answers = []
+    with counter._writing:
+        reader = threading.Thread(target=lambda: answers.append(client.get("/api/stats").status_code))
+        reader.start()
+        reader.join(5)
+        assert not reader.is_alive()
+    assert answers == [200]
+
+
+def test_the_ship_starts_when_the_stats_database_cannot_be_reached(monkeypatch, tmp_path):
+    monkeypatch.setenv("DATABASE_URL", "sqlite:///:memory:")
+    monkeypatch.setenv("STATS_DATABASE_URL", f"sqlite:///{tmp_path / 'no-such-dir' / 'stats.db'}")
+    app = create_app(morning=False)
+    app.config["TESTING"] = True
+    client = app.test_client()
+    assert client.get("/api/base/state", headers=BROWSER).status_code == 200
+    with app.app_context():
+        assert counter.flush() is False         # kept in memory for the next try
+    (tmp_path / "no-such-dir").mkdir()
+    with app.app_context():
+        assert counter.flush() is True          # the tables are made once the database is there
+        assert StatCount.query.count() == 1

@@ -86,8 +86,6 @@ A glossary, and nothing else. One meaning per word, used the same way in the cod
 
 ## Traffic stats
 
-Real traffic on the site, not simulated. Kept as daily totals, on real UTC time, not the mission clock.
-
 **Page view.** One screen opened in a browser, reported by the console.
 
 **Click.** One press of a button or link, reported by the console with the button's name.

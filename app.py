@@ -60,7 +60,12 @@ def create_app(database_url=None, morning=None):
         return response, error.code
 
     with app.app_context():
-        db.create_all()
+        db.create_all(bind_key=None)
+        try:        # a stats database that is down must not stop the ship
+            db.create_all(bind_key="stats")
+            app.config["STATS_TABLES"] = True
+        except Exception:
+            app.logger.warning("the stats database could not be reached; the next flush tries again", exc_info=True)
         seed()
         if app.config["MORNING"]:
             from base_station import morning as demo_morning
