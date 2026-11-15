@@ -18,8 +18,12 @@ export interface StopState {
   path_km: number;        // delay x speed of light
   round_trip_s: number;   // 2 x delay: the earliest a reply can come back
   plays_as_s: number;     // real seconds one leg takes in the demo
+  ship_ai_role: string;
 }
-export interface MissionState extends StopState { speedup: number; stops: StopState[] }
+export interface MissionState extends StopState {
+  speedup: number; stops: StopState[];
+  ship_ai: { name: string; line: string; version: string; parts: { name: string; does: string }[] };
+}
 
 export interface Reading {
   id: number; crew_id: number; at: string; source: string; signal_ok: boolean; context: string | null;
@@ -36,6 +40,7 @@ export interface Lookahead {
   now: number; per_min: number; eta_s: number; red_line: number;
   at: string; red_line_at: string;      // count down to red_line_at
   reply_s: number | null; earth_in_time: boolean;
+  agreement: number;
 }
 export interface Timeline {
   raised_at: string; acknowledged_at: string | null; sent_at: string | null;
@@ -46,7 +51,7 @@ export interface Timeline {
 export interface Alert {
   id: number; crew_id: number; crew: string; at: string; level: Level; vital: string;
   value: number | null; unit: string | null; reason: string; source: string | null; auto: boolean;
-  nasa_risk: string; steps: string[]; steps_done: number[]; acknowledged_by: string | null;
+  nasa_risk: string; steps: string[]; steps_done: number[]; next_step: string | null; acknowledged_by: string | null;
   cleared_at: string | null; cleared_by: string | null; cleared_note: string | null;
   why: string[];                        // how the ship reached this alert. Show it
   timeline: Timeline; lookahead: Lookahead | null; speak: string | null;

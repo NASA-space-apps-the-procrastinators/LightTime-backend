@@ -98,6 +98,7 @@ def alert_dict(alert):
             speak = reports.speak(alert, crew, current_state())
         else:
             speak = reports.speak_falling(crew, cfg["label"], look) if look else None
+    todo = [step for index, step in enumerate(reports.steps_for(alert.vital)) if index not in alert.steps_done]
     return {
         "id": alert_code(alert), "crew_id": crew.code, "crew": crew.name, "at": iso(alert.at),
         "level": alert.level, "state": "RECHECK" if alert.vital == "signal" else STATE[alert.level],
@@ -105,6 +106,7 @@ def alert_dict(alert):
         "value": alert.value, "unit": unit, "reason": alert.reason, "rule": rule, "source": source,
         "auto": alert.auto, "nasa_risk": alert.nasa_risk, "symptoms": alert.symptoms or [],
         "steps": reports.steps_for(alert.vital), "steps_done": alert.steps_done,
+        "next_step": todo[0] if todo else None,
         "acknowledged_by": alert.acknowledged_by,
         "cleared_at": iso(alert.cleared_at), "cleared_by": alert.cleared_by,
         "cleared_note": alert.cleared_note, "why": why,
@@ -207,6 +209,7 @@ def health():
 def state():
     out = current_state()
     out["speedup"] = link.SPEEDUP
+    out["ship_ai"] = modes.SHIP_AI
     out["mission_day"] = dataset.mission_day(utcnow())
     out["platform"] = dataset.mission()["platform"]
     out["stops"] = [modes.describe(stop) for stop in modes.STOPS]

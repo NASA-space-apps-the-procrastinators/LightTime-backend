@@ -141,3 +141,32 @@ def test_the_earliest_reply_after_a_blackout_counts_one_leg_back(client):
 
 def test_an_infinite_round_trip_in_the_feed_is_ignored():
     assert dsn.parse('<dsn><dish name="D"><target name="MRO" rtlt="inf"/></dish></dsn>') == []
+
+
+def test_the_ship_ai_introduces_itself(client):
+    ship_ai = client.get("/api/base/state").get_json()["ship_ai"]
+    assert ship_ai["name"] == "LIGHTTIME" and ship_ai["version"].startswith("rules ")
+    assert [part["name"] for part in ship_ai["parts"]] == ["Don't cry wolf", "Know each person", "Time left", "Ask ahead"]
+
+
+def test_its_role_changes_with_the_distance(client):
+    role = {}
+    for where in ("station", "mars", "sun"):
+        role[where] = client.post("/api/base/dial", json={"stop": where}).get_json()["state"]["ship_ai_role"]
+    assert role["station"].startswith("Drafts") and role["mars"].startswith("Coaches")
+    assert role["sun"].startswith("Main reference")
+
+
+def test_the_report_carries_the_reasoning_and_how_steady_the_fall_is(client):
+    for i in range(30):
+        client.post("/api/base/readings", json={"crew_id": 1, "spo2": round(98 - 0.1 * i, 1)})
+    payload = client.get("/api/base/outbox").get_json()[0]["payload"]
+    assert payload["why"][0].startswith("What was seen")
+    assert 0.5 <= payload["lookahead"]["agreement"] <= 1
+
+
+def test_the_alert_names_the_next_step(client):
+    alert = sos(client)
+    assert alert["next_step"] == alert["steps"][0]
+    after = client.post(f"/api/base/alerts/{alert['id']}/steps", json={"index": 0}).get_json()
+    assert after["next_step"] == alert["steps"][1]

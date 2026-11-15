@@ -115,6 +115,7 @@ def build(alert, crew, state, look=None, usual=None):
             "assessment": assessment,
             "request": REQUEST[state["mode"]],
         },
+        "why": why(alert),
         "asked_ahead": asked_ahead(alert, crew, recent, look, usual),
         "lookahead": deadline(look, state) if look else None,
         "usual": usual,
