@@ -84,3 +84,10 @@ def test_five_low_readings_in_the_suits_words_still_raise_the_sos(client):
         raised = client.post("/api/base/readings",
                              json={"astronaut_id": "LT-04", "spo2_percent": 86}).get_json()["alerts"]
     assert [(alert["crew_id"], alert["state"]) for alert in raised] == [("C4", "SOS")]
+
+
+def test_the_ship_never_uses_the_words_to_avoid(client):
+    for _ in range(5):
+        raised = client.post("/api/base/readings", json={"crew_id": "C3", "spo2": 86}).get_json()["alerts"]
+    said = " ".join([raised[0]["source"], *raised[0]["why"]]).lower()
+    assert not [word for word in ("machine learning", "trained", "validated", "predicts illness") if word in said]
