@@ -35,11 +35,17 @@ def test_restart_puts_the_same_morning_back(morning):
     assert morning.get("/api/base/crew/C2/readings").get_json() == []
 
 
+def board(morning):
+    """Today's check-ins and the reminders, without row numbers: Postgres does not hand deleted ones back."""
+    reminders = [{k: v for k, v in r.items() if k != "id"} for r in morning.get("/api/base/reminders").get_json()]
+    return morning.get("/api/base/checkins/today").get_json(), reminders
+
+
 def test_restart_undoes_the_whole_loop(morning):
-    before = {path: morning.get(path).get_json() for path in ("/api/base/checkins/today", "/api/base/reminders")}
+    before = board(morning)
     morning.post("/api/base/crew/C1/checkins", json=GOOD)
     reply_and_accept(morning)
     later(3600)
     morning.post("/api/base/reset")
-    assert {path: morning.get(path).get_json() for path in before} == before
+    assert board(morning) == before
     assert abs((models.utcnow() - datetime(2026, 11, 14, 6, 30)).total_seconds()) < 5
