@@ -131,9 +131,9 @@ def test_the_earliest_reply_after_a_blackout_counts_one_leg_back(client):
     client.post("/api/base/dial", json={"stop": "mars"})
     from datetime import datetime
     for a in client.get("/api/base/alerts").get_json():
-        line, leg = a["timeline"], lighttime.mars_seconds() / 60
         sent = client.get("/api/base/outbox").get_json()
         report = next(m for m in sent if m["kind"] == "report" and f"A{m['payload']['alert_id']}" == a["id"])
+        line, leg = a["timeline"], report["delay_s"] / 60                  # one leg of the delay it was sent with
         gap = (datetime.fromisoformat(line["earliest_reply_at"].replace("Z", "+00:00"))
                - datetime.fromisoformat(report["deliver_at"].replace("Z", "+00:00"))).total_seconds()
         assert abs(gap - leg) < 0.01

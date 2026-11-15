@@ -1,4 +1,5 @@
 """The ship's side: readings in, alerts and reports out."""
+import math
 import time
 from datetime import datetime, timedelta
 
@@ -222,8 +223,7 @@ def state():
     out = current_state()
     out["speedup"] = link.SPEEDUP
     out["ship_ai"] = modes.SHIP_AI
-    from base_station import console    # imported here because console imports this module
-    out["mission_day"] = dataset.mission_day(datetime.fromisoformat(console.today()))   # stops with the dataset
+    out["mission_day"] = dataset.mission_day(datetime.fromisoformat(dataset.mission_date(utcnow())))
     out["platform"] = dataset.mission()["platform"]
     out["stops"] = [modes.describe(stop) for stop in modes.STOPS]
     return jsonify(out)
@@ -232,7 +232,7 @@ def state():
 @bp.post("/dial")
 def dial():
     stop = body().get("stop")
-    if stop not in modes.STOPS:
+    if not isinstance(stop, str) or stop not in modes.STOPS:
         return bad("unknown stop", "stop")
     db.session.get(MissionState, 1).stop = stop
     db.session.commit()
@@ -247,8 +247,10 @@ def post_reading():
     crew_id = crew_id_or_400(data)
     for vital in VITALS:
         try:
-            number(data.get(vital))
-        except (TypeError, ValueError):
+            value = number(data.get(vital))
+        except (TypeError, ValueError, OverflowError):
+            value = math.nan
+        if value is not None and not math.isfinite(value):       # "inf" would break Earth's JSON
             return bad("a reading must be a number", vital)
     for field in ("source", "context"):
         if data.get(field) is not None and not (isinstance(data[field], str) and len(data[field]) <= 12):
@@ -311,7 +313,7 @@ def tick_step(alert_id):
     alert = alert_or_404(alert_id)
     try:
         index = int(body()["index"])
-    except (KeyError, TypeError, ValueError):
+    except (KeyError, TypeError, ValueError, OverflowError):
         index = -1
     if not 0 <= index < len(reports.steps_for(alert.vital)):
         return bad("unknown step", "index")
@@ -407,7 +409,7 @@ def reset():
 def scenario_start():
     sent = body()
     name, real = sent.get("name", "stage"), bool(sent.get("replay"))
-    if name not in scenario.SCENARIOS:
+    if not isinstance(name, str) or name not in scenario.SCENARIOS:
         return bad("unknown scenario", "name")
     scenario.start(current_app._get_current_object(), name, real)
     return jsonify(ok=True, name=name, replay=real)

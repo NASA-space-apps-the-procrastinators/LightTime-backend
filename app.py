@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 
-from common import lighttime
+from common import dataset, lighttime
 from common.models import db, seed, utcnow
 
 
@@ -31,7 +31,10 @@ def create_app(database_url=None, morning=None):
         """A path or method no route has: JSON on the API, as every route's own errors are."""
         if not request.path.startswith("/api/"):
             return error
-        return jsonify(error="not found" if error.code == 404 else "method not allowed"), error.code
+        response = jsonify(error="not found" if error.code == 404 else "method not allowed")
+        if error.code == 405:
+            response.headers["Allow"] = ", ".join(error.valid_methods or [])
+        return response, error.code
 
     with app.app_context():
         db.create_all()
@@ -40,7 +43,7 @@ def create_app(database_url=None, morning=None):
             from base_station import morning as demo_morning
             demo_morning.load()
     lighttime.mars_seconds()    # ask JPL once now, so no screen waits on it later
-    lighttime.mars_seconds(utcnow().strftime("%Y-%m-%d"))    # and for the mission date, which the dial uses
+    lighttime.mars_seconds(dataset.mission_date(utcnow()))   # and for the mission date, which the dial uses
     return app
 
 

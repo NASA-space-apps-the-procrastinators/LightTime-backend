@@ -22,14 +22,9 @@ LABEL = {"hr_rest": "resting heart rate", "bp_sys": "systolic blood pressure", "
 TYPED = ("mood", "pvt_ms", "bp_sys", "bp_dia")            # what a check-in gives; the rest comes from the suit
 
 
-@functools.lru_cache(maxsize=None)
-def _last_day():
-    return max(row["date"] for row in dataset.table("anomalous/daily_summary"))
-
-
 def today():
-    """The mission date as text. The dataset stops on its last day, so a later clock shows that day."""
-    return min(utcnow().date().isoformat(), _last_day())
+    """The mission date as text: the dataset's last day once the clock passes it."""
+    return dataset.mission_date(utcnow())
 
 
 def daily(code, day):

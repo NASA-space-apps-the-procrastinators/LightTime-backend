@@ -34,6 +34,16 @@ def mission():
     return table("reference/mission")[0]
 
 
+@functools.lru_cache(maxsize=None)
+def last_day():
+    return max(row["date"] for row in table("anomalous/daily_summary"))
+
+
+def mission_date(now):
+    """The mission date as text. The dataset stops on its last day, so a later clock shows that day."""
+    return min(now.date().isoformat(), last_day())
+
+
 def mission_day(now):
     """Day 1 is the launch date."""
     return (now.date() - date.fromisoformat(mission()["launch_date"])).days + 1

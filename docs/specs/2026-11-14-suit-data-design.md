@@ -48,7 +48,7 @@ An empty string counts as no reading. Anything that is not a number returns 400 
 | 4 | Each sender is judged on its own readings | A live sensor and a replayed story for the same person must not cancel each other |
 | 5 | Five clean readings in a row in a band raise the alert | One reading means nothing |
 | 6 | Heart rate is shown and never alarms alone | It tripped for 14 of 15 healthy people at a desk |
-| 7 | A blood pressure from the suit is shown and never alarms. A cuff reading typed by the crew is judged | A once-a-minute estimate sat in the hospital bands on a third of healthy minutes in the generated month |
+| 7 | A blood pressure from the suit is shown and never alarms. A cuff reading typed by the crew is judged | A once-a-minute estimate sat in the caution band or worse on 77,647 of 168,600 healthy minutes (nearly half) in the generated month |
 
 ## 5a. One reading a second, or a different door
 

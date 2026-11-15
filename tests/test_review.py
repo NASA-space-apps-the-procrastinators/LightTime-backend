@@ -184,3 +184,38 @@ def test_an_empty_box_is_no_alert_and_no_source_is_the_suit(client):
     assert sent.status_code == 201 and sent.get_json()["payload"]["alert_id"] is None
     posted = client.post("/api/base/readings", json={"crew_id": "C1", "heart_rate": 70, "source": None})
     assert posted.status_code == 201 and posted.get_json()["reading"]["source"] == "suit"
+
+
+# Found by the check of the fixes above.
+
+def test_a_wrong_method_is_json_and_still_says_which_methods_work(client):
+    answer = client.delete("/api/base/reset")
+    assert answer.status_code == 405 and answer.is_json and "POST" in answer.headers["Allow"]
+
+
+def test_the_dial_and_the_mission_day_use_the_same_date(client):
+    models.set_clock(datetime(2026, 11, 16, 12))
+    try:
+        state = client.post("/api/base/dial", json={"stop": "mars"}).get_json()["state"]
+        assert state["delay_s"] == 660.86                                  # 14 November, the dataset's last day
+        assert client.get("/api/base/state").get_json()["mission_day"] == 158
+    finally:
+        models.set_clock(None)
+
+
+def test_a_number_that_is_not_finite_or_too_big_is_a_400(client):
+    for raw in ('{"crew_id": "C1", "heart_rate": "inf"}', '{"crew_id": "C1", "spo2": "nan"}',
+                '{"crew_id": "C1", "spo2": 1e400}', '{"crew_id": "C1", "spo2": 1' + "0" * 400 + '}'):
+        answer = client.post("/api/base/readings", data=raw, content_type="application/json")
+        assert answer.status_code == 400 and answer.get_json()["field"] in ("heart_rate", "spo2"), raw[:40]
+    assert client.get("/api/base/crew/C1/readings").get_json() == []
+    alert = client.post("/api/base/sos", json={"crew_id": "C1"}).get_json()
+    step = client.post(f"/api/base/alerts/{alert['id']}/steps", data='{"index": 1e400}', content_type="application/json")
+    assert step.status_code == 400 and step.get_json()["field"] == "index"
+
+
+def test_a_list_where_a_name_belongs_is_a_400(client):
+    for route, sent, field in (("/api/base/dial", {"stop": ["mars"]}, "stop"),
+                               ("/api/base/scenario/start", {"name": {"x": 1}}, "name")):
+        answer = client.post(route, json=sent)
+        assert answer.status_code == 400 and answer.get_json()["field"] == field, route

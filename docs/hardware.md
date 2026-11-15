@@ -17,7 +17,7 @@ The ESP32 sends one JSON reading a second over Wi-Fi to the backend laptop.
 - A heart rate from the suit never raises an alarm. It is shown and compared with the person's usual range.
 - A blood pressure from the suit is stored and shown but never raises an alarm. A cuff reading counts when it is posted with `"source": "typed"` (judged at once, never above a warning), or typed at the morning check-in (`POST /api/base/crew/C4/checkins`), where the console's daily rule judges it against the person's own band.
 - Not stored: muscle activity and radiation.
-- The answer is 201 with `{"reading": ..., "alerts": [...]}`: the stored reading and any alert it raised. A 400 means a field was not a number or the crew id is unknown, with a JSON body `{"error": ..., "field": ...}`.
+- The answer is 201 with `{"reading": ..., "alerts": [...]}`: the stored reading and any alert it raised. A 400 means a field was not a finite number, the crew id is unknown, or `source` or `context` is not text of at most 12 characters, with a JSON body `{"error": ..., "field": ...}` naming the field.
 
 Test from a laptop first:
 

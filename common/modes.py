@@ -1,5 +1,5 @@
 """The four dial stops and the rule for who decides."""
-from common import lighttime, link
+from common import dataset, lighttime, link
 from common.models import utcnow
 
 # NASA's NEEMO 16 test (Rader et al. 2013): at about five minutes one way,
@@ -48,7 +48,7 @@ def describe(stop):
     """One dial stop with its working: the delay, the path it stands for, the round trip,
     and how long one leg takes on the demo clock."""
     fixed = stop in FIXED_DELAY_S
-    day = utcnow().strftime("%Y-%m-%d")      # the mission date: 14 November on the demo morning (spec D13)
+    day = dataset.mission_date(utcnow())     # the date the console shows: 14 November on the demo morning (D13)
     delay_s = FIXED_DELAY_S[stop] if fixed else lighttime.mars_seconds(day)
     link_up = STOPS[stop]["link_up"]
     mode = mode_for(delay_s, link_up)
