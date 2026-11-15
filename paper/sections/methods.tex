@@ -1,0 +1,87 @@
+\section{Methods}\label{sec:methods}
+% Outline row: methods.tex. Figure 3, the equations, Table 3, datasets with licences, protocol, statistics.
+
+\input{figures/pipeline}
+
+LIGHTTIME asks three questions of every reading, in a fixed order (Figure~\ref{fig:pipeline}): can it be trusted, is it out of range for long enough to matter, and if it is still in range but falling, how long is left. Each step can stop a false alarm before the next runs. We describe blood oxygen saturation (SpO$_2$), the one vital sign that both raises alarms and carries a trend. Table~\ref{tab:params} lists every setting with its value and source.
+
+\paragraph{Trust.}
+Let $x_t$ be the reading at second $t$ and $g_t$ the sensor's signal-quality flag. A reading is clean when
+\begin{equation}
+  c_t = \bigl[\, L \le x_t \le H \,\bigr] \wedge g_t ,
+\end{equation}
+with $L = \numPlausibleSpoTwoLow$ and $H = \numPlausibleSpoTwoHigh$ per cent; an SpO$_2$ outside that range is a dropout, not a measurement. A reading with a poor signal is never judged and raises a ``check your sensor'' notice instead. After any unclean reading, nothing can alarm for the next $N_\text{settle} = \numSettleN$ readings, because a probe that has just been put back on reads low for a few seconds.
+
+\paragraph{Bands held for a run of readings.}
+The band of a reading follows SpO$_2$ Scale~1 of the NEWS2 chart~\cite{rcp2017news2},
+\begin{equation}
+  b(x) = \begin{cases}
+    3 & x \le \numSpoTwoEmergency \\
+    2 & x \le \numSpoTwoWarning \\
+    1 & x \le \numSpoTwoCaution \\
+    0 & \text{otherwise,}
+  \end{cases}
+\end{equation}
+and the levels are named caution (1), warning (2) and emergency, or SOS (3). NEWS2 adds the scores of six physiological parameters before it decides a response; LIGHTTIME acts on the single sign, so its tiers are inspired by NEWS2, not a use of the score. A level counts only when it holds for the last $N_\text{sus} = \numSustainN$ readings from the same sensor, each clean:
+\begin{equation}
+  \ell_t = \max\bigl\{ s : c_{t-k} \wedge b(x_{t-k}) \ge s \ \text{for}\ k = 0, \dots, N_\text{sus}-1 \bigr\}.
+\end{equation}
+An SOS sends a report to Earth on its own. Two further rules shape the alarms in the running ship but play no part in the replay below: a number typed by a person is judged at once but can never rise above a warning, and after a person clears an alert, the same alert stays quiet for \numQuietS~s unless it gets worse.
+
+\paragraph{The person's usual range.}
+For each person the ship keeps the \numUsualLowPct st and \numUsualHighPct th percentiles of their clean sensor readings over the last \numUsualHours~hours, leaving out readings marked as exercise, once there are at least \numUsualMinReadings{} of them. The range is shown on the crew card and sent to Earth with every report. It raises no alarm.
+
+\paragraph{Time left.}
+A fixed band fires only once the number is already bad, so the third question looks ahead. Take the last $n \le W$ clean readings $x_1, \dots, x_n$, with $W = \numWindowN$. The slope is the Theil--Sen estimate, the median of the slopes between every pair of readings~\cite{theil1950,sen1968},
+\begin{equation}
+  \hat\beta = \operatorname*{median}_{i<j} \frac{x_j - x_i}{j - i},
+\end{equation}
+which for a full window is a median over \numWindowPairs{} pairs. We use it because a minority of wild readings cannot pull it far, where one bad point can ruin a least-squares line~\cite{rousseeuw1987}. Noise always has some slope, so we also measure how consistently the readings fall. With $N_-$ and $N_+$ the numbers of pairs whose slope is negative and positive,
+\begin{equation}
+  A = \frac{N_- - N_+}{n(n-1)/2},
+\end{equation}
+which is Kendall's rank correlation between time and reading with the sign reversed~\cite{kendall1938}. The current level $\tilde x$ is the median of the last \numNowMedianN{} readings and the red line is $r = \numSpoTwoEmergency$. The time left is
+\begin{equation}
+  T = \frac{\tilde x - r}{-\hat\beta}\quad\text{seconds},
+\end{equation}
+and the ship raises a caution with $T$ attached only when all of the following hold: $n \ge \numMinReadings$, $A \ge \numMinAgreement$, the fitted line falls at least \numMinDrop{} points across the window ($-\hat\beta\,(n-1) \ge \numMinDrop$), $\tilde x > r$, and $T \le \numHorizonS$~s. A slow drift that fails the last test is left to the fixed bands. The ship then makes the comparison $2\Delta t < T$ from Section~\ref{sec:system} and freezes it into the report, so Earth later sees what the ship knew when it spoke.
+
+\begin{table}[t]\centering\footnotesize
+\caption{Every setting LIGHTTIME uses, its value and where it comes from. ``LOO'' marks the three settings chosen by the leave-one-recording-out check.}\label{tab:params}
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}L{0.37\columnwidth}L{0.27\columnwidth}L{0.30\columnwidth}@{}}\toprule
+Setting & Value & Source \\ \midrule
+Plausible SpO$_2$ & \numPlausibleSpoTwoLow--\numPlausibleSpoTwoHigh\% & \texttt{limits.json} \\
+Settle after a dropout, $N_\text{settle}$ & \numSettleN{} readings & \texttt{limits.json} \\
+Hold for a band, $N_\text{sus}$ & \numSustainN{} readings & \texttt{limits.json} \\
+Caution, warning, SOS & $\le$\numSpoTwoCaution, $\le$\numSpoTwoWarning, $\le$\numSpoTwoEmergency\% & NEWS2~\cite{rcp2017news2}, via \texttt{limits.json} \\
+Quiet after a clear & \numQuietS~s & \texttt{limits.json} \\
+Window, $W$ & \numWindowN{} readings & \texttt{lookahead.py}, LOO \\
+Fewest readings for a trend & \numMinReadings & \texttt{lookahead.py} \\
+Smallest fall across the window & \numMinDrop{} points & \texttt{lookahead.py}, LOO \\
+Smallest agreement, $A$ & \numMinAgreement & \texttt{lookahead.py}, LOO \\
+Readings in the current level & \numNowMedianN & \texttt{lookahead.py} \\
+Furthest red line worth a warning & \numHorizonS~s & \texttt{lookahead.py} \\
+Usual range & \numUsualLowPct st--\numUsualHighPct th pct., \numUsualHours~h, $\ge$\numUsualMinReadings & \texttt{usual.py} \\
+Crew medical officer leads at & $\Delta t \ge \numCrewFirstAtS$~s & \texttt{modes.py}; our choice after~\cite{rader2013delay} \\
+Mars $\Delta t$, 14 Nov 2026 & \numMarsOneWayS~s & Horizons~\cite{giorginiHorizons}, \texttt{lighttime.py} \\
+Demo speed-up & $\times$\numSpeedup & \texttt{link.py} \\
+Heart-rate adviser limit (offline) & \numHrLimitBpm~bpm & learned, \texttt{hr\_normal.json} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Datasets.}
+Three public datasets were used, all recorded from volunteers on Earth. The University of Washington induced-hypoxemia data~\cite{hoffman2022oximetry} hold \numUwEvents{} recordings of healthy adults who breathed lowered-oxygen gas mixes in a clinical laboratory for \numUwMinutesMin{} to \numUwMinutesMax{} minutes each; we use the reference finger oximeter (Masimo Radical-7) column, one reading a second, unchanged (MIT licence). From the PhysioNet Apnea-ECG Database~\cite{penzel2000apnea,physionetApnea,goldberger2000physionet} we use the SpO$_2$ channel of two overnight records, the control night \texttt{c01r} and the sleep-apnoea night \texttt{a01r}, reduced to one reading a second by taking the first sample of each second; a value of zero marks the probe off (Open Data Commons Attribution License v1.0). PPG-DaLiA~\cite{reiss2019ppg,ppgDaliaData} gives wrist heart rate, one value a second, from \numHrPeople{} people going through sitting, desk work, walking, cycling, stairs and other daily activities (CC BY 4.0). None of the recordings contains a medical emergency.
+
+\paragraph{Replay protocol.}
+Each SpO$_2$ recording was played one reading a second through \texttt{play()} in \texttt{scripts/check\_spo2\_rules.py}. That loop calls the ship's own band function, settle and hold counts from \texttt{limits.json}, and the ship's own trend function (\texttt{lookahead.falling}); it replaces the ship's database with lists, so the alert bookkeeping is re-implemented rather than shared. The SOS time of a recording is the first second at which \numSustainN{} clean readings in a row sit in the emergency band. A trend warning is the first second at which the time-left gates pass; a later one counts as new only after a minute without one. In the running ship the trend rule raises its own caution only while no band is held; once a caution or warning band is held, the time left is shown beside that open alert instead. The replay counts a trend warning in either case, so for each one we also report whether a band was already held, and whether any trend warning came before the band rule's first caution. For each low-oxygen recording we report the last warning before the SOS, the lead (SOS time minus warning time) and the time left the ship stated at that warning. On the control night we count false SOS and trend warnings, first with every number believed, then with impossible numbers removed, then with the settle count added. On the apnoea night we count how often a trend warning came within \numApneaLookbackS~s before an SOS.
+
+\paragraph{Choosing the time-left settings.}
+The window, smallest fall and smallest agreement were chosen on the same \numUwEvents{} recordings, so we checked the choice by leaving each recording out in turn. The grid held \numGridSize{} settings: window \numGridWindowShort{} or \numGridWindowLong{} readings, smallest fall \numGridDropLow, \numMinDrop{} or \numGridDropHigh{} points, and smallest agreement \numGridAgreeLow, \numMinAgreement{} or \numGridAgreeHigh. A setting was allowed only if it raised at most \numGridMaxControlWarnings{} trend warnings on the control night. For each held-out recording, the allowed setting that warned first on the most of the other recordings, then gave the longest median lead, was applied to the held-out one. The control night was used in every round and is not held out.
+
+\paragraph{The offline heart-rate adviser.}
+NEWS2 heart-rate bands raised alarms on most of the healthy PPG-DaLiA volunteers during ordinary desk work (\texttt{data/ppg\_dalia/README.md}), so heart rate raises no alarm in LIGHTTIME. Instead we fitted one small statistical model offline. For person $p$ in activity $a$, the expected rate is the person's resting median plus an activity effect, the median over training people of their activity median minus their resting median. The limit is the \numHrLimitPercentile th percentile of $|\text{rate} - \text{expected}|$ over the training people, and a minute is flagged when \numHrSustainS{} seconds in a row lie beyond it. It was fitted \numHrPeople{} times, each time leaving one person out and testing on that person, against a gate fixed before the run of at most \numHrGateMinPerH{} flagged minute an hour on any held-out person. It is not connected to the ship.
+
+\paragraph{Statistics.}
+All results are descriptive: counts, medians and ranges, reported for every event. With \numUwEvents{} events, no hypothesis test or confidence interval would be informative, and none is given. Every number in this paper is written by \texttt{scripts/paper\_numbers.py} from the code and the recordings and read into the text as a macro.

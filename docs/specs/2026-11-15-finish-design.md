@@ -1,6 +1,6 @@
 # Finishing touches: what a judge sees and hears
 
-Sunday 15 November 2026. This spec covers the defects found by running the overnight work (`docs/reviews/2026-11-15-overnight-review.md`). It adds no feature. Two plans build it: `docs/plans/2026-11-15-backend-finish.md`, and for the console `docs/handoff/2026-11-15-console-finish-plan.md`, which the frontend owner runs (the console repository itself is not touched from here; its task list is `docs/handoff/2026-11-15-frontend-tasks.md`).
+Sunday 15 November 2026. This spec covers the defects found by running the overnight work (`docs/build-log/reviews/2026-11-15-overnight-review.md`). It adds no feature. Two plans build it: `docs/build-log/plans/2026-11-15-backend-finish.md`, and for the console `docs/build-log/handoff/2026-11-15-console-finish-plan.md`, which the frontend owner runs (the console repository itself is not touched from here; its task list is `docs/build-log/handoff/2026-11-15-frontend-tasks.md`).
 
 ## 1. Problem
 

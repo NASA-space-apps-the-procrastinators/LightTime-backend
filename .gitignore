@@ -8,3 +8,5 @@ instance/
 data/processed/*/packets.csv
 data/processed/reports/*.log
 data/scripts/__pycache__/
+# Meeting records and team files: private, never commit
+docs/build-log/extra/

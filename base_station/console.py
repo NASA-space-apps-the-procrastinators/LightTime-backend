@@ -133,11 +133,13 @@ def history(crew, metric, days):
 
 @bp.get("/crew")
 def crew_board():
+    """All four crew: a full record for those the viewer may read, a name card for the rest."""
     return jsonify([access.crew_view(crew_dict(crew)) for crew in Crew.query.order_by(Crew.id)])
 
 
 @bp.get("/crew/<ref>")
 def one_crew(ref):
+    """One crew member's full record, or 403 if the viewer may not read it."""
     crew = crew_or_404(ref)
     if not access.may_read(crew.code):
         return access.refuse()
@@ -146,6 +148,7 @@ def one_crew(ref):
 
 @bp.get("/crew/<ref>/history")
 def crew_history(ref):
+    """Up to 30 days of one daily metric for one person, with their band; ?metric= is required."""
     crew = crew_or_404(ref)
     if not access.may_read(crew.code):
         return access.refuse()
@@ -158,6 +161,7 @@ def crew_history(ref):
 
 @bp.get("/thresholds")
 def thresholds():
+    """The printed console rules: for each daily metric and cabin CO2, the unit, watch and alert values and the source."""
     return jsonify(scoring.rule_text())
 
 
@@ -175,6 +179,7 @@ def _cabin():
 
 @bp.get("/station")
 def station():
+    """The cabin now: CO2, oxygen, pressure, temperature, humidity and today's dose, each marked simulated or not."""
     now = iso(utcnow().replace(microsecond=0))      # the rows are whole seconds: "06:29:00Z" sorts after "06:29:00.3Z"
     row = next((r for r in reversed(_cabin()) if r["ts"] <= now), _cabin()[0])
     real = dataset.listed(row["real_fields"])
@@ -199,6 +204,7 @@ def station():
 
 @bp.get("/space-weather")
 def space_weather():
+    """The simulated solar particle event in progress, or a calm reading."""
     now = iso(utcnow().replace(microsecond=0))
     event = next((e for e in dataset.table("anomalous/space_weather_events")
                   if e["event_time"] <= now <= e["end_time"]), None)
@@ -230,6 +236,7 @@ def streak(day):
 
 @bp.get("/checkins/today")
 def checkins_today():
+    """Who has checked in today and who is due, the streak, and the next badge."""
     day, crew = today(), Crew.query.order_by(Crew.id).all()
     done = {crew_id for (crew_id,) in db.session.query(Checkin.crew_id).filter_by(day=day)}
     days = streak(day)
@@ -240,6 +247,7 @@ def checkins_today():
 
 @bp.post("/crew/<ref>/checkins")
 def post_checkin(ref):
+    """Save today's check-in for one person (mood, sleep, symptoms, optional cuff and reaction time)."""
     crew, sent = crew_or_404(ref), body()
     symptoms, note = sent.get("symptoms", []), sent.get("note") or ""
     if not _number(sent.get("mood"), 1, 5, whole=True):
@@ -363,6 +371,7 @@ def accept_plan(alert_id):
 
 @bp.get("/reminders")
 def reminders():
+    """Reminders, soonest first; ?crew=C1 for one person, ?open=1 for those not done."""
     query = Reminder.query
     if request.args.get("crew"):
         query = query.filter_by(crew_id=crew_or_404(request.args["crew"]).id)
@@ -373,6 +382,7 @@ def reminders():
 
 @bp.post("/reminders/<ref>/done")
 def reminder_done(ref):
+    """Mark one reminder done; a second press changes nothing."""
     number = row_number(ref, "R")
     reminder = db.session.get(Reminder, number) if number is not None else None
     if reminder is None:

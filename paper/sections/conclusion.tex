@@ -1,0 +1,18 @@
+\section{Conclusion}\label{sec:conclusion}
+% Outline row: conclusion.tex. What was shown, at its true size, and what would test it properly.
+
+LIGHT-TIME makes the one-way light time an input to crew health monitoring. The ship computes who must act, Earth or the crew, from the light time for the mission date, and attaches to each falling-trend warning a time left that it compares with the round trip. Replayed through the same rules, \numUwEvents{} public recordings of induced low oxygen were all warned before the SOS, by a median of \numUwMedianLeadS~s, and settings chosen without each recording did as well; on a healthy night the trust rules took false SOS from \numControlFalseSosRaw{} to \numControlFalseSosSettle. Those numbers come from a handful of healthy volunteers on Earth. They show that the parts work together as designed. They do not show that the system would help a crew.
+
+Three steps would test it properly. The first is to run it with a real smart shirt in an analog habitat, with the delay imposed, so the sensors are noisy and the people are busy. The second is an emergency unlock that lets the crew member helping a casualty see that person's full record, logged and reviewed afterwards, since the role-based views now hide it. The third is a study with crews in training, comparing how they handle a falling reading with and without the deadline sentence.
+
+\section*{Availability}
+The backend, with the rules, the replay scripts and the tests, is at \url{https://github.com/NASA-space-apps-the-procrastinators/LightTime-backend} (this paper describes commit \texttt{0fa4441} of \texttt{main}, with the paper scripts added for this draft); the consoles are at \url{https://github.com/NASA-space-apps-the-procrastinators/LightTime-frontend}. The repositories are to be made public before this paper is posted. \texttt{python scripts/paper\_numbers.py} writes every number in the text and Table~\ref{tab:events}, and \texttt{python scripts/paper\_figures.py} draws Figures~\ref{fig:event} and~\ref{fig:evidence}. The datasets are available from their publishers~\cite{hoffman2022oximetry,physionetApnea,ppgDaliaData}.
+
+\section*{Use of AI tools}
+Claude and Claude Code (Anthropic) were used throughout the project: to plan and write much of the backend code and its tests, to design the time-left rule's settings search, to write the documentation, and to draft this paper. The tools did not decide what the paper claims. Every number in the text is written by a script from the code and the recordings, the tests run against the code, and every reference was checked against its DOI record or the source page on 15 November 2026. Each use is logged in \texttt{AI\_USE.md} in the backend repository. Not every author has yet read this draft.
+
+\section*{Acknowledgements}
+We thank the NASA Space Apps Challenge organisers, and the authors of the three public datasets for releasing them. Advisers who commented on the hackathon build will be named here only with their permission.
+
+\section*{Author contributions}
+To be agreed by the team before submission.

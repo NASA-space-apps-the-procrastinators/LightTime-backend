@@ -1,6 +1,6 @@
 # Final fix: design
 
-Date: 15 November 2026, written 11:30 for a 15:30 pitch. Plan: `docs/plans/2026-11-15-final-fix.md`.
+Date: 15 November 2026, written 11:30 for a 15:30 pitch. Plan: `docs/build-log/plans/2026-11-15-final-fix.md`.
 
 ## What we found on the hosted site
 

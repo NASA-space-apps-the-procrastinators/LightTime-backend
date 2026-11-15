@@ -1,8 +1,8 @@
 # The console's data: what the ship serves from the generated month
 
-Date: 14 November 2026, evening. Plan: `docs/plans/2026-11-14-console-contract.md`. Inputs: the frontend owner's API contract (38 endpoints, 14 November), the generated dataset (commit `a25791f`, reviewed in `docs/reviews/2026-11-14-dataset-review.md`), the console's code on its `feat/alert-loop-and-log` branch, and the backend on `main` at `75d6c5f`.
+Date: 14 November 2026, evening. Plan: `docs/build-log/plans/2026-11-14-console-contract.md`. Inputs: the frontend owner's API contract (38 endpoints, 14 November), the generated dataset (commit `a25791f`, reviewed in `docs/build-log/reviews/2026-11-14-dataset-review.md`), the console's code on its `feat/alert-loop-and-log` branch, and the backend on `main` at `75d6c5f`.
 
-This spec replaces sections 4 and 5 of `docs/specs/2026-11-14-console-link-design.md` and Tasks 0, 2, 3 and 4 of `docs/plans/2026-11-14-connect-everything.md`. The ship AI is unchanged except where `docs/specs/2026-11-14-lighttime-ai-design.md` says so.
+This spec replaces sections 4 and 5 of `docs/specs/2026-11-14-console-link-design.md` and Tasks 0, 2, 3 and 4 of `docs/build-log/plans/2026-11-14-connect-everything.md`. The ship AI is unchanged except where `docs/specs/2026-11-14-lighttime-ai-design.md` says so.
 
 ## 1. Problem
 

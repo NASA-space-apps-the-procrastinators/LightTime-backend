@@ -1,0 +1,15 @@
+sequenceDiagram
+    participant S as Suit, story or vitals feed
+    participant R as POST /api/base/readings
+    participant D as Database
+    participant L as LIGHTTIME rules
+    participant K as Delayed link
+    S->>R: one reading
+    R->>R: refuse bad input (400): unknown crew, not a number, no vital, heart rate outside 20 to 250
+    R->>D: store the reading (oxygen outside 50 to 100 is stored as a poor signal)
+    R->>L: trust, band held for 5 clean readings, time left
+    L-->>D: open or raise an alert
+    L-->>K: an SOS or a falling-trend warning sends its report now
+    L-->>K: an alert Earth already has sends an update
+    R-->>S: 201 with the reading, the alerts raised, the fields ignored
+    Note over K: Earth sees a message only after deliver_at. Behind the Sun it waits in the queue
