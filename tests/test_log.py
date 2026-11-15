@@ -49,3 +49,30 @@ def test_stream_health_gives_each_sensors_lowest_signal(morning):
     assert [sensor["source"] for sensor in health["sensors"]] == SENSORS
     assert all(sensor["state"] == "OK" and 0.6 <= sensor["lowest_signal_quality"] <= 1
                for sensor in health["sensors"])
+
+
+def test_the_app_reads_the_minute_file_once_when_it_starts(monkeypatch):
+    from app import create_app
+    from common import dataset
+    from tests.conftest import _offline
+
+    _offline(monkeypatch)
+    dataset.last_minutes.cache_clear()
+    create_app("sqlite:///:memory:", morning=True)
+    assert dataset.last_minutes.cache_info().currsize == 1    # the first /packets does not read the file
+    models.set_clock(None)
+
+
+def test_a_missing_minute_file_does_not_stop_the_app_starting(monkeypatch):
+    from app import create_app
+    from common import dataset
+    from tests.conftest import _offline
+
+    def missing(hours=24):
+        raise FileNotFoundError("vitals_1min.csv")
+
+    _offline(monkeypatch)
+    monkeypatch.setattr(dataset, "last_minutes", missing)
+    app = create_app("sqlite:///:memory:", morning=True)
+    assert app.test_client().get("/api/base/health").status_code == 200
+    models.set_clock(None)
