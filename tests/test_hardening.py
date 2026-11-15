@@ -38,7 +38,7 @@ def test_a_step_that_is_not_on_the_checklist_is_refused(client):
 def test_resolving_twice_tells_earth_once(client):
     alert = sos(client)
     first = client.post(f"/api/base/alerts/{alert['id']}/clear", json={"by": None}).get_json()
-    second = client.post(f"/api/base/alerts/{alert['id']}/clear", json={"by": "Lindqvist"}).get_json()
+    second = client.post(f"/api/base/alerts/{alert['id']}/clear", json={"by": "Linda Rodenburg"}).get_json()
     assert first["cleared_by"] == second["cleared_by"] == "crew" and first["cleared_at"] == second["cleared_at"]
     events = [m["payload"].get("event") for m in client.get("/api/base/outbox").get_json()]
     assert events.count("resolved") == 1

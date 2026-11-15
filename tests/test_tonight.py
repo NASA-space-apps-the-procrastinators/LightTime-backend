@@ -74,7 +74,7 @@ def test_a_manual_sos_says_no_rule_was_involved(client):
 def test_resolving_keeps_the_crews_own_words_and_tells_earth(client):
     alert = sos(client)
     note = "Mask on. Back to 97 in two minutes."
-    done = client.post(f"/api/base/alerts/{alert['id']}/clear", json={"by": "Lindqvist", "note": note}).get_json()
+    done = client.post(f"/api/base/alerts/{alert['id']}/clear", json={"by": "Linda Rodenburg", "note": note}).get_json()
     assert done["cleared_note"] == note
     resolved = [m for m in client.get("/api/base/outbox").get_json() if m["payload"].get("event") == "resolved"]
     assert resolved[0]["payload"]["note"] == note

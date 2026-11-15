@@ -74,8 +74,8 @@ def test_ticking_a_step_tells_earth(client):
 def test_a_person_clears_the_alert_and_the_tile_goes_back(client):
     alert = collapse(client)
     assert client.get("/api/base/crew").get_json()[0]["level"] == "emergency"
-    cleared = client.post(f"/api/base/alerts/{alert['id']}/clear", json={"by": "Lindqvist"}).get_json()
-    assert cleared["cleared_by"] == "Lindqvist"
+    cleared = client.post(f"/api/base/alerts/{alert['id']}/clear", json={"by": "Linda Rodenburg"}).get_json()
+    assert cleared["cleared_by"] == "Linda Rodenburg"
     assert client.get("/api/base/alerts?open=1").get_json() == []
     assert client.get("/api/base/crew").get_json()[0]["level"] == "nominal"
 
@@ -83,7 +83,7 @@ def test_a_person_clears_the_alert_and_the_tile_goes_back(client):
 def test_manual_sos_sends_a_report(client):
     alert = client.post("/api/base/sos", json={"crew_id": 2}).get_json()
     assert alert["level"] == "emergency" and alert["auto"] is False
-    assert client.get("/api/base/outbox").get_json()[0]["payload"]["crew"] == "Lindqvist"
+    assert client.get("/api/base/outbox").get_json()[0]["payload"]["crew"] == "Linda Rodenburg"
 
 
 def test_reset_gives_a_clean_run(client):
@@ -98,8 +98,8 @@ def test_reset_gives_a_clean_run(client):
 def test_acknowledging_tells_earth_and_shows_on_the_round_trip(client):
     alert = collapse(client)
     assert alert["timeline"]["sent_at"] is not None and alert["timeline"]["acknowledged_at"] is None
-    acked = client.post(f"/api/base/alerts/{alert['id']}/ack", json={"by": "Lindqvist"}).get_json()
-    assert acked["acknowledged_by"] == "Lindqvist" and acked["timeline"]["acknowledged_at"] is not None
+    acked = client.post(f"/api/base/alerts/{alert['id']}/ack", json={"by": "Linda Rodenburg"}).get_json()
+    assert acked["acknowledged_by"] == "Linda Rodenburg" and acked["timeline"]["acknowledged_at"] is not None
     events = [m["payload"].get("event") for m in client.get("/api/base/outbox").get_json()]
     assert "acknowledged" in events
 
@@ -108,7 +108,7 @@ def test_a_warning_goes_to_earth_only_when_the_crew_sends_it(client):
     posted = client.post("/api/base/readings", json={"crew_id": 2, "source": "typed", "bp_sys": 88})
     alert = posted.get_json()["alerts"][0]
     assert alert["level"] == "warning" and alert["unit"] == "mmHg" and "NEWS2" in alert["source"]
-    client.post(f"/api/base/alerts/{alert['id']}/ack", json={"by": "Lindqvist"})
+    client.post(f"/api/base/alerts/{alert['id']}/ack", json={"by": "Linda Rodenburg"})
     assert client.get("/api/base/outbox").get_json() == []
     client.post(f"/api/base/alerts/{alert['id']}/send")
     client.post(f"/api/base/alerts/{alert['id']}/send")
