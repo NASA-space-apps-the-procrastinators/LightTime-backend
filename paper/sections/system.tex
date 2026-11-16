@@ -3,23 +3,66 @@
 
 \input{figures/architecture}
 
-LIGHT-TIME has three layers (Figure~\ref{fig:architecture}). A suit sends one reading a second for each crew member. The ship computer runs LIGHTTIME, the ship's rules and statistics, on every reading, keeps a recorder of the last \numRecorderHours~hours, and decides who must act. A delayed link carries reports to the flight surgeon on Earth and carries the replies back. We assume the crew wear a garment like the CSA Bio-Monitor, a smart shirt that the Canadian Space Agency flies on the International Space Station and that records heart activity, blood pressure, breathing, skin temperature, blood oxygen saturation and activity, including during sleep and exercise~\cite{csaBioMonitor}. We assume they wear it for the whole mission. That assumption matters for privacy, and we return to it in Section~\ref{sec:discussion}. The hackathon build used a hobby pulse oximeter board as a stand-in sensor; it is not part of the evaluation.
+LIGHT-TIME has three layers (Figure~\ref{fig:architecture}). A suit sends one reading a second for each crew member. The ship computer runs LIGHTTIME, the ship's rules and statistics, on every reading, keeps a recorder of the last \numRecorderHours~hours, and decides who must act. A delayed link carries reports to the flight surgeon on Earth and carries the replies back. We assume the crew wear a garment like the CSA Bio-Monitor, a smart shirt that the Canadian Space Agency flies on the International Space Station and that records heart activity, blood pressure, breathing, skin temperature, blood oxygen saturation and activity, including during sleep and exercise~\cite{csaBioMonitor}. We assume they wear it for the whole mission. That assumption matters for privacy, and we return to it in Section~\ref{sec:discussion}.
+
+\paragraph{Suit hardware (design).}
+The team designed its own sensor suit, a body-fitting skinsuit worn inside the spacecraft (Table~\ref{tab:suit}). An ESP32 DevKitC V4 board (ESP32-WROOM-32E) sits in a removable module at the front of the waist belt. The three I$^2$C sensors share GPIO21 (SDA) and GPIO22 (SCL) at 3.3~V with 4.7~k$\Omega$ pull-up resistors, and the board forwards timestamped records to the base station over Wi-Fi. Two readings need care: the MAX30205 measures skin temperature, which can differ from core body temperature, and the wearer's body shields the dosimeter at the back of the belt, so its placement would need calibration. The suit is a design and has not been built. The DevKitC is a development reference, and a flight version would need qualified hardware. The current ship software uses none of the EMG or motion data; those sensors are in the design for future rules. The hackathon build used a hobby pulse oximeter board as a stand-in sensor, the suit readings in the demo are simulated, and neither is part of the evaluation.
+
+\begin{table*}[t]\centering\footnotesize
+\caption{The suit as designed, not built. All wired sensors connect to the ESP32 through flexible wiring channels in the skinsuit. The current ship software reads none of the EMG or motion channels.}\label{tab:suit}
+\begin{tabular}{@{}L{0.22\textwidth}L{0.25\textwidth}L{0.24\textwidth}L{0.21\textwidth}@{}}\toprule
+Sensor & Measures & Interface to the ESP32 & Placement \\ \midrule
+ESP32 DevKitC V4 (ESP32-WROOM-32E) & controller; forwards timestamped records over Wi-Fi & hub: I$^2$C on GPIO21 (SDA) and GPIO22 (SCL), 3.3~V, 4.7~k$\Omega$ pull-ups & removable module, front of the waist belt \\
+DFRobot Gravity SEN0518 (MAX30102) & heart rate (beats a minute) and SpO$_2$ (\%) & I$^2$C & fingertip contact \\
+MAX30205 & skin temperature ($^\circ$C) & I$^2$C & upper chest \\
+GY-521 (MPU6050) & 3-axis acceleration and 3-axis rotation & I$^2$C & torso \\
+Two MyoWare 2.0 EMG sensors~\cite{myowareSpecs} & muscle activation (EMG envelope) & analog, GPIO34 and GPIO35 & dominant-arm biceps; quadriceps \\
+SPACEDOS02 dosimeter~\cite{spacedos02} & radiation measurement records; dose only after calibration & UART2 on GPIO16 and GPIO17; own battery & back of the waist belt \\
+Upper-arm blood-pressure cuff & systolic and diastolic pressure (mmHg) & Bluetooth Low Energy & upper arm, at scheduled check-ins, not continuous \\
+\bottomrule
+\end{tabular}
+\end{table*}
 
 \paragraph{Light time and the link.}
-The one-way light time is the path length divided by the speed of light, $\Delta t = d/c$, with $c = \numSpeedOfLightKmS$~km\,s$^{-1}$ exact by definition~\cite{bipmSI}. For Mars the ship asks NASA JPL Horizons for the one-way light time from the centre of the Earth to Mars on the mission date~\cite{giorginiHorizons}. On our mission date, 14 November 2026, Horizons gives $\Delta t = \numMarsOneWayS$~s, about 11 minutes, which corresponds to \numMarsDistanceMillionKm~million km. The earliest possible reply to a report is the round trip, $2\Delta t = \numMarsRoundTripS$~s, about 22 minutes. If Horizons cannot be reached, the ship falls back on values read from it the day before and labels them with that date. The two nearer stops of the demo use fixed delays: \numStationOneWayS~s for a station in low Earth orbit and \numMoonOneWayS~s for the Moon. Over a real Mars mission the one-way light time moves between about 3 and 22 minutes as the planets move~\cite{nssdcMars,mcbrayer2022delay}.
+The one-way light time is the time a signal needs to cover the distance between Earth and the ship:
+\begin{equation}\label{eq:lighttime}
+  \Delta t = \frac{d}{c},
+\end{equation}
+where $d$ is the path length in km and $c = \numSpeedOfLightKmS$~km\,s$^{-1}$ is the speed of light, exact by definition~\cite{bipmSI}, so $\Delta t$ is in seconds. For Mars the ship does not compute $d$ itself. It asks NASA JPL Horizons for the one-way light time from the centre of the Earth to Mars on the mission date~\cite{giorginiHorizons}. On our mission date, 14 November 2026, Horizons gives $\Delta t = \numMarsOneWayS$~s, about 11 minutes; multiplying back by $c$ gives $d = \numMarsDistanceMillionKm$~million km. A report and its answer each cross the link once, so the earliest possible reply comes one round trip after the report is sent:
+\begin{equation}\label{eq:roundtrip}
+  R = 2\,\Delta t ,
+\end{equation}
+which on our date is $R = \numMarsRoundTripS$~s, about 22 minutes. If Horizons cannot be reached, the ship falls back on values read from it the day before and labels them with that date. The two nearer stops of the demo use fixed delays: $\Delta t = \numStationOneWayS$~s for a station in low Earth orbit and $\Delta t = \numMoonOneWayS$~s for the Moon. Over a real Mars mission the one-way light time moves between about 3 and 22 minutes as the planets move~\cite{nssdcMars,mcbrayer2022delay}.
 
-Every message between ship and Earth is a row in one table with the time it was sent, its delay and the time it lands. The other side cannot read a message until its landing time has passed, so the Earth console shows only what the link has delivered. Each message also carries the earliest time a reply could arrive, $2\Delta t$ after it was sent. The Earth side of the code may read only that table and the position of the distance dial; a test fails if it imports any of the ship's crew, reading, alert, check-in or reminder tables. When there is no link, messages wait in a queue and leave by priority when it returns, reports first. Nobody watching a demo can wait 11 minutes, so a leg of a minute or more plays \numSpeedup~times faster: the Mars leg plays in \numMarsPlaysAsS~s. The stored delay keeps its true value, and a message in flight reports its time to landing in mission seconds,
-\begin{equation}
+Every message between ship and Earth is a row in one table with the time it was sent, its delay and the time it lands. The other side cannot read a message until its landing time has passed, so the Earth console shows only what the link has delivered. Each message also carries the earliest time a reply could arrive, $R$ after it was sent. The Earth side of the code may read only that table and the position of the distance dial; a test fails if it imports any of the ship's crew, reading, alert, check-in or reminder tables. When there is no link, messages wait in a queue and leave by priority when it returns, reports first.
+
+Nobody watching a demo can wait 11 minutes, so a leg of a minute or more plays \numSpeedup~times faster: the Mars leg plays in \numMarsPlaysAsS~s of wall-clock time. The stored delay keeps its true value. While a message is in flight, the screens show its time to landing in mission seconds,
+\begin{equation}\label{eq:eta}
   \text{eta} = \Delta t \,\frac{t_\text{lands} - t_\text{now}}{t_\text{lands} - t_\text{sent}},
 \end{equation}
-so the screens never show the shortened figure as the real one.
+where $t_\text{sent}$, $t_\text{lands}$ and $t_\text{now}$ are the wall-clock times, in seconds, at which the message was sent, at which it lands and at the moment of display. The fraction is the share of the shortened flight still to go, and multiplying it by the true $\Delta t$ turns it back into mission seconds, so the screens never show the shortened figure as the real one.
 
 \paragraph{Who decides.}
-The mode rule is three lines in \texttt{common/modes.py}. With no link, the crew act alone and everything is kept for Earth. With a link and $\Delta t \ge \numCrewFirstAtS$~s, the crew medical officer (CMO) on board leads and Earth reviews afterwards. Below that, the flight surgeon on Earth directs care and the ship drafts the report (Figure~\ref{fig:authority}). The switch at \numCrewFirstAtS~s is our design choice and not a measured threshold. It follows NASA's NEEMO~16 analog mission, where a simulated medical emergency was run under a five-minute delay; the authors report that the crew member's safety was compromised by the delay between crew and flight surgeon, and that delays of five minutes or more affected crew performance much as having no communication did~\cite{rader2013delay}. That finding comes from one analog mission, and the report does not set a threshold, so the constant can be moved in one line if better evidence arrives. Moving authority to the crew has a cost. In a spacecraft simulator, crews managing medical events without a flight surgeon on the line performed worse clinically and completed fewer checklist tasks than crews with one, and the authors concluded that checklists are necessary but not sufficient~\cite{yule2023crew}. LIGHT-TIME pairs the switch with a checklist, the reasons for each alert, and a report that answers in advance the questions a flight surgeon would ask first.
+The mode rule is three lines in \texttt{common/modes.py}. Written out, with $\tau = \numCrewFirstAtS$~s the switch point,
+\begin{equation}\label{eq:mode}
+  \text{mode} = \begin{cases}
+    \text{crew alone} & \text{if there is no link,} \\
+    \text{CMO leads} & \text{if } \Delta t \ge \tau, \\
+    \text{flight surgeon directs} & \text{otherwise.}
+  \end{cases}
+\end{equation}
+The rows are read from the top. With no link, the crew act alone and everything is kept for Earth. With a link and a one-way delay of at least $\tau$, the CMO on board leads and Earth reviews afterwards. Below $\tau$, the flight surgeon on Earth directs care and the ship drafts the report. The Moon and the station fall in the last row, and Mars on our date in the second (Figure~\ref{fig:authority}). The switch at $\tau = \numCrewFirstAtS$~s is our design choice and not a measured threshold. It follows NASA's NEEMO~16 analog mission, where a simulated medical emergency was run under a five-minute delay; the authors report that the crew member's safety was compromised by the delay between crew and flight surgeon, and that delays of five minutes or more affected crew performance much as having no communication did~\cite{rader2013delay}. That finding comes from one analog mission, and the report does not set a threshold, so the constant can be moved in one line if better evidence arrives.
+
+Moving authority to the crew has a cost. In a spacecraft simulator, crews managing medical events without a flight surgeon on the line performed worse clinically and completed fewer checklist tasks than crews with one, and the authors concluded that checklists are necessary but not sufficient~\cite{yule2023crew}. LIGHT-TIME pairs the switch with a checklist, the reasons for each alert, and a report that answers in advance the questions a flight surgeon would ask first.
 
 \input{figures/authority}
 
-The same arithmetic decides whether Earth can help with a falling reading. If the time left before the red line is $T$ (Section~\ref{sec:methods}), Earth can answer in time only if $2\Delta t < T$. At Mars on our date the round trip is \numMarsRoundTripS~s, longer than any time left the ship will state, because the ship stays quiet when the red line is more than \numHorizonS~s away. So at Mars the ship tells the CMO, in one sentence, that Earth's answer would come too late, and the report still leaves for Earth.
+\paragraph{Can Earth answer first?}
+The same arithmetic decides whether Earth can help with a falling reading. Let $T$ be the time left, in seconds, before the reading reaches its red line (Section~\ref{sec:methods}, Equation~\ref{eq:timeleft}). An answer from Earth arrives at the earliest $R$ seconds after the report leaves, so Earth can answer before the red line only if
+\begin{equation}\label{eq:earthfirst}
+  R = 2\,\Delta t < T .
+\end{equation}
+The ship makes this comparison in three steps: it computes $T$ from the readings, takes $R$ from the light time for the current stop, and writes the result of $R < T$ into the warning. At Mars on our date $R = \numMarsRoundTripS$~s. The ship states a time left only when $T \le \numHorizonS$~s, because it stays quiet when the red line is further away than that, so every stated $T$ is shorter than $R$ and the comparison always fails. The ship therefore tells the CMO, in one sentence, that Earth's answer would come too late, and the report still leaves for Earth.
 
 \paragraph{Role-based views.}
 Watching every reading puts one person's health record in front of the whole crew unless the screens are shaped. The crew console says who is looking in a request header. With no viewer named, the medical station sees every record. The CMO sees every record. Any other crew member sees their own record in full, a name card for each crewmate, and a short notice if a crewmate has an SOS, without the readings behind it. These are role-based views and not authentication: nothing in the system proves who the viewer is, and anyone who can send requests to the ship can name any viewer. They show the intended rule for who reads what; they do not enforce it.

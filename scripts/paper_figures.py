@@ -27,8 +27,10 @@ from scripts.check_spo2_rules import RED_LINE, SETTLE, one_hz, play  # noqa: E40
 from scripts.paper_numbers import volunteer                          # noqa: E402
 
 BLUE, ORANGE, VERM, GREEN, GREY = "#0072B2", "#E69F00", "#D55E00", "#009E73", "#666666"
-plt.rcParams.update({"font.family": "sans-serif", "font.size": 9, "axes.spines.top": False,
-                     "axes.spines.right": False, "savefig.bbox": "tight"})
+# Drawn at the size they are printed in the paper (one column is about 3.4 in), so 7 pt here is 7 pt on paper.
+plt.rcParams.update({"font.family": "sans-serif", "font.size": 7, "axes.titlesize": 7, "axes.labelsize": 7,
+                     "xtick.labelsize": 6.5, "ytick.labelsize": 6.5, "legend.fontsize": 6.5,
+                     "axes.spines.top": False, "axes.spines.right": False, "savefig.bbox": "tight"})
 WORKED = [97.0, 96.8, 96.5, 96.4, 96.0]          # the readings used in the concept document, section 5.7
 OUT = [ROOT / "paper" / "figures", ROOT / "docs" / "figures" / "concept"]
 
@@ -70,37 +72,39 @@ def event(subject=100001):
     at = [t for t, _ in warnings if t < sos[0]][-1]
     window = values[max(0, at - lookahead.WINDOW + 1):at + 1]
     look = lookahead.falling(window, RED_LINE)
-    fig, ax = plt.subplots(figsize=(6.6, 2.4))
-    ax.plot(range(len(values)), values, color=BLUE, lw=1, label="blood oxygen, 1 reading a second")
+    fig, ax = plt.subplots(figsize=(3.4, 1.8))
+    ax.plot(range(len(values)), values, color=BLUE, lw=1, label="SpO$_2$, one reading a second")
     ax.axhline(RED_LINE, color=VERM, ls="--", lw=1, label=f"red line ({RED_LINE}%)")
     start, slope = at - len(window) + 1, look["per_min"] / 60      # the fitted line passes through (now, at)
     xs = [start, at + look["eta_s"]]
     ax.plot(xs, [look["now"] + slope * (x - at) for x in xs], color=ORANGE, lw=1.5,
             label=f"line fitted at the warning: {look['eta_s']} s left")
-    ax.axvline(at, color=ORANGE, lw=1)
-    ax.axvline(sos[0], color=VERM, lw=1)
-    ax.text(at, ax.get_ylim()[1], " warning", color=ORANGE, va="top", fontsize=7)
-    ax.text(sos[0], ax.get_ylim()[1], " SOS", color=VERM, va="top", fontsize=7)
-    ax.set(xlabel="seconds into the recording", ylabel="%", xlim=(max(0, at - 240), sos[0] + 120))
-    ax.legend(frameon=False, fontsize=7, loc="lower left")
+    ax.axvline(at, ymin=0.4, color=ORANGE, lw=1)        # stop above the legend so no label is crossed
+    ax.axvline(sos[0], ymin=0.4, color=VERM, lw=1)
+    ax.text(at, ax.get_ylim()[1], " warning", color=ORANGE, va="top")
+    ax.text(sos[0], ax.get_ylim()[1], " SOS", color=VERM, va="top")
+    ax.set(xlabel="time into the recording (s)", ylabel="SpO$_2$ (%)", xlim=(max(0, at - 240), sos[0] + 120))
+    ax.legend(frameon=False, loc="lower left", handlelength=1.5)
     save(fig, "timeleft_event")
     return {"subject": subject, "warning_at": at, "sos_at": sos[0], "eta_s": look["eta_s"]}
 
 
 def leads_and_false():
     numbers = json.loads((ROOT / "docs" / "generated" / "numbers.json").read_text(encoding="utf-8"))
-    fig, ax = plt.subplots(figsize=(3.2, 2.4))
-    ax.bar(range(1, 7), numbers["uw_leads_s"], color=BLUE)
+    fig, ax = plt.subplots(figsize=(1.45, 1.6))
+    ax.bar(range(1, len(numbers["uw_leads_s"]) + 1), numbers["uw_leads_s"], color=BLUE)
     ax.axhline(numbers["uw_median_lead_s"], color=GREY, ls=":", lw=1)
-    ax.set(xlabel="recording (sorted)", ylabel="warned ahead of SOS (s)", title="Six low-oxygen recordings")
+    ax.set_xticks(range(1, len(numbers["uw_leads_s"]) + 1))
+    ax.set(xlabel="recording (sorted)", ylabel="warned ahead of SOS (s)", title="Low-oxygen recordings")
     save(fig, "lead_times")
-    stages = ["all\nbelieved", "impossible\nremoved", f"+{SETTLE} s\nsettle"]
+    stages = ["none", "range\ncheck", f"+ {SETTLE} s\nsettle"]
     counts = [numbers["control_false_sos_raw"], numbers["control_false_sos_reject"], numbers["control_false_sos_settle"]]
-    fig, ax = plt.subplots(figsize=(3.2, 2.4))
+    fig, ax = plt.subplots(figsize=(1.45, 1.6))
     ax.bar(stages, counts, color=[GREY, ORANGE, GREEN])
     for x, c in enumerate(counts):
         ax.text(x, c, str(c), ha="center", va="bottom")
-    ax.set(ylabel=f"false SOS in {numbers['control_hours']} h", title="A healthy night")
+    ax.set_ylim(0, max(counts) * 1.3)
+    ax.set(xlabel="trust rules applied", ylabel=f"false SOS in {numbers['control_hours']} h", title="A healthy night")
     save(fig, "false_sos")
     return {"leads": numbers["uw_leads_s"], "false": counts}
 

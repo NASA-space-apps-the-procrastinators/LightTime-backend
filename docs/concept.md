@@ -1,12 +1,37 @@
-# LIGHT-TIME: the concept
+---
+title: "LIGHT-TIME: the concept"
+author:
+  - |
+    Oreoluwa Akinnukawe\
+    oakinnuk@lakeheadu.ca
+  - |
+    Youssef Ali\
+    ysali@lakeheadu.ca
+  - |
+    Tirthesh Jani\
+    tjani@lakeheadu.ca
+  - |
+    Rebecca Mazzocco\
+    remazzoc@lakeheadu.ca
+  - |
+    Damola Olutoke\
+    dolutoke@lakeheadu.ca
+  - |
+    Kyler Visser\
+    krvisser@lakeheadu.ca
+date: |
+  Lakehead University, Ontario, Canada\
+  Team LIGHT-TIME, NASA Space Apps Challenge 2026, Orillia, Ontario\
+  15 November 2026. Authors are listed alphabetically by surname.
+---
 
-What LIGHT-TIME is, why it exists, the words it uses and the math it does, with each number traced to the code. Written for a hackathon judge, a mentor or a new team member who knows high-school algebra and nothing about space medicine. Version of 15 November 2026.
+This document explains what LIGHT-TIME is, why we built it, the words it uses and the math it does, and traces each number to the code. It is written for a reader who knows high-school algebra and nothing about space medicine: a hackathon judge, a mentor or a new team member.
 
-There are three ways in: the two-minute summary below, the story of one emergency in section 4, and the math in section 5. The developers' word list is `CONTEXT.md`, and the technical documentation starts at [docs/tech/architecture.md](tech/architecture.md).
+There are three ways in: the two-minute summary in section 0, the story of one emergency in section 4, and the math in section 5. The developers' word list is `CONTEXT.md`, and the technical documentation starts at [docs/tech/architecture.md](tech/architecture.md).
 
 ## 0. LIGHT-TIME in two minutes
 
-A crew at Mars cannot call a doctor and get an answer in time. Radio travels at the speed of light, and on our mission date, 14 November 2026, light takes 660.86 s, about 11 minutes, to cross from Mars to Earth. An answer needs the message to arrive and the reply to come back, so the earliest reply from Earth is 1,321.72 s away, about 22 minutes. Health monitoring that pages a doctor on Earth is built for the space station, where the doctor answers at once.
+A crew at Mars cannot call a doctor and get an answer in time. Radio travels at the speed of light, and on our mission date, 14 November 2026, light takes 660.86 s, about 11 minutes, to cross from Mars to Earth. An answer needs the message to arrive and the reply to come back, so the earliest reply from Earth is 1,321.72 s away, about 22 minutes. Health monitoring that pages a doctor on Earth is built for the space station, where the doctor can answer almost at once.
 
 LIGHT-TIME puts the light time into the decision. When a crew member's reading starts to fall, the ship's software, which we call LIGHTTIME, works out how long is left before the reading reaches a red line, compares that with the round trip to Earth, and says in one sentence who has to act: the flight surgeon on Earth, the crew medical officer (CMO) on board, or the crew alone when there is no link at all.
 
@@ -23,7 +48,7 @@ Live console: <https://lighttime.health/>. Code: the ship and the link at <https
 
 The 2026 NASA Space Apps challenge we answered is "Create Health Monitoring Software for Astronauts on Space Missions". We read it as two questions. What should software watch on a crew member's body? And who should it tell, when the people who could help are far away?
 
-On the International Space Station the second question is easy. A flight surgeon, a physician in mission control on Earth, is in contact with the crew in close to real time. On board, the crew medical officer is an astronaut given extra medical training before flight, who may or may not be a doctor (NASA-STD-3001 says crew medical officers often are, but need not be, physicians). A reviewer corrected us on this on 15 November. A space-medicine mentor told us on 14 November that health on the station is checked at scheduled times, daily or every few weeks depending on the mission, and is not streamed all day unless there is an emergency.
+On the International Space Station the second question has a simple answer. A flight surgeon, a physician in mission control on Earth, is in contact with the crew in close to real time. On board, the crew medical officer is an astronaut assigned to the medical role for a mission and given extra medical training before flight. That person may or may not be a doctor: NASA's crew health standard says crew medical officers often are, but are not required to be, physicians [22]. A space-medicine mentor told us on 14 November that health on the station is checked at scheduled times, daily or every few weeks depending on the mission, and is not streamed all day unless there is an emergency.
 
 At Mars the easy answer fails. Mars and Earth both circle the Sun, so the distance between them keeps changing, and the one-way light time runs from about 3 to 22 minutes over the years: the closest and farthest distances in NASA's Mars fact sheet, divided by the speed of light [1]. Around solar conjunction, when the Sun sits between the planets, NASA stops sending commands to its Mars spacecraft for about two weeks, because gas thrown out by the Sun's corona can corrupt radio signals [2]. NASA's Human Research Program lists distance from Earth as one of the hazards of human spaceflight [3].
 
@@ -32,6 +57,8 @@ Think of lightning and thunder. The flash and the sound start together, and the 
 So a monitor that raises an alarm and waits for Earth is waiting for an answer that cannot arrive in time.
 
 ## 2. The idea
+
+The team calls the loop between the suit, the ship and Earth a three-way handshake. The suit sends a reading every second, the ship checks it and alerts the crew at once, and the ship's report reaches Earth only after the light time, with any reply taking as long again. Each leg has its own delay, and the longest one decides how much the crew must do alone.
 
 Who decides depends on how long the light takes. LIGHT-TIME uses one rule with three cases (`common/modes.py`):
 
@@ -65,10 +92,25 @@ Everything in the right-hand column is a proposal, not something that runs.
 | The daily check-in, with a reaction-time test | An offline medical assistant for the CMO |
 | Cabin and space-weather tiles | The learned heart-rate adviser wired into the alarms (it exists, offline) |
 | Role-based views: each screen says who is looking | A sign-in |
-| A reading endpoint that accepts the format a suit board would send ([docs/hardware.md](hardware.md)). The demo's suit readings are simulated | The suit electronics, as a design: an ESP32 DevKitC V4 reading a MAX30102 (heart rate and blood oxygen), a MAX30205 skin-temperature sensor, an MPU6050 motion sensor, two MyoWare 2.0 muscle sensors and a SPACEDOS02 radiation dosimeter, with a Bluetooth blood-pressure cuff at check-ins, sending readings to the ship over Wi-Fi |
+| A reading endpoint that accepts the format a suit board would send ([docs/hardware.md](hardware.md)). The demo's suit readings are simulated | The suit electronics, as a design (see "The suit, as designed" below) |
 | A routine vitals feed from the suits to Earth, with simulated values | |
 
-**We assume the crew wear the shirt for the whole mission.** The reviewer of 15 November asked us to write this down, and everything that reads once a second rests on it. With the shirt off there are no readings, and the ship treats a poor or missing signal as a sensor check, never as a measurement.
+We assume that the crew wear the shirt for the whole mission. Everything that reads once a second rests on that assumption, and the reviewer of 15 November asked us to state it. With the shirt off there are no readings, and the ship treats a poor or missing signal as a sensor check, never as a measurement.
+
+### The suit, as designed
+
+The suit exists as a design, not as hardware: nothing in it has been built, and the demo's suit readings are simulated. A small computer, an ESP32 DevKitC V4 microcontroller, sits in a removable module at the front of the waist belt. It gathers every sensor through protected wiring in the garment and sends timestamped readings to the ship over Wi-Fi.
+
+| Sensor | What it measures | Where it sits |
+|----------------|----------------------|------------------------------|
+| MAX30102 (DFRobot SEN0518) | Heart rate and blood oxygen | Fingertip contact |
+| MAX30205 | Skin temperature, which can differ from core body temperature | Upper chest |
+| MPU6050 | Motion and activity | Torso |
+| Two MyoWare 2.0 | Muscle activity | Biceps of the dominant arm, and the thigh |
+| SPACEDOS02 | Radiation dose | Back of the waist belt, on its own battery. The wearer's body shields it a little, so the placement needs calibration |
+| Bluetooth upper-arm cuff | Blood pressure | Upper arm, at the daily check-in only; not worn all the time |
+
+The boards are development parts; a flight version would need qualified hardware. Today's software does not use the muscle or motion readings at all: no part of the code reads them, and they are in the design for rules that do not exist yet. The team's full hardware write-up, with the wiring, is `Physical-tech-documentation.pdf` in the LightTime-Docs repository.
 
 ## 4. One emergency, second by second
 
@@ -87,35 +129,55 @@ The patient is the commander, C1. The crew medical officer is C2. Readings for C
 ![Sequence diagram of one alert's round trip](figures/concept/alert-round-trip.png)\
 *Figure 3. The alert round trip. The ship warns the crew and sends the report at once. At a one-way delay of five minutes or more, the crew acts before the report has even landed. The reply takes one more one-way delay.*
 
-The walk-through is a three-way handshake: suit to ship, ship to crew, ship to Earth and back. Three kinds of traffic go to Earth. A report leaves the moment an early warning or an SOS is raised. A daily summary gives the low, median and high of each vital sign (`base_station/recorder.py`). And a routine vitals feed, started from the console (`POST /api/earth/feed/start`), sends one reading per crew member every 120 s by default, with any interval from 5 s to 3,600 s allowed, as one link message of kind `vitals` (`command_center/feed.py`). Feed messages take the same one-way light time as everything else, wait behind any SOS or report while the link is down, and carry values replayed from the simulated suit file, labelled SIMULATED. Earth keeps every tick it receives; the ship keeps its full stream, one reading a second, for 24 hours. This is store and forward, as with voicemail: keep it, and send it when you can.
+The story has three legs: suit to ship, ship to crew, and ship to Earth and back. Three kinds of traffic go to Earth. A report leaves the moment an early warning or an SOS is raised. A daily summary gives the low, median and high of each vital sign (`base_station/recorder.py`). And a routine vitals feed, started from the console (`POST /api/earth/feed/start`), sends one reading per crew member every 120 s by default, with any interval from 5 s to 3,600 s allowed, as one link message of kind `vitals` (`command_center/feed.py`). Feed messages take the same one-way light time as everything else, wait behind any SOS or report while the link is down, and carry values replayed from the simulated suit file, labelled SIMULATED. Earth keeps every tick it receives; the ship keeps its full stream, one reading a second, for 24 hours. This is store and forward, as with voicemail: keep it, and send it when you can.
 
 ## 5. The math, one piece at a time
 
-Each piece has one plain sentence, the formula, a worked example with real numbers, and a line on what it is not. Every result is from `docs/generated/numbers.json` (written by `scripts/paper_numbers.py`) or from the printout of `scripts/paper_figures.py`. Every setting, such as a window length or a count of readings, was read from `base_station/lookahead.py`, `base_station/usual.py`, `base_station/limits.json`, `common/modes.py` or `common/link.py`, and the story's timings in section 4 come from playing `base_station/scenario.py` through the ship's rules.
+Each piece below has a plain sentence, the formula, a worked example with real numbers, and a line on what it is not. Every result is from `docs/generated/numbers.json` (written by `scripts/paper_numbers.py`) or from the printout of `scripts/paper_figures.py`. Every setting, such as a window length or a count of readings, was read from `base_station/lookahead.py`, `base_station/usual.py`, `base_station/limits.json`, `common/modes.py` or `common/link.py`, and the story's timings in section 4 come from playing `base_station/scenario.py` through the ship's rules.
+
+The symbols mean the same thing in every piece.
+
+| Symbol | What it stands for | Unit |
+|------|----------------------------------------|-----------|
+| $d$ | Distance between the ship and Earth | km |
+| $c$ | Speed of light, 299,792.458 | km/s |
+| $\Delta t$ | One-way light time: how long a signal takes from ship to Earth | s |
+| $T$ | Round trip, twice $\Delta t$: the soonest a reply can arrive | s |
+| $x$ | One blood-oxygen reading | % |
+| $v_i$ | The reading at position $i$ in the window; readings come one a second, so positions are seconds apart | % |
+| $n$ | Number of readings in the window, 60 when it is full | readings |
+| $b$ | Slope of the Theil-Sen line; negative when the reading falls | % per second |
+| $L$ | Level now: the median of the last 5 readings | % |
+| $P_{1}$, $P_{99}$ | The 1st and 99th percentiles of one person's readings | the reading's unit |
+| sent, lands, now | Demo-clock times when a message left, when it lands, and the present moment | clock time |
 
 ### 5.1 Light time
 
-Light needs time to cross a distance.
+A signal needs time to cross a distance, and nothing travels faster than light. The one-way light time is the distance divided by the speed of light.
 
 $$\Delta t = \frac{d}{c}$$
 
-Here $d$ is the distance and $c$ the speed of light, 299,792.458 km/s, exact by the definition of the metre [8]. For 14 November 2026 NASA's JPL Horizons system [9] gives a one-way light time from Mars of $\Delta t$ = 660.86 s, so $d = c\,\Delta t \approx$ 198.1 million km. The ship asks Horizons live; if the call fails, it uses values read from Horizons beforehand and labels them with that date.
+Here $\Delta t$ is the one-way light time in seconds, $d$ the distance between Mars and Earth in kilometres, and $c$ the speed of light, 299,792.458 km/s, exact by the definition of the metre [8]. For 14 November 2026, NASA's JPL Horizons system [9] gives a one-way light time from Mars of $\Delta t$ = 660.86 s, about 11 minutes (660.86 ÷ 60 = 11.01). Turning the formula round gives the distance:
+
+$$d = c\,\Delta t = 299{,}792.458\ \text{km/s} \times 660.86\ \text{s} \approx 198.1\ \text{million km}$$
+
+The ship asks Horizons live; if the call fails, it uses values read from Horizons beforehand and labels them with that date.
 
 What it is not: a number the Deep Space Network measures. The network carries the signal. Our figure is the Horizons distance divided by the speed of light, and it leaves out time spent in relays or ground processing.
 
 ### 5.2 Round trip
 
-An answer needs the message to arrive and the reply to come back.
+An answer needs two crossings: the question has to reach Earth, and the reply has to come back. So the round trip is twice the one-way light time.
 
 $$T = 2\,\Delta t$$
 
-At Mars on our date $T$ = 1,321.72 s, about 22 minutes. The Moon stop uses a fixed one-way time of 1.3 s, so $T$ is 2.6 s of light time alone. The station stop uses 0.25 s, so $T$ is 0.5 s.
+$T$ is the round trip in seconds, the soonest a reply can arrive. At Mars on our date, $T = 2 \times 660.86\ \text{s} = 1{,}321.72$ s, about 22 minutes. The Moon stop uses a fixed one-way time of 1.3 s, so $T = 2 \times 1.3 = 2.6$ s of light time alone. The station stop uses 0.25 s, so $T = 2 \times 0.25 = 0.5$ s.
 
 What it is not: how long a reply really takes. Someone on Earth also has to read the report and decide, so a real reply is always later than $T$. A letter and its reply take the same time in the post both ways; the writing takes extra.
 
 ### 5.3 Who decides
 
-One rule picks who acts.
+One rule picks who acts. It looks at two things only: whether there is a link at all, and the one-way light time $\Delta t$ in seconds, which it compares with a fixed switch at 300 s, five minutes.
 
 $$
 \text{who acts} =
@@ -126,29 +188,40 @@ $$
 \end{cases}
 $$
 
-Station, 0.25 s: the flight surgeon directs care. Moon, 1.3 s: the same. Mars, 660.86 s: the CMO decides, because 660.86 is at least 300. Behind the Sun there is no link, so the crew acts alone and messages wait in a queue.
+Here is the rule worked through the dial's four stops.
+
+- Station: $\Delta t$ = 0.25 s, and 0.25 is less than 300, so the flight surgeon directs care.
+- Moon: $\Delta t$ = 1.3 s, also less than 300, so the flight surgeon directs care.
+- Mars on our date: $\Delta t$ = 660.86 s, and 660.86 is at least 300, so the CMO decides and Earth advises afterwards.
+- Behind the Sun: there is no link, so the crew acts alone and messages wait in a queue.
 
 What it is not: a measured threshold. The 300 s line rests on one analog mission [4].
 
 ### 5.4 The demo clock
 
-On stage, long legs play faster, and the true numbers stay on screen (`common/link.py`).
+An audience cannot wait 11 minutes for a message to land. So on stage any leg of 60 s or more plays 60 times faster, and the true numbers stay on screen (`common/link.py`). With $\Delta t$ the true one-way light time in seconds, the wait shown on stage, also in seconds, is
 
 $$\text{played} = \begin{cases} \Delta t / 60 & \text{if } \Delta t \ge 60\ \text{s}\\ \Delta t & \text{otherwise}\end{cases}$$
 
-The Mars leg plays in 660.86 / 60 = 11.01 s, and the header shows "plays as" beside the true one-way light time. Station and Moon legs play at their real length. Every message carries two kinds of stamp. Clock times (`sent_at`, `deliver_at`) are on the demo clock, which on the demo morning starts at 06:30 UTC on 14 November 2026. Durations (`delay_s`, the time left in flight `eta_s`, the earliest reply) are in true mission seconds; while a message is in flight, $\text{eta} = \Delta t \times (\text{lands} - \text{now}) / (\text{lands} - \text{sent})$.
+The Mars leg is at least 60 s, so it plays in 660.86 ÷ 60 = 11.01 s, and the header shows "plays as" beside the true one-way light time. The Moon (1.3 s) and the station (0.25 s) are under 60 s and play at their real length.
+
+Every message carries two kinds of stamp. Clock times (`sent_at`, `deliver_at`) are on the demo clock, which on the demo morning starts at 06:30 UTC on 14 November 2026. Durations (`delay_s`, the time left in flight `eta_s`, the earliest reply) are in true mission seconds. While a message is in flight, its time left is the share of the played flight still to go, scaled up to mission seconds:
+
+$$\text{eta} = \Delta t \times \frac{\text{lands} - \text{now}}{\text{lands} - \text{sent}}$$
+
+Here sent, lands and now are demo-clock times, and eta is in mission seconds. Halfway through the 11.01 s Mars flight the fraction is one half, so eta = 660.86 × 0.5 = 330.43 s.
 
 What it is not: a different delay. The order of events and who decides are the same as at full length. Only the waiting is shorter.
 
 ### 5.5 Can a reading be trusted?
 
-Three filters run before any number counts (`base_station/rules.py`, settings in `base_station/limits.json`).
+Three filters run before any number counts (`base_station/rules.py`, settings in `base_station/limits.json`). A blood-oxygen reading $x$, in %, is counted only if all three hold; the symbol $\wedge$ means "and".
 
 $$\text{counted} = \big(50 \le x \le 100\big) \wedge \text{good signal} \wedge \text{10 clean readings since the last poor one}$$
 
-A blood-oxygen value outside 50 to 100 % is a dropout, not a measurement. A reading the sensor flags as a poor signal is never judged; the ship shows "check your sensor" instead. And after any poor reading nothing can alarm for the next 10 readings, because a sensor just put back on reads low for a few seconds.
+The first test catches impossible values: a blood-oxygen value outside 50 to 100 %, such as 0 %, is a dropout, not a measurement. The second catches bad contact: a reading the sensor flags as a poor signal is never judged, and the ship shows "check your sensor" instead. The third lets a sensor settle: after any poor reading nothing can alarm for the next 10 readings, 10 seconds at one a second, because a sensor just put back on reads low for a few seconds.
 
-On a healthy night of 7.8 hours (Figure 7), believing every number gives 4 false SOS alarms. Throwing out impossible values leaves 1. Adding the settling rule leaves 0.
+Each filter removes false alarms that the one before it lets through. On a healthy night of 7.8 hours (Figure 7), believing every number gives 4 false SOS alarms. Throwing out impossible values leaves 1. Adding the settling rule leaves 0.
 
 What it is not: a fix for a sensor that is wrong but plausible. A probe stuck on one sensible value passes all three filters.
 
@@ -163,19 +236,21 @@ Each reading falls in a band, and a band counts only when it holds for five read
 | 93 % or less | warning |
 | 91 % or less | emergency: SOS, and the report leaves by itself |
 
+In words, the level at reading $t$ is the worst band that all of the last five clean readings, $t-4$ to $t$, have reached:
+
 $$\text{level}(t) = \text{the worst band that each of the last 5 clean readings has reached}$$
 
-So the readings 92, 91, 91, 90, 91 give a warning, not an emergency: all five are at 93 or less, but the first is above 91. Five in a row means one bad reading can never raise an SOS on its own, like a smoke alarm that waits for a second whiff before it rings. The bands themselves are like the red zone on a rev counter: fixed marks, the same for everyone.
+So the readings 92, 91, 91, 90, 91 (in %) give a warning, not an emergency: all five are at 93 or less, but the first is above 91. One more reading of 91 or less would push the 92 out of the last five and make it an emergency. Five in a row means one bad reading can never raise an SOS on its own, like a smoke alarm that waits for a second whiff before it rings. The bands themselves are like the red zone on a rev counter: fixed marks, the same for everyone.
 
 What it is not: a space-medicine score. The cut-offs are inspired by NEWS2, the early-warning chart of the Royal College of Physicians used in UK hospitals [10], which has not been tested in spaceflight. NEWS2 adds up scores for seven signs; LIGHT-TIME acts on one. These are demo tiers with a named source.
 
 ### 5.7 Is this normal for this person?
 
-Each person has a usual range, learned from their own readings (`base_station/usual.py`).
+Each person has a usual range, learned from their own readings (`base_station/usual.py`). It runs from the 1st percentile $P_{1}$ to the 99th percentile $P_{99}$, both in the reading's own unit.
 
 $$\text{usual range} = \big[\,P_{1},\ P_{99}\,\big] \text{ of the person's clean readings over the last 24 hours}$$
 
-A percentile is a place in a sorted list. Sort 100 readings from lowest to highest: the 1st percentile sits near the bottom, the 99th near the top, and almost every reading lies between them. The code takes the reading one hundredth of the way up the sorted list and the one one hundredth of the way down from the top. It leaves out typed numbers, poor signals and anything marked as exercise, and it says nothing until it has at least 600 readings, ten minutes at one a second. With exactly 600 it skips the six lowest and the six highest, so the range runs from the seventh lowest to the seventh highest. It is like knowing the usual hum of your own car: you judge it against itself, not against other cars.
+A percentile is a place in a sorted list. Sort 100 readings from lowest to highest: the 1st percentile sits near the bottom, the 99th near the top, and almost every reading lies between them. The code takes the reading one hundredth of the way up the sorted list and the one one hundredth of the way down from the top. It leaves out typed numbers, poor signals and anything marked as exercise, and it says nothing until it has at least 600 readings, ten minutes at one a second (600 ÷ 60 = 10). With exactly 600, one hundredth is 6 readings, so it skips the six lowest and the six highest, and the range runs from the seventh lowest to the seventh highest. It is like knowing the usual hum of your own car: you judge it against itself, not against other cars.
 
 The range is shown on the crew card and sent to Earth with every report, where it answers "Is this normal for this person?".
 
@@ -185,21 +260,25 @@ What it is not: an alarm. On real wrist recordings a personal range was too wide
 
 Draw the line the readings follow, and see where it meets the red line (`base_station/lookahead.py`).
 
-LIGHTTIME takes the last 60 clean readings, one minute of data. For every pair of readings $i < j$ it works out the slope between them, and takes the median. This is the Theil-Sen line [11, 12]:
+LIGHTTIME takes the last $n$ = 60 clean readings, one minute of data, and numbers them by position, so $v_i$ is the reading at position $i$, in %. For every pair of positions $i < j$ it works out the slope between the two readings, the change in the reading divided by the seconds between them, and takes the median of all those slopes. This is the Theil-Sen line [11, 12]:
 
 $$b = \operatorname{median}_{\,i<j}\ \frac{v_j - v_i}{j - i}$$
 
-With $n$ readings there are $n(n-1)/2$ pairs. The level now is the median of the last five readings, and the time left to the red line of 91 % is
+The slope $b$ is in % per second, and it is negative when the reading falls. With $n$ readings there are $n(n-1)/2$ pairs: 1,770 for a full window of 60 (60 × 59 ÷ 2), and 10 for the five readings in the example below.
 
-$$\text{time left} = \frac{\text{now} - 91}{-b}\quad\text{seconds, at one reading a second}$$
+The level now, $L$, is the median of the last five readings, in %. The time left, in seconds, is the gap between $L$ and the red line of 91 %, divided by how fast the reading is falling:
 
-A worked example with five readings (Figure 4): 97.0, 96.8, 96.5, 96.4, 96.0. The 10 pairs give these slopes in % per second, sorted: −0.4, −0.3, −0.267, −0.25, −0.25, −0.25, −0.2, −0.2, −0.2, −0.1. The middle is −0.25 (with an even count the code takes the upper of the two middle values; here both are −0.25). The level now is 96.5, the median of the five. So
+$$\text{time left} = \frac{L - 91}{-b}\quad\text{seconds, at one reading a second}$$
+
+Because $b$ is negative for a fall, $-b$ is positive, and so is the time left.
+
+A worked example with five readings (Figure 4): 97.0, 96.8, 96.5, 96.4, 96.0, at positions 1 to 5. Take one pair, the first and the last: (96.0 − 97.0) ÷ (5 − 1) = −1.0 ÷ 4 = −0.25 % per second. All 10 pairs give these slopes, sorted: −0.4, −0.3, −0.267, −0.25, −0.25, −0.25, −0.2, −0.2, −0.2, −0.1. The middle is −0.25 (with an even count the code takes the upper of the two middle values; here both are −0.25), so $b$ = −0.25 % per second. The level now is $L$ = 96.5, the median of the five. So
 
 $$\text{time left} = \frac{96.5 - 91}{0.25} = 22.0\ \text{s}$$
 
 The ship would still stay quiet on these five. It needs at least 15 readings before it calls anything a trend, and the fitted line must fall at least 2 points across the window; here it falls 1.0 point. It also stays quiet when the red line is more than 600 s away, and leaves slow drifts to the fixed bands.
 
-The line uses a median, not the usual least-squares fit, because a few bad readings cannot drag a median off course. Up to a share of $1 - 1/\sqrt{2}$ of the readings, a little under a third, can be wildly wrong before the line fails [13], while one bad point can ruin a least-squares line. It is like judging when a bath will be empty from the water line: one splash cannot fool a median.
+The line uses a median, not the usual least-squares fit, because a few bad readings cannot drag a median off course. Up to a share of $1 - 1/\sqrt{2}$ of the readings, about 29 %, can be wildly wrong before the line fails [13], while one bad point can ruin a least-squares line. It is like judging when a bath will be empty from the water line: one splash cannot fool a median.
 
 ![Two charts of the five-reading worked example](figures/concept/timeleft_worked.png)\
 *Figure 4. The worked example: five readings and the line through the median slope (left), and all 10 pair slopes, with the median ones marked (right).*
@@ -208,21 +287,21 @@ What it is not: a forecast of the body. It assumes the fall carries on at the sa
 
 ### 5.9 Do the readings agree?
 
-Most pairs must be falling, not just the ends.
+Most pairs must be falling, not just the ends. A pair falls when the later reading is lower ($v_j < v_i$) and rises when it is higher. The agreement is the number of falling pairs minus the number of rising pairs, divided by all $n(n-1)/2$ pairs; a pair with two equal readings counts in the total but neither falls nor rises. The agreement runs from −1, every pair rising, to +1, every pair falling, and has no unit. The ship needs at least 0.5.
 
 $$\text{agreement} = \frac{\text{pairs that fall} - \text{pairs that rise}}{\text{all pairs}} \ \ge 0.5$$
 
-In the worked example all 10 pairs fall, so the agreement is 1.0. At 0.5, falls outnumber rises by at least three to one among the pairs that moved. This is Kendall's rank correlation between time and the reading [14], with the sign turned round.
+In the worked example all 10 pairs fall and none rise, so the agreement is (10 − 0) ÷ 10 = 1.0, which passes. With 8 falling and 2 rising it would be (8 − 2) ÷ 10 = 0.6, which passes; with 7 and 3 it would be 0.4, which fails. At 0.5, falls outnumber rises by at least three to one among the pairs that moved. This is Kendall's rank correlation between time and the reading [14], with the sign turned round.
 
 What it is not: a significance test. It is a gate that stops a noisy, flat signal from passing as a trend.
 
 ### 5.10 Can Earth answer first?
 
-Compare the time left with the round trip.
+Compare the time left with the round trip, both in seconds. Earth can answer before the red line only when the round trip $T$ is shorter than the time left; the symbol $\iff$ means "exactly when".
 
 $$\text{Earth can answer in time} \iff T < \text{time left}$$
 
-A real recording (Figure 5): volunteer 100001 from a laboratory study of induced low oxygen [15]. The ship warned at 162 s with 142 s predicted to the red line, and the SOS came at 321 s, 159 s after the warning. At Mars $T$ = 1,321.72 s, far more than 142 s, so the crew must act and the sentence says so. At the Moon $T$ = 2.6 s, so Earth can answer first.
+A real recording (Figure 5): volunteer 100001 from a laboratory study of induced low oxygen [15]. The ship warned at 162 s with 142 s predicted to the red line, and the SOS came at 321 s, 159 s after the warning. At Mars, $T$ = 1,321.72 s is far more than 142 s, so Earth cannot answer in time; the crew must act, and the sentence says so. At the Moon, $T$ = 2.6 s is less than 142 s, so Earth can answer first. In the scripted story of section 4 the ship states about 70 s, and 1,321.72 s is again far longer, which is why the sentence there says Earth's reply is too late.
 
 ![Chart of blood oxygen in recording 100001 with the warning and the SOS](figures/concept/timeleft_event.png)\
 *Figure 5. One real low-oxygen recording, volunteer 100001: the reading once a second, the red line at 91 %, the line the ship fitted at the warning, and the SOS.*
@@ -268,7 +347,7 @@ Six events is a small sample, all from one laboratory study on Earth, all induce
 
 Two limits come from the method. At the start of a fast fall the one-minute window still holds flat readings, so the fitted slope is too shallow and the stated time left too long: in the scripted story the ship says about 70 seconds and the SOS comes 13 seconds later. And the rules count readings at one a second, so a sensor that sends less often makes every alarm slower by the same factor. There is no rule yet for a fast heart rate at rest, a slow one in sleep, or a sensor stuck on one value. Nothing here is a medical device, and the checklist wording is not medical advice.
 
-## 7. Privacy and safety by design
+## 7. Privacy and safety
 
 Our mentors raised privacy before we did. On the station today health is checked at scheduled times; LIGHT-TIME reads every crew member once a second, a far larger intrusion. A mentor framed it on 14 November as a question of proportionality: watching all the time has to earn its place against the intrusion, and the least intrusive option that still does the job should win. A Canadian Space Agency mentor added on 15 November that not every crew member should see everyone's vital signs: full records for the crew medical officer, each person's own record for everyone else, and an SOS that still reaches the whole crew.
 
@@ -285,7 +364,7 @@ The packet log follows the same rule: a crew member sees only their own suit.
 
 Three more protections are in the code. Earth's code cannot read the ship's tables: `command_center/` may read only the link's table, and `tests/test_wall.py` fails if any Earth file imports the ship's code or its crew, reading, alert, check-in or reminder tables. That is also what keeps the Earth console honest, since it cannot show anything Earth would not have yet. No language model is called while a request is handled, so no reading goes to an outside service, and the adviser keeps working behind the Sun. And impossible input is refused: an empty reading or an impossible heart rate is turned away, and blood oxygen outside the plausible range is treated as a dropout.
 
-What is still missing. There is no login. The viewer header is believed, so anyone who can reach the ship can claim to be the CMO; nothing proves who is looking. A crewmate helping in an emergency cannot open the patient's record unless they are the CMO. And checking this section turned up a gap: a routine feed message carries every crew member's readings and is about no single person, so a crew member who opens the ship's outbox sees all of it. Last, the proportionality question is open. The raw stream stays on the ship, Earth gets reports, summaries and a low-rate feed whose interval can be raised, and crewmates see only their own record and an SOS notice. Whether that is proportionate is for crews and flight surgeons to judge, and it rests on the assumption in section 3 that the crew wear the shirt for the whole mission.
+Four gaps remain. There is no login. The viewer header is believed, so anyone who can reach the ship can claim to be the CMO; nothing proves who is looking. A crewmate helping in an emergency cannot open the patient's record unless they are the CMO. And checking this section turned up a gap: a routine feed message carries every crew member's readings and is about no single person, so a crew member who opens the ship's outbox sees all of it. Last, the proportionality question is open. The raw stream stays on the ship, Earth gets reports, summaries and a low-rate feed whose interval can be raised, and crewmates see only their own record and an SOS notice. Whether that is proportionate is for crews and flight surgeons to judge, and it rests on the assumption in section 3 that the crew wear the shirt for the whole mission.
 
 ## 8. What is real and what is simulated
 
@@ -364,7 +443,7 @@ A real suit sensor on a real person, ideally a smart shirt like the Bio-Monitor,
 
 ## 11. References
 
-Entries 2, 7 and 21 are new in this document and were opened at their publisher on 15 November 2026. Every other entry is copied from `docs/how-it-works.md` or `docs/submission.md`, where each was opened at its publisher, NASA, PhysioNet, UCI or a DOI record on 15 November 2026.
+Entries 2, 7, 21 and 22 are new here. The rest are copied from `docs/how-it-works.md` or `docs/submission.md`. Each entry was opened at its publisher (NASA, PhysioNet, UCI) or its DOI record on 15 November 2026.
 
 1. NASA Space Science Data Coordinated Archive (2025). Mars Fact Sheet. <https://nssdc.gsfc.nasa.gov/planetary/factsheet/marsfact.html>
 2. NASA (2023). NASA's Mars Fleet Will Still Conduct Science While Lying Low. 10 November 2023. <https://www.nasa.gov/solar-system/planets/mars/nasas-mars-fleet-will-still-conduct-science-while-lying-low>
@@ -387,3 +466,4 @@ Entries 2, 7 and 21 are new in this document and were opened at their publisher 
 19. NASA Open Science Data Repository. Environmental Data App (EDA), mission RR-1 (Rodent Research 1). <https://visualization.osdr.nasa.gov/eda/> (read 15 November 2026).
 20. NASA Office of the Chief Health and Medical Officer. Carbon Dioxide (CO2). OCHMO-TB-004, Revision D. <https://www.nasa.gov/wp-content/uploads/2023/12/ochmo-tb-004-carbon-dioxide.pdf>
 21. NASA (2022). Houston, Do You Copy? HERA Crew Navigates Communication Delays. 19 October 2022. <https://www.nasa.gov/humans-in-space/houston-do-you-copy-hera-crew-navigates-communication-delays>
+22. NASA (2023). NASA Spaceflight Human-System Standard, Volume 1: Crew Health. NASA-STD-3001, Volume 1, Revision C. Requirement V1 5003, rationale, page 47. <https://standards.nasa.gov/sites/default/files/standards/NASA/C//nasa-std-3001-vol-1-rev-c-signature.pdf>
