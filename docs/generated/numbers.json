@@ -87,5 +87,18 @@
   "hr_gate_min_per_h": 1,
   "hr_limit_percentile": 99.9,
   "test_count": 236,
-  "recorder_hours": 24
+  "recorder_hours": 24,
+  "worked_reading_one": 97.0,
+  "worked_reading_two": 96.8,
+  "worked_reading_three": 96.5,
+  "worked_reading_four": 96.4,
+  "worked_reading_five": 96.0,
+  "worked_n": 5,
+  "worked_pairs": 10,
+  "worked_slope": -0.25,
+  "worked_agreement": 1.0,
+  "worked_level": 96.5,
+  "worked_gap": 5.5,
+  "worked_time_left_s": 22.0,
+  "worked_drop": 1.0
 }

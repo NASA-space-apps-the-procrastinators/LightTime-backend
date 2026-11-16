@@ -135,6 +135,23 @@ def paper_extras(volunteers, rows):
     x["test_count"] = int(next(line.split()[0] for line in out.splitlines() if "collected" in line))
     from base_station import recorder                              # noqa: E402
     x["recorder_hours"] = round(recorder.KEEP.total_seconds() / 3600)
+    # The five-reading worked example of the time-left rule (scripts/paper_figures.py WORKED, concept document
+    # section 5.7), worked out the way base_station/lookahead.py does it: sorted pair slopes, the middle one
+    # (index len // 2), the median of the last five readings as the level, then (level - red line) / -slope.
+    worked = [97.0, 96.8, 96.5, 96.4, 96.0]
+    for name, value in zip(("one", "two", "three", "four", "five"), worked):
+        x[f"worked_reading_{name}"] = value
+    pairs = sorted((worked[j] - worked[i]) / (j - i) for i in range(len(worked)) for j in range(i + 1, len(worked)))
+    slope = pairs[len(pairs) // 2]
+    level = statistics.median(worked[-5:])
+    x["worked_n"] = len(worked)
+    x["worked_pairs"] = len(pairs)
+    x["worked_slope"] = slope
+    x["worked_agreement"] = (sum(p < 0 for p in pairs) - sum(p > 0 for p in pairs)) / len(pairs)
+    x["worked_level"] = level
+    x["worked_gap"] = round(level - bands[3], 10)
+    x["worked_time_left_s"] = round((level - bands[3]) / -slope, 10)
+    x["worked_drop"] = round(-slope * (len(worked) - 1), 10)
     return x
 
 
@@ -200,7 +217,8 @@ def main(quick):
         if isinstance(value, (int, float)) and not isinstance(value, bool):
             words = key.replace("spo2", "spo two").replace("_", " ").split()
             name = "num" + "".join(word.capitalize() for word in words)      # mars_one_way_s -> numMarsOneWayS
-            macros.append(f"\\newcommand{{\\{name}}}{{{value:.10g}}}")
+            text = f"{value:.1f}" if key.startswith("worked_reading") else f"{value:.10g}"
+            macros.append(f"\\newcommand{{\\{name}}}{{{text}}}")
     (ROOT / "paper" / "generated").mkdir(parents=True, exist_ok=True)
     (ROOT / "paper" / "generated" / "numbers.tex").write_text("\n".join(macros) + "\n", encoding="utf-8")
     (ROOT / "paper" / "generated" / "table_events.tex").write_text("\n".join(table) + "\n", encoding="utf-8")
