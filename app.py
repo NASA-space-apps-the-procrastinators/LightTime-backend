@@ -6,13 +6,18 @@ from flask_cors import CORS
 
 from common import dataset, lighttime
 from common.models import db, seed, utcnow
+from stats import counter, visitor
 
 
 def create_app(database_url=None, morning=None):
     load_dotenv()
     app = Flask(__name__)
-    app.config["SQLALCHEMY_DATABASE_URI"] = (
-        database_url or os.getenv("DATABASE_URL", "sqlite:///lighttime.db"))
+    main_url = database_url or os.getenv("DATABASE_URL", "sqlite:///lighttime.db")
+    app.config["SQLALCHEMY_DATABASE_URI"] = main_url
+    # Traffic stats outlive a deploy in their own database. With none set, or a database given
+    # (as the tests do), they share the main one.
+    stats_url = None if database_url else os.getenv("STATS_DATABASE_URL")
+    app.config["SQLALCHEMY_BINDS"] = {"stats": stats_url or main_url}
     # Morning mode loads the demo morning and starts the mission clock. Run one process only:
     # the clock lives in this process's memory.
     app.config["MORNING"] = os.getenv("LIGHTTIME_MORNING") == "1" if morning is None else morning
@@ -22,8 +27,26 @@ def create_app(database_url=None, morning=None):
     from base_station import console, log  # noqa: F401  (each adds its routes to the ship's blueprint)
     from base_station.routes import bp as base_bp
     from command_center.routes import bp as earth_bp
+    from stats.routes import bp as stats_bp
     app.register_blueprint(base_bp, url_prefix="/api/base")
     app.register_blueprint(earth_bp, url_prefix="/api/earth")
+    app.register_blueprint(stats_bp, url_prefix="/api/stats")
+
+    @app.after_request
+    def count_traffic(response):
+        """Count one API call by its route rule, so /crew/C1 and /crew/C2 count as one. A GET is a
+        poll. Not counted: the stats routes, preflights, bots, and the test client's user agent,
+        which is how the vitals feed posts readings to the ship (command_center/feed.py)."""
+        agent = request.headers.get("User-Agent", "")
+        if (request.path.startswith("/api/stats") or request.method == "OPTIONS"
+                or visitor.is_bot(agent) or agent.startswith("Werkzeug/")):
+            return response
+        name = f"{request.method} {request.url_rule.rule}" if request.url_rule else "unmatched"
+        counter.add("poll" if request.method == "GET" else "request", name)
+        counter.see(visitor.visitor_id(request))
+        if not app.testing:     # set only after create_app returns, so it is read here
+            counter.start(app)
+        return response
 
     @app.errorhandler(404)
     @app.errorhandler(405)
@@ -37,7 +60,12 @@ def create_app(database_url=None, morning=None):
         return response, error.code
 
     with app.app_context():
-        db.create_all()
+        db.create_all(bind_key=None)
+        try:        # a stats database that is down must not stop the ship
+            db.create_all(bind_key="stats")
+            app.config["STATS_TABLES"] = True
+        except Exception:
+            app.logger.warning("the stats database could not be reached; the next flush tries again", exc_info=True)
         seed()
         if app.config["MORNING"]:
             from base_station import morning as demo_morning

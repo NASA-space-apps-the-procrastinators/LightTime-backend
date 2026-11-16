@@ -84,6 +84,16 @@ A glossary, and nothing else. One meaning per word, used the same way in the cod
 
 **Real recordings.** Measurements from people or spacecraft: NASA's cabin record from the station, JPL light times, the Deep Space Network feed, and three public sets of heart rate and blood oxygen.
 
+## Traffic stats
+
+**Page view.** One screen opened in a browser, reported by the console.
+
+**Click.** One press of a button or link, reported by the console with the button's name.
+
+**Visitor.** One browser on one day, known only by a hash that changes daily.
+
+**Request.** One API call the backend received. Polling requests are counted apart from the rest.
+
 ## Words to avoid
 
 **"Model", "ML", "trained", "predicts illness".** Nothing here was trained and nothing predicts an illness. Say "rule", "measured on real recordings" and "time left".
